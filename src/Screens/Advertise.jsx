@@ -51,6 +51,7 @@ const Advertise = () => {
     const [link2, setLink2] = useState('')
     const [forPay, setForPay] = useState('')
     const [currency, setCurrency] = useState('BNB')
+    const [price, setPrice] = useState()
 
     const loggedIn = localStorage.getItem('currentUser');
 
@@ -60,6 +61,29 @@ const Advertise = () => {
         }
     }, [loggedIn])
 
+
+    useEffect(() => {
+        const queryString = currency === 'BNB' ? `https://coin-ab637-default-rtdb.firebaseio.com/coins/-NOWBEhCORoCg40a3sgc.json` : `https://coin-ab637-default-rtdb.firebaseio.com/coins/-NOUoXxxRWe8ZcWtdMVP.json`
+
+
+        var config = {
+            method: 'get',
+            maxBodyLength: Infinity,
+            url: queryString,
+            headers: {}
+        };
+
+        axios(config)
+            .then(function (response) {
+                const result = response.data
+                
+                setPrice(result.price)
+            })
+            .catch(function (error) {
+                console.log(error);
+            });
+
+    }, [currency])
 
     const getCountries = async () => {
 
@@ -203,7 +227,7 @@ const Advertise = () => {
 
     useEffect(() => {
         if (bannerLink || voteLink || forPay !== "") {
-            axios.post('http://localhost:5000/createTransaction', {
+            axios.post('https://coinvote-api.herokuapp.com/createTransaction', {
                 amount: total,
                 currency1: currency,
                 currency2: "BTC",
@@ -211,7 +235,7 @@ const Advertise = () => {
             })
                 .then(function (res) {
                     axios
-                        .post('http://localhost:5000/getPaymentStatus', {
+                        .post('https://coinvote-api.herokuapp.com/getPaymentStatus', {
                             transactionId: res.data.result.txn_id
                         })
                         .then(res2 => {

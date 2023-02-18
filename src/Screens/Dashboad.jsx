@@ -325,7 +325,7 @@ const Dashboad = () => {
                                     </td>
                                     <td className='hidden md:table-cell align-middle text-[16px] text-primary'>{coin.coin.chain}</td>
                                     <td className='hidden md:table-cell align-middle text-[16px] text-primary'>{ }</td>
-                                    <td className='hidden md:table-cell align-middle text-[16px] text-primary'>{coin.coin.cap}</td>
+                                    <td className='hidden md:table-cell align-middle text-[16px] text-primary'>$ {coin.coin.cap}</td>
                                     <td className='hidden md:table-cell align-middle text-[16px] text-primary'>{`${dateDifference(coin.coin.launchDate)} Months`}</td>
                                     <td onClick={(e) => upVote(e, coin)} className='align-middle text-[16px] text-primary'>
                                         <button className='hover:bg-[#e2c574] font-extrabold min-w-[80px] text-center border-[2px] border-[#e2c574] bg-[#262626] rounded-[7px] p-[10px] text-white' style={{ lineHeight: 1.5 }}>
@@ -506,7 +506,7 @@ const Dashboad = () => {
                                     </td>
                                     <td className='hidden md:table-cell align-middle text-[16px] text-primary'>{coin.coin.chain}</td>
                                     <td className='hidden md:table-cell align-middle text-[16px] text-primary'>{ }</td>
-                                    <td className='hidden md:table-cell align-middle text-[16px] text-primary'>{coin.coin.cap}</td>
+                                    <td className='hidden md:table-cell align-middle text-[16px] text-primary'>$ {coin.coin.cap.toString().slice(0,6)}</td>
                                     <td className='hidden md:table-cell align-middle text-[16px] text-primary'>{`${dateDifference(coin.coin.launchDate)} Months`}</td>
                                     <td onClick={(e) => upVote(e, coin)} className='align-middle text-[16px] text-primary'>
                                         <button className='hover:bg-[#e2c574] font-extrabold min-w-[80px] text-center border-[2px] border-[#e2c574] bg-[#262626] rounded-[7px] p-[10px] text-white' style={{ lineHeight: 1.5 }}>

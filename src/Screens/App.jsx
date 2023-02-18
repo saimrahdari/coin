@@ -28,6 +28,7 @@ const App = () => {
         setCurrentUser({})
         setDisplayName("")
         localStorage.removeItem("currentUser")
+        setsidebar(false)
     }
 
     return (
@@ -143,7 +144,7 @@ const App = () => {
                                 </Link>
                             </li>
                             <li>
-                                <div onClick={() => setIsAccountActive(!isAccountActive)} className={`${isAccountActive ? "text-white bg-[#e2c5740d] cursor-pointer" : "text-[#e7cd86]"}  flex items-center flex-row justify-between rounded-[10px] py-[10px] px-[20px] text-[16px] leading-[1.5] my-[2px] border-b border-b-[#e2c57412]`} style={{ transition: 'border-left-color 0.3s, background-color 0.3s' }}>
+                                <div onClick={() => setIsAccountActive(!isAccountActive)} className={`${isAccountActive ? "text-white bg-[#e2c5740d] cursor-pointer" : "text-[#e7cd86]"}  flex items-center flex-row  hover:text-white hover:bg-[#e2c5740d] hover:cursor-pointer justify-between rounded-[10px] py-[10px] px-[20px] text-[16px] leading-[1.5] my-[2px] border-b border-b-[#e2c57412]`} style={{ transition: 'border-left-color 0.3s, background-color 0.3s' }}>
                                     <Link to={'/'} className={`relative flex items-center font-normal`} >
                                         Account
                                     </Link>
@@ -153,26 +154,26 @@ const App = () => {
                                     (
                                         <ul className={`relative min-w-[160px] py-[5px] ml-[26px] ${isAccountActive ? "block" : "hidden"}`}>
                                             <li>
-                                                <Link to={'/my-fav'} className='flex items-center p-[8px] text-[13px] text-primary'>
+                                                <Link to={'/my-fav'} onClick={() => setsidebar(false)} className='flex items-center p-[8px] text-[13px] text-primary hover:text-white'>
                                                     My Favourite
                                                 </Link>
                                             </li>
                                             <li>
-                                                <Link to={'/my-orders'} className='flex items-center p-[8px] text-[13px] text-primary'>
+                                                <Link to={'/my-orders'} onClick={() => setsidebar(false)} className='flex items-center p-[8px] text-[13px] text-primary hover:text-white'>
                                                     My Orders
                                                 </Link>
                                             </li>   <li>
-                                                <Link to={'/my-coins'} className='flex items-center p-[8px] text-[13px] text-primary'>
+                                                <Link to={'/my-coins'} onClick={() => setsidebar(false)} className='flex items-center p-[8px] text-[13px] text-primary hover:text-white'>
                                                     My Coins
                                                 </Link>
                                             </li>
                                             <li>
-                                                <Link to={'/account-settings'} className='flex items-center p-[8px] text-[13px] text-primary'>
+                                                <Link to={'/account-settings'} onClick={() => setsidebar(false)} className='flex items-center p-[8px] text-[13px] text-primary hover:text-white'>
                                                     Account Settings
                                                 </Link>
                                             </li>
                                             <li>
-                                                <Link to={''} onClick={handleLogout} className='flex items-center p-[8px] text-[13px] text-primary'>
+                                                <Link to={''} onClick={handleLogout} className='flex items-center p-[8px] text-[13px] text-primary hover:text-white'>
                                                     Logout
                                                 </Link>
                                             </li>
@@ -182,12 +183,12 @@ const App = () => {
                                         <ul className={`relative min-w-[160px] py-[5px] ml-[26px] ${isAccountActive ? "block" : "hidden"}`}>
 
                                             <li>
-                                                <Link to={'/login'} className='flex items-center p-[8px] text-[13px] text-primary'>
+                                                <Link to={'/login'} onClick={() => {setsidebar(false); isAccountActive(false)}} className='flex items-center p-[8px] text-[13px] text-primary hover:text-white'>
                                                     Login
                                                 </Link>
                                             </li>
                                             <li>
-                                                <Link to={'/register'} className='flex items-center p-[8px] text-[13px] text-primary'>
+                                                <Link to={'/register'} onClick={() => {setsidebar(false); isAccountActive(false)}} className='flex items-center p-[8px] text-[13px] text-primary hover:text-white'>
                                                     Register
                                                 </Link>
                                             </li>

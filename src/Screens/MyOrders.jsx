@@ -1,5 +1,8 @@
-import React, { useEffect, useState } from 'react'
+import { onValue, ref } from 'firebase/database'
+import React, { useContext, useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { db } from '../../Firebase'
+import { GlobalContext } from './GlobalContext'
 
 const MyOrders = () => {
     const navigate = useNavigate()
@@ -8,7 +11,7 @@ const MyOrders = () => {
     const [banner, SetBanner] = useState('')
     const [vote, SetVote] = useState('')
     const [certified, SetCertified] = useState('')
-
+    const {currentUser} = useContext(GlobalContext)
     const loggedIn = localStorage.getItem('currentUser');
 
     useEffect(() => {
@@ -17,6 +20,30 @@ const MyOrders = () => {
         }
     }, [loggedIn])
 
+    useEffect(() => {
+        const promotionRef = ref(db, '/promoted');
+        onValue(promotionRef, (snapshot) => {
+            let promotionList = [];
+            let bannerList = [];
+            let voteList = [];
+            snapshot.forEach(childSnapshot => {
+                const childData = childSnapshot.val();
+                if (JSON.parse(childData.promoted).length > 0) {
+                    console.log("promoted");
+                    promotionList.push(childData);
+                }
+                if (JSON.parse(childData.banner).length > 0) {
+                    console.log("promoted");
+                    bannerList.push({ date: JSON.parse(childData.banner), image: childData.bannerImage, url: childData.bannerURL });
+                    
+                }
+                if (childData.voteImage !== "") {
+                    console.log("promoted");
+                    voteList.push(JSON.parse(childData.vote));
+                }
+            });
+        }, (error) => console.log(error))
+    }, [currentUser]);
 
     return (
         <div className='mt-[120px] items-center flex justify-center w-full flex-col'>
