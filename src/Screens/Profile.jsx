@@ -1,10 +1,19 @@
 import React, { useContext, useEffect, useState } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { GlobalContext } from './GlobalContext'
 
 const Profile = () => {
     const [image, setImage] = useState('https://firebasestorage.googleapis.com/v0/b/coin-ab637.appspot.com/o/profiles%2Fprofile.jpg?alt=media&token=d1c9cf40-4e39-429c-b610-595fd066ff01')
-    const {currentUser } = useContext(GlobalContext)
+    const { currentUser } = useContext(GlobalContext)
+    const navigate = useNavigate()
+
+    const loggedIn = localStorage.getItem('currentUser');
+
+    useEffect(() => {
+        if (!loggedIn) {
+            navigate("/login")
+        }
+    }, [loggedIn])
 
     useEffect(() => {
         if (currentUser != undefined) {

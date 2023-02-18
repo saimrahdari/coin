@@ -18,6 +18,7 @@ import MyOrders from './Screens/MyOrders';
 import AccountSettings from './Screens/AccountSettings';
 import ChangePassword from './Screens/ChangePassword';
 import Advertise from './Screens/Advertise';
+import MyFavs from './Screens/MyFavs';
 
 
 const router = createBrowserRouter([
@@ -51,7 +52,7 @@ const router = createBrowserRouter([
       },
       {
         path: "my-fav",
-        element : <Dashboad />
+        element : <MyFavs />
       },
       {
         path: "my-coins",

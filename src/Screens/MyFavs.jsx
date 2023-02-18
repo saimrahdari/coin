@@ -1,10 +1,10 @@
-    import { onValue, ref, set } from 'firebase/database';
-    import React, { useContext, useEffect, useState } from 'react'
-    import { useNavigate } from 'react-router-dom';
-    import { db } from '../../Firebase';
-    import { GlobalContext } from './GlobalContext';
+import { onValue, ref, set } from 'firebase/database';
+import React, { useContext, useEffect, useState } from 'react'
+import { useNavigate } from 'react-router-dom';
+import { db } from '../../Firebase';
+import { GlobalContext } from './GlobalContext';
 
-const MyCoins = () => {
+const MyFavs = () => {
     const navigate = useNavigate()
     const { currentUser } = useContext(GlobalContext)
     const [coins, setCoins] = useState([])
@@ -26,7 +26,6 @@ const MyCoins = () => {
         return diffMonths
     }
 
-
     useEffect(() => {
         const userRef = ref(db, 'users/');
         onValue(userRef, snapshot => {
@@ -46,13 +45,13 @@ const MyCoins = () => {
             snapshot.forEach(childSnapshot => {
                 const childKey = childSnapshot.key;
                 const childData = childSnapshot.val();
-                if(childData.ownerId == currentUser.uid){
+                if(dbUser.fav.includes(childKey) && dbUser){
                     coinList.push({ key: childKey, coin: childData });
                 }
             });
             setCoins(coinList);
         }, (error) => console.log(error))
-    }, [currentUser]);
+    }, [currentUser , dbUser]);
 
 
     const IsFav = (coin) => {
@@ -95,15 +94,13 @@ const MyCoins = () => {
     }
 
 
-
-
     return (
         <div className='mt-[120px] items-center flex justify-center w-full flex-col'>
             <div className='w-full flex mt-[20px] px-[8px] md:w-[80%] flex-col'>
                 <ul className=' overflow-x-auto overflow-y-hidden whitespace-nowrap flex gap-x-2'>
                     <li className='mt-[5px] border-b-[4px] border-b-[#211f1f] inline-block mr-[2px] border-[5px] border-t-[#494949] border-l-[#211f1f] border-r-[#3c3c3c]'>
                         <p className={` bg-[#303032] text-primary text-[18px]  cursor-pointer block px-[20px] py-[10px] rounded-t-[3px]`}>
-                            My Coins
+                            My Favourite Coins
                         </p>
                     </li>
                 </ul>
@@ -162,4 +159,4 @@ const MyCoins = () => {
     )
 }
 
-export default MyCoins
+export default MyFavs

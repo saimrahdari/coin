@@ -1,12 +1,14 @@
 import { createUserWithEmailAndPassword, updateProfile } from 'firebase/auth'
-import React, { useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { auth, db } from '../../Firebase'
 import { ref, set, onValue } from "firebase/database";
+import { GlobalContext } from './GlobalContext';
 
 
 const Register = () => {
     const navigate = useNavigate()
+    const { currentUser } = useContext(GlobalContext)
 
     const [dbName, setDbName] = useState("")
     const [username, setUsername] = useState("")
@@ -14,6 +16,14 @@ const Register = () => {
     const [password, setPassword] = useState("")
     const [repassword, setRepassword] = useState("")
     const [error, setError] = useState("")
+
+    const loggedIn = localStorage.getItem('currentUser');
+
+    useEffect(() => {
+        if (loggedIn) {
+            navigate(-1)
+        }
+    }, [loggedIn])
 
     useEffect(() => {
         const userRef = ref(db, 'users/');
@@ -34,7 +44,7 @@ const Register = () => {
         if (username === "") {
             setError("enter username")
         }
-        else if(dbName.includes(username)){
+        else if (dbName.includes(username)) {
             setError("username already taken")
 
         }
@@ -57,6 +67,7 @@ const Register = () => {
                         photoURL: "https://firebasestorage.googleapis.com/v0/b/coin-ab637.appspot.com/o/Profiles%2Fprofile.jpg?alt=media&token=19d30fce-c1a6-4057-a9e0-e3a5c66caf38"
                     }).then(() => {
                         addToDatabase(user.uid)
+                        localStorage.setItem('currentUser', user.stsTokenManager.accessToken);
                         navigate("/")
                     })
                 })
@@ -81,7 +92,7 @@ const Register = () => {
             profileImage: "https://firebasestorage.googleapis.com/v0/b/coin-ab637.appspot.com/o/Profiles%2Fprofile.jpg?alt=media&token=19d30fce-c1a6-4057-a9e0-e3a5c66caf38",
             privacy: false,
             displayName: "",
-            fav : [""]
+            fav: [""]
         });
     }
 

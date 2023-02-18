@@ -27,6 +27,7 @@ const App = () => {
         await auth.signOut()
         setCurrentUser({})
         setDisplayName("")
+        localStorage.removeItem("currentUser")
     }
 
     return (
@@ -132,12 +133,12 @@ const App = () => {
                     <aside className={`${sidebar ? "block lg:hidden left-0 " : "left-full"} h-screen bg-background -z-0 w-full right-0  overflow-auto fixed top-0 bottom-0 `} style={{ transition: 'left 0.2s, width 0.2s' }}>
                         <ul className='w-full pt-[80px] px-[15px] pb-0 list-none mb-[10px]'>
                             <li>
-                                <Link to={'/'} className='relative flex items-center py-[10px] px-[20px] font-normal rounded-[10px] my-[2px] border-b border-b-[#e2c57412] text-[#e7cd86] text-[16px] leading-[1.5] hover:text-white hover:bg-[#e2c5740d] hover:cursor-pointer' style={{ transition: 'border-left-color 0.3s, background-color 0.3s' }}>
-                                    Tokens
+                                <Link onClick={() => setsidebar(false)} to={'/advertise'} className='relative flex items-center py-[10px] px-[20px] font-normal rounded-[10px] my-[2px] border-b border-b-[#e2c57412] text-[#e7cd86] text-[16px] leading-[1.5] hover:text-white hover:bg-[#e2c5740d] hover:cursor-pointer' style={{ transition: 'border-left-color 0.3s, background-color 0.3s' }}>
+                                    Advertise
                                 </Link>
                             </li>
                             <li>
-                                <Link to={'/'} className='relative flex items-center py-[10px] px-[20px] font-normal rounded-[10px] my-[2px] border-b border-b-[#e2c57412] text-[#e7cd86] text-[16px] leading-[1.5] hover:text-white hover:bg-[#e2c5740d] hover:cursor-pointer' style={{ transition: 'border-left-color 0.3s, background-color 0.3s' }}>
+                                <Link onClick={() => setsidebar(false)} to={'/add-coin'} className='relative flex items-center py-[10px] px-[20px] font-normal rounded-[10px] my-[2px] border-b border-b-[#e2c57412] text-[#e7cd86] text-[16px] leading-[1.5] hover:text-white hover:bg-[#e2c5740d] hover:cursor-pointer' style={{ transition: 'border-left-color 0.3s, background-color 0.3s' }}>
                                     Add Coin
                                 </Link>
                             </li>
@@ -148,24 +149,56 @@ const App = () => {
                                     </Link>
                                     <svg className={`${isAccountActive ? "" : "-rotate-90"}`} style={{ transition: 'all 0.3s' }} width="14" height="8.5" viewBox="0 0 28 17" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M0.728676 1.45065C1.12112 1.08129 1.58283 0.890834 2.11379 0.879291C2.64475 0.867749 3.10646 1.0582 3.49891 1.45065L13.9912 11.9429L24.4834 1.45065C24.8528 1.08129 25.3087 0.885063 25.8512 0.861977C26.3937 0.838892 26.8612 1.02357 27.2536 1.41602C27.6461 1.78539 27.8481 2.24709 27.8596 2.80114C27.8712 3.35518 27.6807 3.81689 27.2883 4.18625L15.1339 16.3753C14.9723 16.5369 14.7934 16.6581 14.5971 16.7389C14.4009 16.8197 14.1989 16.8601 13.9912 16.8601C13.7834 16.8601 13.5814 16.8197 13.3852 16.7389C13.1889 16.6581 13.01 16.5369 12.8484 16.3753L0.694048 4.22088C0.324684 3.85152 0.14 3.39558 0.14 2.85308C0.14 2.31058 0.336226 1.8431 0.728676 1.45065Z" fill="currentColor" /></svg>
                                 </div>
-                                <ul className={`relative min-w-[160px] py-[5px] ml-[26px] ${isAccountActive ? "block" : "hidden"}`}>
-                                    <li>
-                                        <Link to={'/login'} className='flex items-center p-[8px] text-[13px] text-primary'>
-                                            Login
-                                        </Link>
-                                    </li>
-                                    <li>
-                                        <Link to={'/register'} className='flex items-center p-[8px] text-[13px] text-primary'>
-                                            Register
-                                        </Link>
-                                    </li>
-                                </ul>
+                                {displayName != "" ?
+                                    (
+                                        <ul className={`relative min-w-[160px] py-[5px] ml-[26px] ${isAccountActive ? "block" : "hidden"}`}>
+                                            <li>
+                                                <Link to={'/my-fav'} className='flex items-center p-[8px] text-[13px] text-primary'>
+                                                    My Favourite
+                                                </Link>
+                                            </li>
+                                            <li>
+                                                <Link to={'/my-orders'} className='flex items-center p-[8px] text-[13px] text-primary'>
+                                                    My Orders
+                                                </Link>
+                                            </li>   <li>
+                                                <Link to={'/my-coins'} className='flex items-center p-[8px] text-[13px] text-primary'>
+                                                    My Coins
+                                                </Link>
+                                            </li>
+                                            <li>
+                                                <Link to={'/account-settings'} className='flex items-center p-[8px] text-[13px] text-primary'>
+                                                    Account Settings
+                                                </Link>
+                                            </li>
+                                            <li>
+                                                <Link to={''} onClick={handleLogout} className='flex items-center p-[8px] text-[13px] text-primary'>
+                                                    Logout
+                                                </Link>
+                                            </li>
+                                        </ul>
+                                    ) :
+                                    (
+                                        <ul className={`relative min-w-[160px] py-[5px] ml-[26px] ${isAccountActive ? "block" : "hidden"}`}>
 
+                                            <li>
+                                                <Link to={'/login'} className='flex items-center p-[8px] text-[13px] text-primary'>
+                                                    Login
+                                                </Link>
+                                            </li>
+                                            <li>
+                                                <Link to={'/register'} className='flex items-center p-[8px] text-[13px] text-primary'>
+                                                    Register
+                                                </Link>
+                                            </li>
+                                        </ul>
+                                    )
+                                }
                             </li>
                         </ul>
                     </aside>
                 </div>
-            </div>
+            </div >
 
             <Outlet />
             <div className='mt-[100px]'>

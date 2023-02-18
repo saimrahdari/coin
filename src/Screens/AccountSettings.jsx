@@ -1,10 +1,10 @@
 import React, { useContext, useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { GlobalContext } from './GlobalContext'
-import { ref, onValue , child, push, update  } from "firebase/database";
-import { db , storage } from '../../Firebase';
+import { ref, onValue, child, push, update } from "firebase/database";
+import { db, storage } from '../../Firebase';
 import { getAuth, updateEmail, updateProfile } from 'firebase/auth';
-import {getDownloadURL, ref as imageRef, uploadBytes} from "firebase/storage";
+import { getDownloadURL, ref as imageRef, uploadBytes } from "firebase/storage";
 
 
 const AccountSettings = () => {
@@ -23,12 +23,22 @@ const AccountSettings = () => {
     const [dbUser, setDbUser] = useState([])
     const [updated, setUpdated] = useState("")
 
+
+    const loggedIn = localStorage.getItem('currentUser');
+
+    useEffect(() => {
+        if (!loggedIn) {
+            navigate("/login")
+        }
+    }, [loggedIn])
+
+
     useEffect(() => {
         setImage(currentUser.photoURL)
-        const   userRef = ref(db, 'users/');
+        const userRef = ref(db, 'users/');
         onValue(userRef, snapshot => {
             snapshot.forEach(childSnapshot => {
-                if(Object.values(childSnapshot.val()).includes(currentUser.uid)){
+                if (Object.values(childSnapshot.val()).includes(currentUser.uid)) {
                     setDbUser(childSnapshot.val())
                 }
             })
@@ -36,7 +46,7 @@ const AccountSettings = () => {
     }, [currentUser])
 
     useEffect(() => {
-        if(dbUser.length != 0){
+        if (dbUser.length != 0) {
             setName(dbUser.displayName)
             setEmail(dbUser.email)
             setWebsite(dbUser.website)
@@ -44,15 +54,14 @@ const AccountSettings = () => {
             setAbout(dbUser.about)
             setFacebook(dbUser.facebook)
             setTwitter(dbUser.twitter)
-            setImage(dbUser.profileImage)
             setPrivacy(dbUser.privacy)
-        }   
-    }, [dbUser , currentUser])
+        }
+    }, [dbUser, currentUser])
 
     useEffect(() => {
         setTimeout(() => {
             setUpdated("")
-        } ,7000)
+        }, 7000)
     }, [updated])
 
     const handleChange = (event) => {
@@ -76,15 +85,15 @@ const AccountSettings = () => {
             getDownloadURL(StorageRef).then(url => {
                 updateProfile(auth.currentUser, {
                     photoURL: url
-                  }).then(() => {
+                }).then(() => {
                     setImage(url)
-                    
-                  }).catch((error) => {
+
+                }).catch((error) => {
                     // An error occurred
                     // ...
-                  });
+                });
             });
-          });
+        });
 
         const reader = new FileReader();
         reader.readAsDataURL(file);
@@ -100,34 +109,26 @@ const AccountSettings = () => {
     };
 
     const handleSubmit = () => {
-        
-        const UesrData = {
-            id: currentUser.uid,
-            email: email,
-            website: website,
-            location: location,
-            about: about,
-            facebook: facebook,
-            twitter: twitter,
-            profileImage: image == null ? " " : image,
-            privacy: privacy,
-            displayName: name,
-            favs : setDbUser.favs
-          };
-
-          const auth = getAuth();
-          updateEmail(auth.currentUser, email).then(() => {
-              const updates = {};
-              updates['/users/' + currentUser.uid] = UesrData;
-              update(ref(db), updates);
-              setUpdated("Profile Updated!")
-          }).catch((error) => {
+        const auth = getAuth();
+        updateEmail(auth.currentUser, email).then(() => {
+            update(ref(db, `/users/${currentUser.uid}`), {
+                email: email,
+                website: website,
+                location: location,
+                about: about,
+                facebook: facebook,
+                twitter: twitter,
+                profileImage: image == null ? "" : image,
+                privacy: privacy,
+                displayName: name,
+            })
+        }).catch((error) => {
             // An error occurred
             console.log(error);
             // ...
-          });
+        });
 
-          navigate("/")
+        navigate("/")
     }
 
     return (

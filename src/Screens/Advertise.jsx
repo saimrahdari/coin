@@ -52,6 +52,14 @@ const Advertise = () => {
     const [forPay, setForPay] = useState('')
     const [currency, setCurrency] = useState('BNB')
 
+    const loggedIn = localStorage.getItem('currentUser');
+
+    useEffect(() => {
+        if (!loggedIn) {
+            navigate("/login")
+        }
+    }, [loggedIn])
+
 
     const getCountries = async () => {
 
@@ -101,7 +109,7 @@ const Advertise = () => {
         }
         setTotal(currency === "BNB" ? (((date1.length * 0.11) + (date2.length * 0.11) + (date3.length * 0.08)).toFixed(2) - reduction).toFixed(2) : (((date1.length * 0.000046) + (date2.length * 0.000046) + (date3.length * 0.000046)) - reduction));
 
-    }, [date1, date2, date3, subtotal, reduction , currency])
+    }, [date1, date2, date3, subtotal, reduction, currency])
 
     const handleSubmit = () => {
         if (date1.length + date2.length + date3.length <= 0) {
@@ -171,7 +179,7 @@ const Advertise = () => {
             }
         }
 
-        if(forPay === ""){
+        if (forPay === "") {
             setForPay("yes");
         }
 
@@ -200,48 +208,48 @@ const Advertise = () => {
                 currency1: currency,
                 currency2: "BTC",
                 buyer_email: currentUser.email
-              })
-              .then(function (res) {
-                axios
-                  .post('http://localhost:5000/getPaymentStatus', {
-                    transactionId: res.data.result.txn_id
-                  })
-                  .then(res2 => {
-                    Promise.all([bannerLink, voteLink]).then(([bannerUrl, voteUrl]) => {
-                        push(ref(db, 'promoted/'), {
-                            coin,
-                            owner: currentUser.displayName,
-                            ownerId: currentUser.uid,
-                            promoted: JSON.stringify(date1),
-                            banner: JSON.stringify(date2),
-                            bannerImage: bannerUrl,
-                            bannerURL: link1,
-                            vote: JSON.stringify(date3),
-                            voteImage: voteUrl,
-                            voteURL: link2,
-                            total: total,
-                            name: name,
-                            surname: surname,
-                            streetAddress: street,
-                            additionalAddress: additionalAddress,
-                            city: city,
-                            postalCode: postal,
-                            country: country,
-                            txnId : res.data.result.txn_id,
-                            status: res2.data.result.status
+            })
+                .then(function (res) {
+                    axios
+                        .post('http://localhost:5000/getPaymentStatus', {
+                            transactionId: res.data.result.txn_id
                         })
-                    })
-                    setDate1([])
-                    setDate2([])
-                    setDate3([])
-                    window.open(res.data.result.checkout_url , "_blank");
-                    navigate("/")
-                  } )
-                  .catch(err => console.error(err));
-              })
-              .catch(function (error) {
-                console.log(error);
-              });
+                        .then(res2 => {
+                            Promise.all([bannerLink, voteLink]).then(([bannerUrl, voteUrl]) => {
+                                push(ref(db, 'promoted/'), {
+                                    coin,
+                                    owner: currentUser.displayName,
+                                    ownerId: currentUser.uid,
+                                    promoted: JSON.stringify(date1),
+                                    banner: JSON.stringify(date2),
+                                    bannerImage: bannerUrl,
+                                    bannerURL: link1,
+                                    vote: JSON.stringify(date3),
+                                    voteImage: voteUrl,
+                                    voteURL: link2,
+                                    total: total,
+                                    name: name,
+                                    surname: surname,
+                                    streetAddress: street,
+                                    additionalAddress: additionalAddress,
+                                    city: city,
+                                    postalCode: postal,
+                                    country: country,
+                                    txnId: res.data.result.txn_id,
+                                    status: res2.data.result.status
+                                })
+                            })
+                            setDate1([])
+                            setDate2([])
+                            setDate3([])
+                            window.open(res.data.result.checkout_url, "_blank");
+                            navigate("/")
+                        })
+                        .catch(err => console.error(err));
+                })
+                .catch(function (error) {
+                    console.log(error);
+                });
         }
     }, [bannerLink, voteLink, forPay])
 
@@ -398,8 +406,8 @@ const Advertise = () => {
 
                     <div className='w-full lg:w-[60%] flex flex-col justify-center items-center bg-[#303030] rounded-[20px] py-[40px] m-[20px]'>
                         <div className='flex flex-row self-end mr-[28px]'>
-                            <div onClick={() => setCurrency(currency === "BNB" ? "BTC" : "BNB")} className='select-none w-[100px] block h-[45px] cursor-pointer relative outline-none rounded-[100px] border-[2px] border-primary bg-[#e9ca800f]' style={{transition : 'all 500ms'}}>
-                                <p className={` ${currency === "BNB"? "rounded-l-[50px] rounded-r-[5px]" : "rounded-l-[5px] rounded-r-[50px]"} absolute top-[4px] bottom-[4px] left-[4px] text-center uppercase bg-[#37474f] border-[2px] border-[#f0b90b] text-[#f0b90b]`} style={{width: "calc(50% - 4px)", lineHeight: '30px', transition : 'left 500ms , right 500ms' , transform : `${currency === 'BNB' ? "" : 'translate(100%, 0)'}`}}>
+                            <div onClick={() => setCurrency(currency === "BNB" ? "BTC" : "BNB")} className='select-none w-[100px] block h-[45px] cursor-pointer relative outline-none rounded-[100px] border-[2px] border-primary bg-[#e9ca800f]' style={{ transition: 'all 500ms' }}>
+                                <p className={` ${currency === "BNB" ? "rounded-l-[50px] rounded-r-[5px]" : "rounded-l-[5px] rounded-r-[50px]"} absolute top-[4px] bottom-[4px] left-[4px] text-center uppercase bg-[#37474f] border-[2px] border-[#f0b90b] text-[#f0b90b]`} style={{ width: "calc(50% - 4px)", lineHeight: '30px', transition: 'left 500ms , right 500ms', transform: `${currency === 'BNB' ? "" : 'translate(100%, 0)'}` }}>
                                     {currency}
                                 </p>
                             </div>
@@ -457,7 +465,7 @@ const Advertise = () => {
                                 <div onClick={() => setcollapse2(!collapse2)} className='cursor-pointer flex flex-row items-center w-full py-[1rem] px-[1.25rem] text-left text-white border-none ' style={{ transition: "color 0.15s ease-in-out, background-color 0.15s ease-in-out, border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out, border-radius 0.15s ease" }}>
                                     <h3 className='break-words mt-[20px] mb-[10px] font-medium text-[20px] '>Main Banner Ad</h3>
                                     <p className='ml-[5px] font-normal mt-[8px] rounded-[10px] min-w-[10px] py-[3px] px-[7px] text-[15px] text-[#262626] text-center whitespace-nowrap align-baseline bg-primary'>
-                                      {currency === "BNB" ? "~0.11 BNB" : "~0.000046 BTC"}
+                                        {currency === "BNB" ? "~0.11 BNB" : "~0.000046 BTC"}
                                     </p>
                                     <span className='ml-auto font-black text-white'>
                                         <svg width="20" height="17" viewBox="0 0 28 17" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M0.728676 1.45065C1.12112 1.08129 1.58283 0.890834 2.11379 0.879291C2.64475 0.867749 3.10646 1.0582 3.49891 1.45065L13.9912 11.9429L24.4834 1.45065C24.8528 1.08129 25.3087 0.885063 25.8512 0.861977C26.3937 0.838892 26.8612 1.02357 27.2536 1.41602C27.6461 1.78539 27.8481 2.24709 27.8596 2.80114C27.8712 3.35518 27.6807 3.81689 27.2883 4.18625L15.1339 16.3753C14.9723 16.5369 14.7934 16.6581 14.5971 16.7389C14.4009 16.8197 14.1989 16.8601 13.9912 16.8601C13.7834 16.8601 13.5814 16.8197 13.3852 16.7389C13.1889 16.6581 13.01 16.5369 12.8484 16.3753L0.694048 4.22088C0.324684 3.85152 0.14 3.39558 0.14 2.85308C0.14 2.31058 0.336226 1.8431 0.728676 1.45065Z" fill="currentColor" /></svg>

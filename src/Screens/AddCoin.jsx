@@ -90,6 +90,15 @@ const AddCoin = () => {
   const coinDate = new DateObject()
 
 
+  const loggedIn = localStorage.getItem('currentUser');
+
+  useEffect(() => {
+    if (!loggedIn) {
+      navigate("/login")
+    }
+  }, [loggedIn])
+
+
   const coinPaymentsApiKey = import.meta.env.PUBLIC_KEY
 
   const keyOptions = {
@@ -281,6 +290,9 @@ const AddCoin = () => {
   useEffect(() => {
     setDescCount(description.length)
   }, [description])
+
+
+
 
   return (
     <div className='mt-[120px] items-center flex justify-center w-full flex-col'>

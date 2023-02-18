@@ -1,13 +1,21 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 
 const MyOrders = () => {
     const navigate = useNavigate()
-    const [order , SetOrders] = useState('')
-    const [promoted , SetPromoted] = useState('')
-    const [banner , SetBanner] = useState('')
-    const [vote , SetVote] = useState('')
-    const [certified , SetCertified] = useState('')
+    const [order, SetOrders] = useState('')
+    const [promoted, SetPromoted] = useState('')
+    const [banner, SetBanner] = useState('')
+    const [vote, SetVote] = useState('')
+    const [certified, SetCertified] = useState('')
+
+    const loggedIn = localStorage.getItem('currentUser');
+
+    useEffect(() => {
+        if (!loggedIn) {
+            navigate("/login")
+        }
+    }, [loggedIn])
 
 
     return (
@@ -23,40 +31,40 @@ const MyOrders = () => {
 
                 <div className='flex flex-col justify-center items-center mt-[40px] '>
                     <h1 className='text-[1.5rem] mb-[10px] mt-[20px] font-medium'>Pending Orders</h1>
-                    {order.length === 0 ? 
-                    <h1 className='text-[1rem]  font-normal'>No data there..</h1>
+                    {order.length === 0 ?
+                        <h1 className='text-[1rem]  font-normal'>No data there..</h1>
                         :
                         <></>
                     }
                 </div>
                 <div className='flex flex-col justify-center items-center mt-[40px] '>
                     <h1 className='text-[1.5rem] mb-[10px] mt-[20px] font-medium'>Promoted Coin</h1>
-                    {promoted.length === 0 ? 
-                    <h1 className='text-[1rem]  font-normal'>No data there..</h1>
+                    {promoted.length === 0 ?
+                        <h1 className='text-[1rem]  font-normal'>No data there..</h1>
                         :
                         <></>
                     }
                 </div>
                 <div className='flex flex-col justify-center items-center mt-[40px] '>
                     <h1 className='text-[1.5rem] mb-[10px] mt-[20px] font-medium'>Banner Ad</h1>
-                    {banner.length === 0 ? 
-                    <h1 className='text-[1rem]  font-normal'>No data there..</h1>
+                    {banner.length === 0 ?
+                        <h1 className='text-[1rem]  font-normal'>No data there..</h1>
                         :
                         <></>
                     }
                 </div>
                 <div className='flex flex-col justify-center items-center mt-[40px] '>
                     <h1 className='text-[1.5rem] mb-[10px] mt-[20px] font-medium'>Vote ad</h1>
-                    {vote.length === 0 ? 
-                    <h1 className='text-[1rem]  font-normal'>No data there..</h1>
+                    {vote.length === 0 ?
+                        <h1 className='text-[1rem]  font-normal'>No data there..</h1>
                         :
                         <></>
                     }
                 </div>
                 <div className='flex flex-col justify-center items-center mt-[40px] '>
                     <h1 className='text-[1.5rem] mb-[10px] mt-[20px] font-medium'>Certified Coin</h1>
-                    {certified.length === 0 ? 
-                    <h1 className='text-[1rem]  font-normal'>No data there..</h1>
+                    {certified.length === 0 ?
+                        <h1 className='text-[1rem]  font-normal'>No data there..</h1>
                         :
                         <></>
                     }

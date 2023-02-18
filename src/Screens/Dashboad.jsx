@@ -241,7 +241,6 @@ const Dashboad = () => {
     }
 
     useEffect(() => {
-        console.log(coinType[0]);
         filterSymbol(type, coinType[0]);
     }, [filteredCoins]);
 
@@ -312,7 +311,7 @@ const Dashboad = () => {
                         {
                             promotedCoin.map(coin => (
 
-                                <tr onClick={() => navigate(`/coin/${coin.coin.name}`, { state: coin })} className='border-b border-b-[#5c5c5c]  hover:bg-[#3f3f3f] h-[70px] cursor-pointer w-full border-spacing-[10px] text-white text-center'>
+                                <tr key={coin.coin.name} onClick={() => navigate(`/coin/${coin.coin.name}`, { state: coin })} className='border-b border-b-[#5c5c5c]  hover:bg-[#3f3f3f] h-[70px] cursor-pointer w-full border-spacing-[10px] text-white text-center'>
                                     <td onClick={(e) => handleFav(e, coin)} className='group align-middle table-cell text-[16px] text-primary'>
                                         <div className='flex flex-row w-full justify-center items-center'>
                                             <svg className={` ${IsFav(coin) ? "text-red-500" : "text-white"} group-hover:opacity-100 inline opacity-0  mr-[15px]`} width="25" height="22" viewBox="0 0 25 22" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M22.5738 1.49576C19.8981 -0.784512 15.9186 -0.374356 13.4625 2.15982L12.5006 3.15104L11.5387 2.15982C9.08751 -0.374356 5.10314 -0.784512 2.42736 1.49576C-0.639049 4.11295 -0.800182 8.81022 1.94396 11.6471L11.3922 21.403C12.0026 22.0329 12.9938 22.0329 13.6041 21.403L23.0524 11.6471C25.8014 8.81022 25.6402 4.11295 22.5738 1.49576Z" fill="currentColor" /></svg>
@@ -352,15 +351,15 @@ const Dashboad = () => {
                 <div className='w-full md:w-[32%] bg-[#302e2a] p-[14px] rounded-[0.375rem] border-[2px] border-[#3e3a30] flex-col gap-y-2'>
                     <div className='w-full flex justify-between items-center flex-row'>
                         <h4 className='text-[18px] my-[10px]]'>🔥 Trending</h4>
-                        <div class="group relative flex justify-center">
-                            <span class="absolute top-10 scale-0 rounded bg-black p-2 text-xs w-[250px] text-white group-hover:scale-100">The trending section is based on a voting scores</span>
-                            <button class="min-w-[20px] h-[20px] text-black rounded-[50%] bg-white">i</button>
+                        <div className="group relative flex justify-center">
+                            <span className="absolute top-10 scale-0 rounded bg-black p-2 text-xs w-[250px] text-white group-hover:scale-100">The trending section is based on a voting scores</span>
+                            <button className="min-w-[20px] h-[20px] text-black rounded-[50%] bg-white">i</button>
                         </div>
                     </div>
                     <div className='flex flex-col gap-y-2 w-full'>
                         {
                             trending.map(coin => (
-                                <div onClick={() => navigate(`/coin/${coin.coin.name}`, { state: coin })} key={coin.key} className='hover:text-[#646464] text-primary flex flex-row w-full cursor-pointer'>
+                                <div onClick={() => navigate(`/coin/${coin.coin.name}`, { state: coin })} key={coin.key} className='hover:text-[#646464]  gap-x-2 text-primary flex flex-row w-full cursor-pointer'>
                                     <div className='group w-[30px] h-[30px] overflow-hidden rounded-[50%]'>
                                         <img src={coin.coin.coinLogo} alt="" />
                                     </div>
@@ -378,15 +377,15 @@ const Dashboad = () => {
                 <div className='w-full md:w-[32%] bg-[#302e2a] p-[14px] rounded-[0.375rem] border-[2px] border-[#3e3a30] flex-col gap-y-2'>
                     <div className='w-full flex justify-between items-center flex-row'>
                         <h4 className='text-[18px] my-[10px]]'>🌕 Top gainers</h4>
-                        <div class="group relative flex justify-center">
-                            <span class="absolute top-10 scale-0 rounded bg-black p-2 text-xs w-[250px] text-white group-hover:scale-100">Top ganers are based on the biggest price.</span>
-                            <button class="min-w-[20px] h-[20px] text-black rounded-[50%] bg-white">i</button>
+                        <div className="group relative flex justify-center">
+                            <span className="absolute top-10 scale-0 rounded bg-black p-2 text-xs w-[250px] text-white group-hover:scale-100">Top ganers are based on the biggest price.</span>
+                            <button className="min-w-[20px] h-[20px] text-black rounded-[50%] bg-white">i</button>
                         </div>
                     </div>
                     <div className='flex flex-col gap-y-2 w-full'>
                         {
                             price.map(coin => (
-                                <div onClick={() => navigate(`/coin/${coin.coin.name}`, { state: coin })} key={coin.key} className='hover:text-[#646464] text-primary flex flex-row w-full cursor-pointer'>
+                                <div onClick={() => navigate(`/coin/${coin.coin.name}`, { state: coin })} key={coin.key} className=' gap-x-2 hover:text-[#646464] text-primary flex flex-row w-full cursor-pointer'>
                                     <div className='group w-[30px] h-[30px] overflow-hidden rounded-[50%]'>
                                         <img src={coin.coin.coinLogo} alt="" />
                                     </div>
@@ -403,15 +402,15 @@ const Dashboad = () => {
                 <div className='w-full md:w-[32%] bg-[#302e2a] p-[14px] rounded-[0.375rem] border-[2px] border-[#3e3a30] flex-col gap-y-2'>
                     <div className='w-full flex justify-between items-center flex-row'>
                         <h4 className='text-[18px] my-[10px]]'>✨ Recently added</h4>
-                        <div class="group relative flex justify-center">
-                            <span class="absolute top-10 scale-0 rounded bg-black p-2 text-xs w-[250px] text-white group-hover:scale-100">recently added highlights recently listed projects on Coinvote to give everyone a chance to be seen</span>
-                            <button class="min-w-[20px] h-[20px] text-black rounded-[50%] bg-white">i</button>
+                        <div className="group relative flex justify-center">
+                            <span className="absolute top-10 scale-0 rounded bg-black p-2 text-xs w-[250px] text-white group-hover:scale-100">recently added highlights recently listed projects on Coinvote to give everyone a chance to be seen</span>
+                            <button className="min-w-[20px] h-[20px] text-black rounded-[50%] bg-white">i</button>
                         </div>
                     </div>
                     <div className='flex flex-col gap-y-2 w-full'>
                         {
                             recently.map(coin => (
-                                <div onClick={() => navigate(`/coin/${coin.coin.name}`, { state: coin })} key={coin.key} className='hover:text-[#646464] text-primary flex flex-row w-full cursor-pointer'>
+                                <div onClick={() => navigate(`/coin/${coin.coin.name}`, { state: coin })} key={coin.key} className='hover:text-[#646464] gap-x-2 text-primary flex flex-row w-full cursor-pointer'>
                                     <div className='group w-[30px] h-[30px] overflow-hidden rounded-[50%]'>
                                         <img src={coin.coin.coinLogo} alt="" />
                                     </div>
@@ -429,7 +428,7 @@ const Dashboad = () => {
 
             <div className='flex flex-row gap-x-[18px] justify-start px-[8px] mt-[20px] md:w-[80%] w-full flex-wrap'>
                 {coinType.map((coin, index) => (
-                    <div onClick={() => filterSymbol(index, coin)} className={`flex flex-row gap-x-3 cursor-pointer mb-[3px] text-white p-[10px] border-[2px] border-primary w-auto   ${type === index ? "bg-primary" : "bg-[#262626]"} `}>
+                    <div key={coin.key} onClick={() => filterSymbol(index, coin)} className={`flex flex-row gap-x-3 cursor-pointer mb-[3px] text-white p-[10px] border-[2px] border-primary w-auto   ${type === index ? "bg-primary" : "bg-[#262626]"} `}>
                         <img src={coin.image} alt="" />
                         <p>{coin.name}</p>
                     </div>
@@ -493,7 +492,7 @@ const Dashboad = () => {
                     <tbody>
                         {
                             Typefiltered.map(coin => (
-                                <tr onClick={() => navigate(`/coin/${coin.coin.name}`, { state: coin })} className='border-b border-b-[#5c5c5c]  hover:bg-[#3f3f3f] h-[70px] cursor-pointer w-full border-spacing-[10px] text-white text-center'>
+                                <tr key={coin.key} onClick={() => navigate(`/coin/${coin.coin.name}`, { state: coin })} className='border-b border-b-[#5c5c5c]  hover:bg-[#3f3f3f] h-[70px] cursor-pointer w-full border-spacing-[10px] text-white text-center'>
                                     <td onClick={(e) => handleFav(e, coin)} className='group align-middle table-cell text-[16px] text-primary'>
                                         <div className='flex flex-row w-full justify-center items-center'>
                                             <svg className={` ${IsFav(coin) ? "text-red-500" : "text-white"} group-hover:opacity-100 inline opacity-0  mr-[15px]`} width="25" height="22" viewBox="0 0 25 22" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M22.5738 1.49576C19.8981 -0.784512 15.9186 -0.374356 13.4625 2.15982L12.5006 3.15104L11.5387 2.15982C9.08751 -0.374356 5.10314 -0.784512 2.42736 1.49576C-0.639049 4.11295 -0.800182 8.81022 1.94396 11.6471L11.3922 21.403C12.0026 22.0329 12.9938 22.0329 13.6041 21.403L23.0524 11.6471C25.8014 8.81022 25.6402 4.11295 22.5738 1.49576Z" fill="currentColor" /></svg>

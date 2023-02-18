@@ -11,6 +11,14 @@ const Login = () => {
     const [password, setPassword] = useState("")
     const [error, setError] = useState("")
 
+    const loggedIn = localStorage.getItem('currentUser');
+
+    useEffect(() => {
+        if (loggedIn) {
+            navigate(-1)
+        }
+    }, [loggedIn])
+
 
     const loginHandle = () => {
         if (email === "") {
@@ -25,6 +33,7 @@ const Login = () => {
             .then((userCredential) => {
                 const data = userCredential.user;
                 setUser(data)
+                localStorage.setItem('currentUser', data.stsTokenManager.accessToken);
                 navigate("/")
             })
             .catch((error) => {

@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { EmailAuthProvider, getAuth, reauthenticateWithCredential, updatePassword } from "firebase/auth";
 import { GlobalContext } from './GlobalContext';
@@ -6,10 +6,19 @@ import { GlobalContext } from './GlobalContext';
 
 const ChangePassword = () => {
     const navigate = useNavigate()
-    // const [currentUser] = useContext(GlobalContext)
+    const { currentUser } = useContext(GlobalContext)
+
     const [old, setOld] = useState('')
     const [newPass, setNewPass] = useState('')
     const [repass, setRepass] = useState('')
+
+    const loggedIn = localStorage.getItem('currentUser');
+
+    useEffect(() => {
+        if (!loggedIn) {
+            navigate("/login")
+        }
+    }, [loggedIn])
 
     const handleChange = () => {
         const auth = getAuth();
@@ -19,16 +28,16 @@ const ChangePassword = () => {
         const userCredential = EmailAuthProvider.credential(
             user.email,
             old
-          );
-        reauthenticateWithCredential(user , userCredential).then(() => {
+        );
+        reauthenticateWithCredential(user, userCredential).then(() => {
             updatePassword(user, newPass).then(() => {
                 navigate('/account-settings')
             }).catch((error) => {
             });
-            
+
         })
 
-        
+
     }
     return (
         <div className='mt-[120px] items-center flex justify-center w-full flex-col'>
