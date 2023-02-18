@@ -181,14 +181,13 @@ const App = () => {
                                     ) :
                                     (
                                         <ul className={`relative min-w-[160px] py-[5px] ml-[26px] ${isAccountActive ? "block" : "hidden"}`}>
-
                                             <li>
-                                                <Link to={'/login'} onClick={() => {setsidebar(false); isAccountActive(false)}} className='flex items-center p-[8px] text-[13px] text-primary hover:text-white'>
+                                                <Link to={'/login'} className='flex items-center p-[8px] text-[13px] text-primary hover:text-white'>
                                                     Login
                                                 </Link>
                                             </li>
                                             <li>
-                                                <Link to={'/register'} onClick={() => {setsidebar(false); isAccountActive(false)}} className='flex items-center p-[8px] text-[13px] text-primary hover:text-white'>
+                                                <Link to={'/register'} className='flex items-center p-[8px] text-[13px] text-primary hover:text-white'>
                                                     Register
                                                 </Link>
                                             </li>
