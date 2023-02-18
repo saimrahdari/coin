@@ -199,7 +199,7 @@ const App = () => {
                         </ul>
                     </aside>
                 </div>
-            </div >
+            </div>
 
             <Outlet />
             <div className='mt-[100px]'>
