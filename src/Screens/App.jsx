@@ -1,10 +1,11 @@
 import React, { useContext, useEffect, useState } from 'react'
-import { Link, Outlet } from 'react-router-dom'
+import { Link, Outlet, useNavigate } from 'react-router-dom'
 import { GlobalContext } from './GlobalContext'
 import { auth } from '../../Firebase'
 
 
 const App = () => {
+    const navigate = useNavigate()
     const [userDropdown, setUserDropdown] = useState(false)
     const [sidebar, setsidebar] = useState(false)
     const [isAccountActive, setIsAccountActive] = useState(false)
@@ -182,14 +183,14 @@ const App = () => {
                                     (
                                         <ul className={`relative min-w-[160px] py-[5px] ml-[26px] ${isAccountActive ? "block" : "hidden"}`}>
                                             <li>
-                                                <Link to={'/login'} className='flex items-center p-[8px] text-[13px] text-primary hover:text-white'>
+                                                <p onClick={() => {setsidebar(false); isAccountActive(false); navigate("/login")}} className='flex items-center p-[8px] text-[13px] text-primary hover:text-white'>
                                                     Login
-                                                </Link>
+                                                </p>
                                             </li>
                                             <li>
-                                                <Link to={'/register'} className='flex items-center p-[8px] text-[13px] text-primary hover:text-white'>
+                                                <p onClick={() => {setsidebar(false); isAccountActive(false); navigate("/register")}} className='flex items-center p-[8px] text-[13px] text-primary hover:text-white'>
                                                     Register
-                                                </Link>
+                                                </p>
                                             </li>
                                         </ul>
                                     )
