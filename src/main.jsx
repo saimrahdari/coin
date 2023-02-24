@@ -19,6 +19,11 @@ import AccountSettings from './Screens/AccountSettings';
 import ChangePassword from './Screens/ChangePassword';
 import Advertise from './Screens/Advertise';
 import MyFavs from './Screens/MyFavs';
+import Airdrops from './Screens/Airdrops';
+import AddAirdrop from './Screens/AddAirdrop';
+import Partners from './Screens/Partners';
+import AirdropDetails from './Screens/AirdropDetails';
+import AddPartner from './Screens/AddPartner';
 
 
 const router = createBrowserRouter([
@@ -73,6 +78,26 @@ const router = createBrowserRouter([
       {
         path: "advertise",
         element : <Advertise />
+      },
+      {
+        path: "airdrops",
+        element : <Airdrops />
+      },
+      {
+        path: "add-airdrop",
+        element : <AddAirdrop />
+      },
+      {
+        path: "airdrop/:name",
+        element : <AirdropDetails />
+      },
+      {
+        path: "add-partner",
+        element : <AddPartner />
+      },
+      {
+        path: "partner",
+        element : <Partners />
       },
     ]
   },

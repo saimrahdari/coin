@@ -47,8 +47,8 @@ const MyOrders = () => {
 
     return (
         <div className='mt-[120px] items-center flex justify-center w-full flex-col'>
-            <div className='md:w-[80%] w-full flex flex-col justify-center items-center my-[20px]  rounded-[12px] pt-[20px] pb-[90px] px-[5px] bg-[#262626] border-[5px] border-primary '>
-                <div onClick={() => navigate("/")} className='self-start inline-flex cursor-pointer flex-row items-center gap-x-[8px] text-primary p-[20px] hover:text-white'>
+            <div className='md:w-[80%] w-full flex flex-col justify-center items-center my-[20px]  rounded-[12px] pt-[20px] pb-[90px] px-[5px] bg-primary border-[5px] border-secondary '>
+                <div onClick={() => navigate("/")} className='self-start inline-flex cursor-pointer flex-row items-center gap-x-[8px] text-white p-[20px] hover:text-white'>
                     <svg width="15" height="15" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M11.4965 18.1877L10.5055 19.1787C10.0859 19.5983 9.40743 19.5983 8.9923 19.1787L0.314697 10.5055C-0.104899 10.0859 -0.104899 9.40743 0.314697 8.9923L8.9923 0.314697C9.4119 -0.104899 10.0904 -0.104899 10.5055 0.314697L11.4965 1.30566C11.9205 1.72972 11.9116 2.4216 11.4786 2.83674L6.09977 7.96117H18.9287C19.5224 7.96117 20 8.43879 20 9.03247V10.4609C20 11.0546 19.5224 11.5322 18.9287 11.5322H6.09977L11.4786 16.6566C11.9161 17.0718 11.925 17.7636 11.4965 18.1877Z" fill="currentColor" /></svg>
                     <p>Go back</p>
                 </div>

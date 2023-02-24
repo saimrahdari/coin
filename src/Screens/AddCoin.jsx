@@ -296,8 +296,8 @@ const AddCoin = () => {
 
   return (
     <div className='mt-[120px] items-center flex justify-center w-full flex-col'>
-      <div className='md:w-[80%] w-full my-[20px] rounded-[12px] pt-[20px] pb-[30px] px-[5px] bg-[#262626] border-[5px] border-primary '>
-        <div onClick={() => navigate("/")} className='inline-flex cursor-pointer flex-row items-center gap-x-[8px] text-primary p-[20px] hover:text-white'>
+      <div className='md:w-[80%] w-full my-[20px] rounded-[12px] pt-[20px] pb-[30px] px-[5px] bg-primary border-[5px] border-secondary '>
+        <div onClick={() => navigate("/")} className='inline-flex cursor-pointer flex-row items-center gap-x-[8px] text-white p-[20px] hover:text-white'>
           <svg width="15" height="15" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M11.4965 18.1877L10.5055 19.1787C10.0859 19.5983 9.40743 19.5983 8.9923 19.1787L0.314697 10.5055C-0.104899 10.0859 -0.104899 9.40743 0.314697 8.9923L8.9923 0.314697C9.4119 -0.104899 10.0904 -0.104899 10.5055 0.314697L11.4965 1.30566C11.9205 1.72972 11.9116 2.4216 11.4786 2.83674L6.09977 7.96117H18.9287C19.5224 7.96117 20 8.43879 20 9.03247V10.4609C20 11.0546 19.5224 11.5322 18.9287 11.5322H6.09977L11.4786 16.6566C11.9161 17.0718 11.925 17.7636 11.4965 18.1877Z" fill="currentColor" /></svg>
           <p>Go back</p>
         </div>
@@ -354,7 +354,7 @@ const AddCoin = () => {
             </div>
             <div className='break-words mb-[15px]'>
               <label className='cursor-pointer mb-[5px] font-semibold flex flex-col'>
-                Symbol
+                Description
               </label>
               <textarea
                 className='text-ellipsis focus-visible:outline-none w-full py-[6px] px-[12px] text-[#495057] bg-white border border-[#ced4da] rounded-[0.25rem]'
@@ -366,19 +366,19 @@ const AddCoin = () => {
                 maxLength={1800}
                 onChange={e => setDescription(e.target.value)}
               ></textarea>
-              <p className='text-primary font-semibold text-[14px]'>{descCount}/1800 characters (max)</p>
+              <p className='text-white font-semibold text-[14px]'>{descCount}/1800 characters (max)</p>
             </div>
 
             <div className='w-full flex-row '>
               <h1 className='font-semibold text-[16px] mt-[20px] mb-[15px]'>Coin Images</h1>
               <label
                 htmlFor="image-input"
-                className=' hover:bg-primary bg-transparent text-white border-[2px] border-primary px-[16px] py-[8px] cursor-pointer rounded-[4px]'
+                className=' hover:bg-white hover:text-primary bg-transparent text-white border-[2px] border-white px-[16px] py-[8px] cursor-pointer rounded-[4px]'
               >
                 {image ? 'Change Logo' : 'Upload Logo'}
               </label>
               <label
-                className='block text-primary mt-[12px] cursor-pointer'
+                className='block text-white mt-[12px] cursor-pointer'
               >
                 {image ? '' : 'Recommended size 512x512 px'}
               </label>
@@ -439,7 +439,7 @@ const AddCoin = () => {
               </div>
 
               <div className='w-[50%] flex justify-end'>
-                <button onClick={() => setToken(!token)} className='mt-[26px] border border-primary py-[6px] px-[20px] bg-[#262626] text-[15px] h-[35px] whitespace-nowrap align-middle rounded-[4px] hover:text-background hover:bg-primary'>
+                <button onClick={() => setToken(!token)} className='mt-[26px] border border-white py-[6px] px-[20px] bg-primary text-[15px] h-[35px] whitespace-nowrap align-middle rounded-[4px] hover:text-primary hover:bg-white'>
                   {token ? "Token" : "Coin/Explorer?"}
                 </button>
               </div>
@@ -547,12 +547,12 @@ const AddCoin = () => {
               <h1 className='font-semibold text-[16px] mt-[70px] mb-[15px]'></h1>
               <label
                 htmlFor="image-input2"
-                className=' hover:bg-primary bg-transparent text-white border-[2px] border-primary px-[16px] py-[8px] cursor-pointer rounded-[4px]'
+                className=' hover:bg-white hover:text-primary bg-transparent text-white border-[2px] border-white px-[16px] py-[8px] cursor-pointer rounded-[4px]'
               >
                 {cover ? 'Change cover' : 'Upload cover'}
               </label>
               <label
-                className='block text-primary mt-[12px] cursor-pointer'
+                className='block text-white mt-[12px] cursor-pointer'
               >
                 {cover ? '' : 'Recommended size 440x160 px'}
               </label>
@@ -737,7 +737,7 @@ const AddCoin = () => {
 
         <div className='w-full flex flex-col justify-center items-center mt-[20px]'>
 
-          <button onClick={handleSubmit} className='border border-primary py-[6px] px-[50px] bg-[#262626] text-[15px] h-[35px] whitespace-nowrap align-middle rounded-[4px] hover:text-background hover:bg-primary'>
+          <button onClick={handleSubmit} className='border border-white py-[6px] px-[50px] bg-primary text-[15px] h-[35px] whitespace-nowrap align-middle rounded-[4px] hover:text-primary hover:bg-white'>
             Submit
           </button>
           <p className='text-red-500 mt-[12px]'>{checkErr}</p>

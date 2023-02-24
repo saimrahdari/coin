@@ -2,6 +2,7 @@ import React, { useContext, useEffect, useState } from 'react'
 import { Link, Outlet, useNavigate } from 'react-router-dom'
 import { GlobalContext } from './GlobalContext'
 import { auth } from '../../Firebase'
+import Logo from '../assets/logo.png'
 
 
 const App = () => {
@@ -34,19 +35,19 @@ const App = () => {
 
     return (
         <>
-            <div className='z-[10000000] fixed w-full h-[72px] p-0 border-b-primary border-b-[5px] m-0 mb-[5px] bg-background top-0' style={{ boxShadow: '0px 1px 20px 0px rgb(73 73 73 / 50%)' }}>
+            <div className='z-[10000000] fixed w-full h-[72px] p-0 border-b-primary border-b-[5px] m-0 mb-[5px] bg-secondary top-0' style={{ boxShadow: '0px 1px 20px 0px rgb(73 73 73 / 50%)' }}>
                 <div className='h-[72px] m-0 flex w-full justify-around items-center'>
 
-                    <div className="z-20 lg:hidden w-full flex flex-row justify-between items-center px-[8px] bg-background ">
-                        <Link to={'/'} className='inline-block relative max-w-[170px] h-[60px]  text-[#ffffff] fonttext-[14.5px] leading-5'>
-                            <img className="align-middle mt-[8px] max-h-[72px] my-0 mx-auto w-full max-w-full relative h-auto hover:scale-110" src={'https://coinvote.cc/template/images/coinvote_logo.png'} style={{ transition: "transform 0.3s" }} alt="" />
+                    <div className="z-20 lg:hidden w-full flex flex-row justify-between items-center px-[8px] bg-secondary ">
+                        <Link to={'/'} className='inline-block relative max-w-[170px]  text-[#ffffff] text-[14.5px] leading-5'>
+                            <img className="align-middle max-h-[72px] my-0 mx-auto w-full max-w-[80%] relative h-auto hover:scale-110" src={Logo} style={{ transition: "transform 0.3s" }} alt="" />
                         </Link>
 
                         <div className='flex flex-row '>
-                            <button className='hover:bg-[#e2c5740d] hover:text-white text-primary py-[9px] px-[10px] mr-[15px] border border-transparent rounded-[4px]'>
+                            <button className='hover:bg-white hover:text-gray text-white py-[9px] px-[10px] mr-[15px] border border-transparent rounded-[4px]'>
                                 <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M18.4746 19.7175L11.6667 12.9096C11.1017 13.3992 10.4426 13.7806 9.68927 14.0537C8.93597 14.3267 8.13559 14.4633 7.28814 14.4633C5.25424 14.4633 3.53107 13.7571 2.11864 12.3446C0.706215 10.9322 0 9.22787 0 7.23164C0 5.2354 0.706215 3.53107 2.11864 2.11864C3.53107 0.706215 5.24482 0 7.25989 0C9.25612 0 10.9557 0.706215 12.3588 2.11864C13.7618 3.53107 14.4633 5.2354 14.4633 7.23164C14.4633 8.04143 14.3314 8.82298 14.0678 9.57627C13.8041 10.3296 13.4087 11.0358 12.8814 11.6949L19.7458 18.5028C19.9153 18.6535 20 18.8465 20 19.0819C20 19.3173 19.9058 19.5292 19.7175 19.7175C19.548 19.887 19.3409 19.9718 19.096 19.9718C18.8512 19.9718 18.6441 19.887 18.4746 19.7175ZM7.25989 12.7684C8.78531 12.7684 10.0847 12.2269 11.1582 11.1441C12.2316 10.0612 12.7684 8.75706 12.7684 7.23164C12.7684 5.70621 12.2316 4.40207 11.1582 3.31921C10.0847 2.23635 8.78531 1.69492 7.25989 1.69492C5.71563 1.69492 4.40207 2.23635 3.31921 3.31921C2.23635 4.40207 1.69492 5.70621 1.69492 7.23164C1.69492 8.75706 2.23635 10.0612 3.31921 11.1441C4.40207 12.2269 5.71563 12.7684 7.25989 12.7684Z" fill="currentColor" /></svg>
                             </button>
-                            <button onClick={() => setsidebar(!sidebar)} className='hover:bg-[#e2c5740d] hover:text-white text-primary py-[9px] px-[10px] mr-[15px] border border-transparent rounded-[4px]'>
+                            <button onClick={() => setsidebar(!sidebar)} className='hover:bg-white hover:text-gray text-white py-[9px] px-[10px] mr-[15px] border border-transparent rounded-[4px]'>
                                 <svg width="20" height="15" viewBox="0 0 20 15" fill="none" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" clip-rule="evenodd" d="M1.25015 0H18.7499C19.4402 0 20 0.559556 20 1.24993C20 1.94031 19.4402 2.50008 18.7499 2.50008H1.25015C0.55977 2.50008 0 1.94031 0 1.24993C0 0.559556 0.55977 0 1.25015 0ZM1.25015 6.2502H18.7499C19.4402 6.2502 20 6.80976 20 7.50013C20 8.19051 19.4402 8.75007 18.7499 8.75007H1.25015C0.55977 8.75007 0 8.19051 0 7.50013C0 6.80976 0.55977 6.2502 1.25015 6.2502ZM1.25015 12.4999H18.7499C19.4402 12.4999 20 13.0596 20 13.75C20 14.4404 19.4402 14.9999 18.7499 14.9999H1.25015C0.55977 14.9999 0 14.4404 0 13.75C0 13.0596 0.55977 12.4999 1.25015 12.4999Z" fill="currentColor" /></svg>
                             </button>
                         </div>
@@ -54,30 +55,51 @@ const App = () => {
 
                     <div className='z-20 lg:block hidden p-0 m-0 h-[55px] overflow-visible w-auto max-h-[340px]'>
                         <ul className='h-[72px] flex flex-row justify-center items-center mt-[-5px] float-left m-0 list-none'>
-                            <li className='float-left max-h-[40.38px]'>
-                                <Link to={'/'} className='inline-block relative max-w-[170px] text-[#ffffff] fonttext-[14.5px] leading-5'>
-                                    <img className="align-middle max-h-[72px] my-0 mx-auto w-full max-w-full relative h-auto hover:scale-110" src={'https://coinvote.cc/template/images/coinvote_logo.png'} style={{ transition: "transform 0.3s" }} alt="" />
+                            <li className=''>
+                                <Link to={'/'} className='inline-block relative max-w-[170px] text-[#ffffff] text-[14.5px] leading-5'>
+                                    <img className="align-middle max-h-[72px] my-0 mx-auto w-full max-w-[75%] relative h-auto hover:scale-110" src={Logo} style={{ transition: "transform 0.3s" }} alt="" />
                                 </Link>
                             </li>
                             <li>
-                                <Link to={'/advertise'} className='max-w-[170px] text-[#ffffff] text-[14.5px] leading-5 py-[10px] px-[15px] hover:text-primary'>
+                                <Link to={'/airdrops'} className='max-w-[170px] text-[#ffffff] text-[14.5px] leading-5 py-[10px] px-[15px] hover:text-gray'>
+                                    Airdops
+                                </Link>
+                            </li>
+                            <li>
+                                <Link to={'/advertise'} className='max-w-[170px] text-[#ffffff] text-[14.5px] leading-5 py-[10px] px-[15px] hover:text-gray'>
                                     Advertise
                                 </Link>
                             </li>
+                            
                             <li className='relative block'>
-                                <div className='text-[#ffffff] flex flex-row justify-center items-center cursor-pointer max-w-[170px]  text-[14.5px] leading-5 py-[10px] px-[15px] hover:text-primary'>
+                                <div className='text-[#ffffff] flex flex-row justify-center items-center cursor-pointer max-w-[170px]  text-[14.5px] leading-5 py-[10px] px-[15px] hover:text-gray'>
                                     <Link to={'/add-coin'} className='mr-[5px]'>Add Coin</Link>
                                 </div>
                             </li>
+                            <li className='relative block'>
+                                <div className='text-[#ffffff] flex flex-row justify-center items-center cursor-pointer max-w-[170px]  text-[14.5px] leading-5 py-[10px] px-[15px] hover:text-gray'>
+                                    <Link to={'/add-airdrop'} className='mr-[5px]'>Add airdrop</Link>
+                                </div>
+                            </li>
+                            <li className={`${currentUser.displayName === "admin" ? "block" : "hidden"}`}>
+                                <Link to={'/add-partner'} className='max-w-[170px] text-[#ffffff] text-[14.5px] leading-5 py-[10px] px-[15px] hover:text-gray'>
+                                    Add Partners & Tools
+                                </Link>
+                            </li>
+                            <li>
+                                <Link to={'/partner'} className='max-w-[170px] text-[#ffffff] text-[14.5px] leading-5 py-[10px] px-[15px] hover:text-gray'>
+                                    Partners & Tools
+                                </Link>
+                            </li>
                             <div className='ml-[1rem] flex justify-center items-center border-[#e2c5741a] border-[2px] h-[40px] rounded-[10px] bg-[#e2c5740d] max-w-[200px]'>
-                                <div className='w-full flex relative'>
+                                <form className='w-full flex relative' autoComplete="off">
                                     <input
                                         className='focus-visible:outline-none text-ellipsis text-white pl-[40px] bg-inherit'
-                                        type="text" value={search} onChange={(e) => setSearch(e.target.value)} placeholder={"Search coins..."} />
+                                        type="text" value={search} onChange={(e) => setSearch(e.target.value)} placeholder={"Search coins..."} name={"search"} autoComplete="on"/>
                                     <span className='inline-flex items-center justify-center text-[#dbdbdb8c] absolute w-[2.5rem] cursor-pointer text-[15px] left-0 mt-[2px] '>
                                         <svg width="15" height="15" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M18.4746 19.7175L11.6667 12.9096C11.1017 13.3992 10.4426 13.7806 9.68927 14.0537C8.93597 14.3267 8.13559 14.4633 7.28814 14.4633C5.25424 14.4633 3.53107 13.7571 2.11864 12.3446C0.706215 10.9322 0 9.22787 0 7.23164C0 5.2354 0.706215 3.53107 2.11864 2.11864C3.53107 0.706215 5.24482 0 7.25989 0C9.25612 0 10.9557 0.706215 12.3588 2.11864C13.7618 3.53107 14.4633 5.2354 14.4633 7.23164C14.4633 8.04143 14.3314 8.82298 14.0678 9.57627C13.8041 10.3296 13.4087 11.0358 12.8814 11.6949L19.7458 18.5028C19.9153 18.6535 20 18.8465 20 19.0819C20 19.3173 19.9058 19.5292 19.7175 19.7175C19.548 19.887 19.3409 19.9718 19.096 19.9718C18.8512 19.9718 18.6441 19.887 18.4746 19.7175ZM7.25989 12.7684C8.78531 12.7684 10.0847 12.2269 11.1582 11.1441C12.2316 10.0612 12.7684 8.75706 12.7684 7.23164C12.7684 5.70621 12.2316 4.40207 11.1582 3.31921C10.0847 2.23635 8.78531 1.69492 7.25989 1.69492C5.71563 1.69492 4.40207 2.23635 3.31921 3.31921C2.23635 4.40207 1.69492 5.70621 1.69492 7.23164C1.69492 8.75706 2.23635 10.0612 3.31921 11.1441C4.40207 12.2269 5.71563 12.7684 7.25989 12.7684Z" fill="currentColor" /></svg>
                                     </span>
-                                </div>
+                                </form>
                             </div>
                             {displayName != "" ?
 
@@ -87,7 +109,7 @@ const App = () => {
                                             <img src={image} className="overflow-hidden" alt="" />
                                         </div>
                                         <div className={` ${userDropdown ? "block" : "hidden"} absolute right-[-20px] top-[40px] `}>
-                                            <div className='bg-[#302e2a] border-[2px] border-[#e2c5741a] rounded-[10px] mt-[8px]' style={{ boxShadow: 'rgb(81 89 105 / 12%) 0px 2px 10px, rgb(81 89 105 / 8%) 0px 1px 2px' }}>
+                                            <div className='bg-secondary border-[2px] border-primary rounded-[10px] mt-[8px]' style={{ boxShadow: 'rgb(81 89 105 / 12%) 0px 2px 10px, rgb(81 89 105 / 8%) 0px 1px 2px' }}>
                                                 <Link to={`/profile/${displayName}`} className='flex p-[15px] flex-row w-[248px] gap-x-[20px] mb-[8px] items-center'>
                                                     <div className='w-[75px] h-[75px] rounded-[50%] overflow-hidden '>
                                                         <img src={image} className="overflow-hidden" alt="" />
@@ -97,20 +119,20 @@ const App = () => {
                                                         <p>View my Profile</p>
                                                     </div>
                                                 </Link>
-                                                <hr className='border-[2px] border-[#262626] w-full my-0 ' />
-                                                <div className='rounded-[8px] p-[8px] cursor-pointer text-[12px]text-primary hover:text-white hover:bg-[#e2c5740d]'>
+                                                <hr className='border-[2px] border-primary w-full my-0 ' />
+                                                <div className='rounded-[8px] p-[8px] cursor-pointer text-[12px] text-white hover:text-secondary hover:bg-white'>
                                                     <Link to={'/my-fav'} className=''>My Favourite</Link>
                                                 </div>
-                                                <div className='rounded-[8px] p-[8px] cursor-pointer text-[12px]text-primary hover:text-white hover:bg-[#e2c5740d]'>
+                                                <div className='rounded-[8px] p-[8px] cursor-pointer text-[12px] text-white hover:text-secondary hover:bg-white'>
                                                     <Link to={'/my-orders'} className=''>My Orders</Link>
                                                 </div>
-                                                <div className='rounded-[8px] p-[8px] cursor-pointer text-[12px]text-primary hover:text-white hover:bg-[#e2c5740d]'>
+                                                <div className='rounded-[8px] p-[8px] cursor-pointer text-[12px] text-white hover:text-secondary hover:bg-white'>
                                                     <Link to={'/my-coins'} className=''>My Coins</Link>
                                                 </div>
-                                                <div className='rounded-[8px] p-[8px] cursor-pointer text-[12px]text-primary hover:text-white hover:bg-[#e2c5740d]'>
+                                                <div className='rounded-[8px] p-[8px] cursor-pointer text-[12px] text-white hover:text-secondary hover:bg-white'>
                                                     <Link to={'/account-settings'} className=''>Account Settings</Link>
                                                 </div>
-                                                <div onClick={handleLogout} className='rounded-[8px] p-[8px] cursor-pointer text-[12px]text-primary hover:text-white hover:bg-[#e2c5740d]'>
+                                                <div onClick={handleLogout} className='rounded-[8px] p-[8px] cursor-pointer text-[12px]text-primary hover:text-secondary hover:bg-white'>
                                                     <p className=''>Logout</p>
                                                 </div>
                                             </div>
@@ -119,10 +141,10 @@ const App = () => {
                                 ) :
                                 (
                                     <li className='inline-flex relative'>
-                                        <Link to={"/login"} className='ml-[5px] text-white text-[14.5px] py-[10px] px-[15px] rounded-[8px] hover:bg-[#e2c57459]' style={{ lineHeight: '20px' }}>
+                                        <Link to={"/login"} className='ml-[5px] text-white text-[14.5px] py-[10px] px-[15px] rounded-[8px] hover:bg-white hover:text-primary' style={{ lineHeight: '20px' }}>
                                             Login
                                         </Link>
-                                        <Link to={"/register"} className='font-medium ml-[5px] text-[#262626] text-[14.5px] py-[10px] px-[15px] rounded-[8px] hover:bg-[#e2c57459]' style={{ lineHeight: '20px', animation: 'shadow-pulse 3s infinite', background: "linear-gradient(180deg,#e2c574 0,#f5c574" }}>
+                                        <Link to={"/register"} className='font-medium ml-[5px] text-secondary text-[14.5px] py-[10px] px-[15px] rounded-[8px]' style={{ lineHeight: '20px', animation: 'shadow-pulse 3s infinite', background: "linear-gradient(180deg,white 0, white" }}>
                                             Register
                                         </Link>
                                     </li>
@@ -132,20 +154,40 @@ const App = () => {
                         </ul>
                     </div>
 
-                    <aside className={`${sidebar ? "block lg:hidden left-0 " : "left-full"} h-screen bg-background -z-0 w-full right-0  overflow-auto fixed top-0 bottom-0 `} style={{ transition: 'left 0.2s, width 0.2s' }}>
+                    <aside className={`${sidebar ? "block lg:hidden left-0 " : "left-full"} h-screen bg-secondary -z-0 w-full right-0  overflow-auto fixed top-0 bottom-0 `} style={{ transition: 'left 0.2s, width 0.2s' }}>
                         <ul className='w-full pt-[80px] px-[15px] pb-0 list-none mb-[10px]'>
                             <li>
-                                <Link onClick={() => setsidebar(false)} to={'/advertise'} className='relative flex items-center py-[10px] px-[20px] font-normal rounded-[10px] my-[2px] border-b border-b-[#e2c57412] text-[#e7cd86] text-[16px] leading-[1.5] hover:text-white hover:bg-[#e2c5740d] hover:cursor-pointer' style={{ transition: 'border-left-color 0.3s, background-color 0.3s' }}>
+                                <Link onClick={() => setsidebar(false)} to={'/airdrops'} className='relative flex items-center py-[10px] px-[20px] font-normal rounded-[10px] my-[2px] border-b border-b-[#e2c57412] text-white text-[16px] leading-[1.5] hover:text-white hover:bg-[#e2c5740d] hover:cursor-pointer' style={{ transition: 'border-left-color 0.3s, background-color 0.3s' }}>
+                                    Airdrops
+                                </Link>
+                            </li>
+                            <li>
+                                <Link onClick={() => setsidebar(false)} to={'/advertise'} className='relative flex items-center py-[10px] px-[20px] font-normal rounded-[10px] my-[2px] border-b border-b-[#e2c57412] text-white text-[16px] leading-[1.5] hover:text-white hover:bg-[#e2c5740d] hover:cursor-pointer' style={{ transition: 'border-left-color 0.3s, background-color 0.3s' }}>
                                     Advertise
                                 </Link>
                             </li>
                             <li>
-                                <Link onClick={() => setsidebar(false)} to={'/add-coin'} className='relative flex items-center py-[10px] px-[20px] font-normal rounded-[10px] my-[2px] border-b border-b-[#e2c57412] text-[#e7cd86] text-[16px] leading-[1.5] hover:text-white hover:bg-[#e2c5740d] hover:cursor-pointer' style={{ transition: 'border-left-color 0.3s, background-color 0.3s' }}>
+                                <Link onClick={() => setsidebar(false)} to={'/add-coin'} className='relative flex items-center py-[10px] px-[20px] font-normal rounded-[10px] my-[2px] border-b border-b-[#e2c57412] text-white text-[16px] leading-[1.5] hover:text-white hover:bg-[#e2c5740d] hover:cursor-pointer' style={{ transition: 'border-left-color 0.3s, background-color 0.3s' }}>
                                     Add Coin
                                 </Link>
                             </li>
                             <li>
-                                <div onClick={() => setIsAccountActive(!isAccountActive)} className={`${isAccountActive ? "text-white bg-[#e2c5740d] cursor-pointer" : "text-[#e7cd86]"}  flex items-center flex-row  hover:text-white hover:bg-[#e2c5740d] hover:cursor-pointer justify-between rounded-[10px] py-[10px] px-[20px] text-[16px] leading-[1.5] my-[2px] border-b border-b-[#e2c57412]`} style={{ transition: 'border-left-color 0.3s, background-color 0.3s' }}>
+                                <Link onClick={() => setsidebar(false)} to={'/add-airdrop'} className='relative flex items-center py-[10px] px-[20px] font-normal rounded-[10px] my-[2px] border-b border-b-[#e2c57412] text-white text-[16px] leading-[1.5] hover:text-white hover:bg-[#e2c5740d] hover:cursor-pointer' style={{ transition: 'border-left-color 0.3s, background-color 0.3s' }}>
+                                    Add Airdrop
+                                </Link>
+                            </li>
+                            <li className={`${currentUser.displayName === "admin" ? "block" : "hidden"}`}>
+                                <Link onClick={() => setsidebar(false)} to={'/add-partner'} className='relative flex items-center py-[10px] px-[20px] font-normal rounded-[10px] my-[2px] border-b border-b-[#e2c57412] text-white text-[16px] leading-[1.5] hover:text-white hover:bg-[#e2c5740d] hover:cursor-pointer' style={{ transition: 'border-left-color 0.3s, background-color 0.3s' }}>
+                                Add Partners & Tools
+                                </Link>
+                            </li>
+                            <li>
+                                <Link onClick={() => setsidebar(false)} to={'/partner'} className='relative flex items-center py-[10px] px-[20px] font-normal rounded-[10px] my-[2px] border-b border-b-[#e2c57412] text-white text-[16px] leading-[1.5] hover:text-white hover:bg-[#e2c5740d] hover:cursor-pointer' style={{ transition: 'border-left-color 0.3s, background-color 0.3s' }}>
+                                Partners & Tools
+                                </Link>
+                            </li>
+                            <li>
+                                <div onClick={() => setIsAccountActive(!isAccountActive)} className={`${isAccountActive ? "text-white bg-[#e2c5740d] cursor-pointer" : "text-white"}  flex items-center flex-row  hover:text-white hover:bg-[#e2c5740d] hover:cursor-pointer justify-between rounded-[10px] py-[10px] px-[20px] text-[16px] leading-[1.5] my-[2px] border-b border-b-[#e2c57412]`} style={{ transition: 'border-left-color 0.3s, background-color 0.3s' }}>
                                     <Link to={'/'} className={`relative flex items-center font-normal`} >
                                         Account
                                     </Link>
@@ -155,26 +197,26 @@ const App = () => {
                                     (
                                         <ul className={`relative min-w-[160px] py-[5px] ml-[26px] ${isAccountActive ? "block" : "hidden"}`}>
                                             <li>
-                                                <Link to={'/my-fav'} onClick={() => setsidebar(false)} className='flex items-center p-[8px] text-[13px] text-primary hover:text-white'>
+                                                <Link to={'/my-fav'} onClick={() => setsidebar(false)} className='flex items-center p-[8px] text-[13px] text-white hover:text-gray'>
                                                     My Favourite
                                                 </Link>
                                             </li>
                                             <li>
-                                                <Link to={'/my-orders'} onClick={() => setsidebar(false)} className='flex items-center p-[8px] text-[13px] text-primary hover:text-white'>
+                                                <Link to={'/my-orders'} onClick={() => setsidebar(false)} className='flex items-center p-[8px] text-[13px] text-white hover:text-gray'>
                                                     My Orders
                                                 </Link>
                                             </li>   <li>
-                                                <Link to={'/my-coins'} onClick={() => setsidebar(false)} className='flex items-center p-[8px] text-[13px] text-primary hover:text-white'>
+                                                <Link to={'/my-coins'} onClick={() => setsidebar(false)} className='flex items-center p-[8px] text-[13px] text-white hover:text-gray'>
                                                     My Coins
                                                 </Link>
                                             </li>
                                             <li>
-                                                <Link to={'/account-settings'} onClick={() => setsidebar(false)} className='flex items-center p-[8px] text-[13px] text-primary hover:text-white'>
+                                                <Link to={'/account-settings'} onClick={() => setsidebar(false)} className='flex items-center p-[8px] text-[13px] text-white hover:text-gray'>
                                                     Account Settings
                                                 </Link>
                                             </li>
                                             <li>
-                                                <Link to={''} onClick={handleLogout} className='flex items-center p-[8px] text-[13px] text-primary hover:text-white'>
+                                                <Link to={''} onClick={handleLogout} className='flex items-center p-[8px] text-[13px] text-white hover:text-gray'>
                                                     Logout
                                                 </Link>
                                             </li>
@@ -183,12 +225,12 @@ const App = () => {
                                     (
                                         <ul className={`relative min-w-[160px] py-[5px] ml-[26px] ${isAccountActive ? "block" : "hidden"}`}>
                                             <li>
-                                                <p onClick={() => { navigate("/login") ; setIsAccountActive(false); setsidebar(false);}} className='cursor-pointer flex items-center p-[8px] text-[13px] text-primary hover:text-white'>
+                                                <p onClick={() => { navigate("/login") ; setIsAccountActive(false); setsidebar(false);}} className='cursor-pointer flex items-center p-[8px] text-[13px] text-white hover:text-gray'>
                                                     Login
                                                 </p>
                                             </li>
                                             <li>
-                                                <p onClick={() => {navigate("/register") ; setIsAccountActive(false);setsidebar(false)}} className='cursor-pointer flex items-center p-[8px] text-[13px] text-primary hover:text-white'>
+                                                <p onClick={() => {navigate("/register") ; setIsAccountActive(false);setsidebar(false)}} className='cursor-pointer flex items-center p-[8px] text-[13px] text-white hover:text-gray'>
                                                     Register
                                                 </p>
                                             </li>
@@ -204,8 +246,8 @@ const App = () => {
             <Outlet />
             <div className='mt-[100px]'>
             </div>
-            <footer className='text-[#e8f5f6] text-[12px] bg-[#262626] w-full mt-[80px] '>
-                <div className='w-full bg-[#262626] text-[#74787e] items-center py-[10px] px-auto '>
+            <footer className='text-[#e8f5f6] text-[12px] bg-secondary w-full mt-[80px] '>
+                <div className='w-full bg-secondary text-white items-center py-[10px] px-auto '>
                     <span className='block mx-auto text-center '>
                         <Link to={'/'} className="p-[5px] inline-block ml-[12px] mt-0">
                             <img className='w-[130px] align-middle' src={'https://coinvote.cc/template/images/en_badge_web_generic.png'} alt="" />
@@ -261,22 +303,22 @@ const App = () => {
                     </span>
                     <div className='flex flex-row gap-x-[20px] w-[50%] justify-center items-center mx-auto'>
                         <Link to='/'>
-                            <span className=' flex justify-center items-center rounded-[50%] h-[3em] text-[#e7cd86] bg-white align-middle w-[3em] hover:bg-hover' style={{ lineHeight: "2em" }}>
+                            <span className=' flex justify-center items-center rounded-[50%] h-[3em] text-primary bg-white align-middle w-[3em] hover:bg-gray' style={{ lineHeight: "2em" }}>
                                 <svg width="20" height="15" viewBox="0 0 15 13" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M14.9573 1.14521L12.6937 11.8203C12.5229 12.5737 12.0775 12.7612 11.4447 12.4063L7.9957 9.86474L6.33149 11.4653C6.14732 11.6495 5.99329 11.8035 5.63835 11.8035L5.88614 8.29094L12.2784 2.51475C12.5564 2.26696 12.2182 2.12967 11.8465 2.37746L3.944 7.35335L0.541912 6.28853C-0.198109 6.05748 -0.211503 5.54851 0.695944 5.19356L14.0029 0.0669903C14.6191 -0.164057 15.1582 0.204279 14.9573 1.14521Z" fill="currentColor" /></svg>
                             </span>
                         </Link>
                         <Link to='/'>
-                            <span className='flex justify-center items-center rounded-[50%] h-[3em] text-[#e7cd86] bg-white align-middle w-[3em] hover:bg-hover' style={{ lineHeight: "2em" }}>
+                            <span className='flex justify-center items-center rounded-[50%] h-[3em] text-primary bg-white align-middle w-[3em] hover:bg-gray' style={{ lineHeight: "2em" }}>
                                 <svg width="20" height="15" viewBox="0 0 15 13" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M13.4582 3.03616C13.4677 3.16941 13.4677 3.30268 13.4677 3.43592C13.4677 7.5 10.3744 12.1828 4.72083 12.1828C2.97906 12.1828 1.36105 11.6783 0 10.8027C0.247472 10.8312 0.485393 10.8408 0.742386 10.8408C2.17955 10.8408 3.50254 10.3554 4.55902 9.52732C3.20749 9.49876 2.07487 8.61361 1.68464 7.39532C1.87501 7.42386 2.06535 7.4429 2.26524 7.4429C2.54125 7.4429 2.81729 7.40481 3.07425 7.33822C1.66562 7.05266 0.609114 5.81536 0.609114 4.32107V4.28301C1.01836 4.51144 1.49429 4.65421 1.9987 4.67322C1.17065 4.12118 0.628157 3.17893 0.628157 2.11293C0.628157 1.54187 0.780413 1.01839 1.04693 0.561535C2.56026 2.42702 4.83503 3.64528 7.38577 3.77855C7.33819 3.55012 7.30963 3.3122 7.30963 3.07425C7.30963 1.38006 8.6802 0 10.3839 0C11.269 0 12.0685 0.371193 12.6301 0.970814C13.3249 0.837572 13.9911 0.580578 14.5812 0.228429C14.3528 0.942279 13.8674 1.5419 13.2297 1.92259C13.8484 1.85599 14.448 1.68464 15 1.44671C14.5813 2.05583 14.0578 2.59832 13.4582 3.03616Z" fill="currentColor" /></svg>
                             </span>
                         </Link>
                         <Link to='/'>
-                            <span className='flex justify-center items-center rounded-[50%] h-[3em] text-[#e7cd86] bg-white align-middle w-[3em] hover:bg-hover' style={{ lineHeight: "2em" }}>
+                            <span className='flex justify-center items-center rounded-[50%] h-[3em] text-primary bg-white align-middle w-[3em] hover:bg-gray' style={{ lineHeight: "2em" }}>
                                 <svg width="20" height="18" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M7.50167 3.65337C5.3734 3.65337 3.65672 5.37005 3.65672 7.49833C3.65672 9.6266 5.3734 11.3433 7.50167 11.3433C9.62995 11.3433 11.3466 9.6266 11.3466 7.49833C11.3466 5.37005 9.62995 3.65337 7.50167 3.65337ZM7.50167 9.99805C6.12633 9.99805 5.00195 8.87702 5.00195 7.49833C5.00195 6.11963 6.12298 4.99861 7.50167 4.99861C8.88037 4.99861 10.0014 6.11963 10.0014 7.49833C10.0014 8.87702 8.87702 9.99805 7.50167 9.99805ZM12.4007 3.4961C12.4007 3.9947 11.9992 4.39292 11.5039 4.39292C11.0053 4.39292 10.6071 3.99136 10.6071 3.4961C10.6071 3.00084 11.0086 2.59927 11.5039 2.59927C11.9992 2.59927 12.4007 3.00084 12.4007 3.4961ZM14.9473 4.4063C14.8904 3.20496 14.616 2.14083 13.7359 1.26408C12.8592 0.38734 11.795 0.112939 10.5937 0.052705C9.35555 -0.0175683 5.64445 -0.0175683 4.4063 0.052705C3.20831 0.109593 2.14417 0.383993 1.26408 1.26074C0.383993 2.13748 0.112939 3.20162 0.052705 4.40296C-0.0175683 5.6411 -0.0175683 9.3522 0.052705 10.5904C0.109593 11.7917 0.383993 12.8558 1.26408 13.7326C2.14417 14.6093 3.20496 14.8837 4.4063 14.9439C5.64445 15.0142 9.35555 15.0142 10.5937 14.9439C11.795 14.8871 12.8592 14.6127 13.7359 13.7326C14.6127 12.8558 14.8871 11.7917 14.9473 10.5904C15.0176 9.3522 15.0176 5.64445 14.9473 4.4063ZM13.3477 11.9189C13.0867 12.5747 12.5814 13.08 11.9222 13.3444C10.935 13.7359 8.59258 13.6456 7.50167 13.6456C6.41076 13.6456 4.06497 13.7326 3.08115 13.3444C2.42526 13.0834 1.91997 12.5781 1.65561 11.9189C1.26408 10.9317 1.35443 8.58924 1.35443 7.49833C1.35443 6.40742 1.26743 4.06163 1.65561 3.0778C1.91662 2.42192 2.42192 1.91662 3.08115 1.65226C4.06832 1.26074 6.41076 1.35109 7.50167 1.35109C8.59258 1.35109 10.9384 1.26408 11.9222 1.65226C12.5781 1.91327 13.0834 2.41857 13.3477 3.0778C13.7393 4.06498 13.6489 6.40742 13.6489 7.49833C13.6489 8.58924 13.7393 10.935 13.3477 11.9189Z" fill="currentColor" /></svg>
                             </span>
                         </Link>
                         <Link to='/'>
-                            <span className='flex justify-center items-center rounded-[50%] h-[3em] text-[#e7cd86] bg-white align-middle w-[3em] hover:bg-hover' style={{ lineHeight: "2em" }}>
+                            <span className='flex justify-center items-center rounded-[50%] h-[3em] text-primary bg-white align-middle w-[3em] hover:bg-gray' style={{ lineHeight: "2em" }}>
                                 <svg width="20" height="18" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3.35759 14.9997H0.247768V4.98516H3.35759V14.9997ZM1.801 3.61908C0.806585 3.61908 0 2.79542 0 1.801C7.11763e-09 1.32335 0.189748 0.865256 0.527502 0.527502C0.865256 0.189748 1.32335 0 1.801 0C2.27866 0 2.73675 0.189748 3.07451 0.527502C3.41226 0.865256 3.60201 1.32335 3.60201 1.801C3.60201 2.79542 2.79509 3.61908 1.801 3.61908ZM14.9967 14.9997H11.8935V10.1247C11.8935 8.96283 11.8701 7.47288 10.2767 7.47288C8.65982 7.47288 8.41205 8.73516 8.41205 10.041V14.9997H5.30558V4.98516H8.28817V6.35123H8.3317C8.74687 5.5644 9.76105 4.73404 11.2741 4.73404C14.4214 4.73404 15 6.80659 15 9.49855V14.9997H14.9967Z" fill="currentColor" /></svg>
                             </span>
                         </Link>

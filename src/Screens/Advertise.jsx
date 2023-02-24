@@ -421,17 +421,17 @@ const Advertise = () => {
 
     return (
         <div className='mt-[120px] items-center flex justify-center w-full flex-col'>
-            <div className='md:w-[80%] w-full my-[20px] rounded-[12px] pt-[20px] pb-[30px] px-[5px] bg-[#262626] border-[5px] border-primary '>
-                <div onClick={() => navigate("/")} className='inline-flex cursor-pointer flex-row items-center gap-x-[8px] text-primary p-[20px] hover:text-white'>
+            <div className='md:w-[80%] w-full my-[20px] rounded-[12px] pt-[20px] pb-[30px] px-[5px] bg-primary border-[5px] border-secondary '>
+                <div onClick={() => navigate("/")} className='inline-flex cursor-pointer flex-row items-center gap-x-[8px] text-white p-[20px] hover:text-hover'>
                     <svg width="15" height="15" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M11.4965 18.1877L10.5055 19.1787C10.0859 19.5983 9.40743 19.5983 8.9923 19.1787L0.314697 10.5055C-0.104899 10.0859 -0.104899 9.40743 0.314697 8.9923L8.9923 0.314697C9.4119 -0.104899 10.0904 -0.104899 10.5055 0.314697L11.4965 1.30566C11.9205 1.72972 11.9116 2.4216 11.4786 2.83674L6.09977 7.96117H18.9287C19.5224 7.96117 20 8.43879 20 9.03247V10.4609C20 11.0546 19.5224 11.5322 18.9287 11.5322H6.09977L11.4786 16.6566C11.9161 17.0718 11.925 17.7636 11.4965 18.1877Z" fill="currentColor" /></svg>
                     <p>Go back</p>
                 </div>
                 <div className='w-full flex flex-row justify-center items-start flex-wrap'>
 
-                    <div className='w-full lg:w-[60%] flex flex-col justify-center items-center bg-[#303030] rounded-[20px] py-[40px] m-[20px]'>
+                    <div className='w-full lg:w-[60%] flex flex-col justify-center items-center bg-secondary rounded-[20px] py-[40px] m-[20px]'>
                         <div className='flex flex-row self-end mr-[28px]'>
-                            <div onClick={() => setCurrency(currency === "BNB" ? "BTC" : "BNB")} className='select-none w-[100px] block h-[45px] cursor-pointer relative outline-none rounded-[100px] border-[2px] border-primary bg-[#e9ca800f]' style={{ transition: 'all 500ms' }}>
-                                <p className={` ${currency === "BNB" ? "rounded-l-[50px] rounded-r-[5px]" : "rounded-l-[5px] rounded-r-[50px]"} absolute top-[4px] bottom-[4px] left-[4px] text-center uppercase bg-[#37474f] border-[2px] border-[#f0b90b] text-[#f0b90b]`} style={{ width: "calc(50% - 4px)", lineHeight: '30px', transition: 'left 500ms , right 500ms', transform: `${currency === 'BNB' ? "" : 'translate(100%, 0)'}` }}>
+                            <div onClick={() => setCurrency(currency === "BNB" ? "BTC" : "BNB")} className='select-none w-[100px] block h-[45px] cursor-pointer relative outline-none rounded-[100px] border-[2px] border-white bg-primary' style={{ transition: 'all 500ms' }}>
+                                <p className={` ${currency === "BNB" ? "rounded-l-[50px] rounded-r-[5px]" : "rounded-l-[5px] rounded-r-[50px]"} absolute top-[4px] bottom-[4px] left-[4px] text-center uppercase bg-primary border-[2px] border-white text-white`} style={{ width: "calc(50% - 4px)", lineHeight: '30px', transition: 'left 500ms , right 500ms', transform: `${currency === 'BNB' ? "" : 'translate(100%, 0)'}` }}>
                                     {currency}
                                 </p>
                             </div>
@@ -439,10 +439,10 @@ const Advertise = () => {
                         <h1 className='font-bold text-[2.5rem] mt-[20px] mb-[10px]'>Advertise</h1>
 
                         <div className='w-[90%] border-[2px] border-gray-300 rounded-[20px] overflow-hidden flex items-center flex-col'>
-                            <div className='w-full bg-[#262626] border border-[#00000020]'>
+                            <div className='w-full bg-primary border border-white'>
                                 <div onClick={() => setcollapse1(!collapse1)} className='cursor-pointer flex flex-row items-center w-full py-[1rem] px-[1.25rem] text-left text-white border-none ' style={{ transition: "color 0.15s ease-in-out, background-color 0.15s ease-in-out, border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out, border-radius 0.15s ease" }}>
                                     <h3 className='break-words mt-[20px] mb-[10px] font-medium text-[20px] '>Promoted Section</h3>
-                                    <p className='ml-[5px] font-normal mt-[8px] rounded-[10px] min-w-[10px] py-[3px] px-[7px] text-[15px] text-[#262626] text-center whitespace-nowrap align-baseline bg-primary'>
+                                    <p className='ml-[5px] font-normal mt-[8px] rounded-[10px] min-w-[10px] py-[3px] px-[7px] text-[15px] text-primary text-center whitespace-nowrap align-baseline bg-white'>
                                         {currency === "BNB" ? "~0.11 BNB" : "~0.000046 BTC"}
                                     </p>
                                     <span className='ml-auto font-black text-white'>
@@ -450,7 +450,7 @@ const Advertise = () => {
                                     </span>
                                 </div>
 
-                                <div className={`${collapse1 ? "hidden" : "block"} border-t border-t-[#80808033] bg-[#262626] py-[1rem] px-[1.25rem]`} style={{ transition: "transition: height 0.25s ease" }}>
+                                <div className={`${collapse1 ? "hidden" : "block"} border-t white bg-primary py-[1rem] px-[1.25rem]`} style={{ transition: "transition: height 0.25s ease" }}>
                                     <p className='break-words text-[#dedede]'>
                                         <b>Summary:</b>
                                         our project will be advertised on our promoted section : live on the website and the mobile application (iOS & Android) among thousands users per day. If your project is not validated yet the promotion will automatically activate it.
@@ -460,7 +460,7 @@ const Advertise = () => {
                                     <div className='w-full mb-[5px] text-center flex flex-col items-center justify-center'>
                                         <label className='pt-[10px] font-bold mb-[5px]'>Select your coin</label>
                                         <select
-                                            className='cursor-default focus-visible:outline-none w-[60%] rounded-[40px] bg-[#262626] border border-gray-400 py-[5p]'
+                                            className='cursor-default focus-visible:outline-none w-[60%] rounded-[40px] bg-white text-black border border-gray-400 py-[5p]'
                                             placeholder='Contract or Name'
                                             value={coin}
                                             onChange={(e) => setCoin(e.target.value)}>
@@ -476,7 +476,7 @@ const Advertise = () => {
                                             multiple
                                             value={date1}
                                             onChange={setDate1}
-                                            className={"rmdp-prime bg-dark yellow"}
+                                            className={"rmdp-prime blue"}
                                             minDate={new DateObject()}
                                             mapDays={({ date, today }) => promotedDisable({ date, today })}
                                         />
@@ -485,10 +485,10 @@ const Advertise = () => {
                             </div>
 
 
-                            <div className='w-full bg-[#262626] border border-[#00000020]'>
+                            <div className='w-full bg-primary border border-white'>
                                 <div onClick={() => setcollapse2(!collapse2)} className='cursor-pointer flex flex-row items-center w-full py-[1rem] px-[1.25rem] text-left text-white border-none ' style={{ transition: "color 0.15s ease-in-out, background-color 0.15s ease-in-out, border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out, border-radius 0.15s ease" }}>
                                     <h3 className='break-words mt-[20px] mb-[10px] font-medium text-[20px] '>Main Banner Ad</h3>
-                                    <p className='ml-[5px] font-normal mt-[8px] rounded-[10px] min-w-[10px] py-[3px] px-[7px] text-[15px] text-[#262626] text-center whitespace-nowrap align-baseline bg-primary'>
+                                    <p className='ml-[5px] font-normal mt-[8px] rounded-[10px] min-w-[10px] py-[3px] px-[7px] text-[15px] text-primary text-center whitespace-nowrap align-baseline bg-white'>
                                         {currency === "BNB" ? "~0.11 BNB" : "~0.000046 BTC"}
                                     </p>
                                     <span className='ml-auto font-black text-white'>
@@ -496,7 +496,7 @@ const Advertise = () => {
                                     </span>
                                 </div>
 
-                                <div className={`${collapse2 ? "hidden" : "block"} border-t border-t-[#80808033] bg-[#262626] py-[1rem] px-[1.25rem]`} style={{ transition: "transition: height 0.25s ease" }}>
+                                <div className={`${collapse2 ? "hidden" : "block"} border-t border-t-white bg-primary py-[1rem] px-[1.25rem]`} style={{ transition: "transition: height 0.25s ease" }}>
                                     <p className='break-words text-[#dedede]'>
                                         <b>Summary:</b>
                                         This banner ad will be live on on almost all the pages of our website and our mobile application (iOS & Android) to thousand of users per day. You will also be able to track clicks of your banner.
@@ -506,7 +506,7 @@ const Advertise = () => {
                                     <div className='w-full mb-[5px] text-center flex flex-col items-center justify-center'>
                                         <label className='pt-[10px] font-bold mb-[5px]'>Select your coin</label>
                                         <select
-                                            className='cursor-default focus-visible:outline-none w-[60%] rounded-[40px] bg-[#262626] border border-gray-400 py-[5p]'
+                                            className='cursor-default focus-visible:outline-none w-[60%] rounded-[40px] bg-white text-black border border-gray-400 py-[5p]'
                                             placeholder='Contract or Name'
                                             value={coin}
                                             onChange={(e) => setCoin(e.target.value)}>
@@ -521,7 +521,7 @@ const Advertise = () => {
                                     <div className='w-full flex flex-col justify-center items-center mt-[12px]'>
                                         <label
                                             htmlFor="image-input"
-                                            className=' hover:bg-primary bg-transparent text-white border-[2px] border-primary px-[16px] py-[8px] cursor-pointer rounded-[4px]'
+                                            className=' hover:bg-white text-white bg-transparent hover:text-primary border-[2px] border-white px-[16px] py-[8px] cursor-pointer rounded-[4px]'
                                         >
                                             {bannerImage ? 'Change Logo' : 'Upload banner'}
                                         </label>
@@ -544,15 +544,15 @@ const Advertise = () => {
                                         )}
                                     </div>
                                     <div className='w-full mx-auto inline-flex flex-row px-[8px] justify-center items-center mt-[12px]'>
-                                        <span className='w-[30%] bg-[#262626] border border-[#808080] text-white py-[6px] px-[15px] rounded-l-[4px] text-center justify-center items-center'>URL Redirection</span>
-                                        <input value={link1} placeholder="ad-url.com" onChange={(e) => setLink1(e.target.value)} type="text" className='w-[50%] bg-[#262626] border border-[#808080] py-[5px] px-[15px] focus-visible:outline-none h-[34px] overflow-hidden text-ellipsis' />
+                                        <span className='w-[30%] bg-white border border-hover text-primary cursor-default select-none py-[6px] px-[15px] rounded-l-[4px] text-center justify-center items-center border-r-0'>URL Redirection</span>
+                                        <input value={link1} placeholder="add-url.com" onChange={(e) => setLink1(e.target.value)} type="text" className='w-[50%] bg-white border border-secondary text-black border-l-0 py-[16.6px] px-[15px] focus-visible:outline-none h-[34px] overflow-hidden text-ellipsis' />
                                     </div>
                                     <div className='flex w-full justify-center items-center mt-[30px]'>
                                         <Calendar
                                             multiple
                                             value={date2}
                                             onChange={setDate2}
-                                            className={"rmdp-prime bg-dark yellow"}
+                                            className={"rmdp-prime blue"}
                                             minDate={new DateObject()}
                                             mapDays={({ date, today }) => bannerDisable({ date, today })}
                                         />
@@ -561,10 +561,10 @@ const Advertise = () => {
                             </div>
 
 
-                            <div className='w-full bg-[#262626] border border-[#00000020]'>
+                            <div className='w-full bg-primary border border-white'>
                                 <div onClick={() => setcollapse3(!collapse3)} className='cursor-pointer flex flex-row items-center w-full py-[1rem] px-[1.25rem] text-left text-white border-none ' style={{ transition: "color 0.15s ease-in-out, background-color 0.15s ease-in-out, border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out, border-radius 0.15s ease" }}>
                                     <h3 className='break-words mt-[20px] mb-[10px] font-medium text-[20px] '>Vote Banner Ad</h3>
-                                    <p className='ml-[5px] font-normal mt-[8px] rounded-[10px] min-w-[10px] py-[3px] px-[7px] text-[15px] text-[#262626] text-center whitespace-nowrap align-baseline bg-primary'>
+                                    <p className='ml-[5px] font-normal mt-[8px] rounded-[10px] min-w-[10px] py-[3px] px-[7px] text-[15px] text-primary bg-white text-center whitespace-nowrap align-baseline'>
                                         {currency === "BNB" ? "~0.08 BNB" : "~0.000046 BTC"}
                                     </p>
                                     <span className='ml-auto font-black text-white'>
@@ -572,7 +572,7 @@ const Advertise = () => {
                                     </span>
                                 </div>
 
-                                <div className={`${collapse3 ? "hidden" : "block"} border-t border-t-[#80808033] bg-[#262626] py-[1rem] px-[1.25rem]`} style={{ transition: "transition: height 0.25s ease" }}>
+                                <div className={`${collapse3 ? "hidden" : "block"} border-t border-t-white bg-primary py-[1rem] px-[1.25rem]`} style={{ transition: "transition: height 0.25s ease" }}>
                                     <p className='break-words text-[#dedede]'>
                                         <b>Summary:</b>
                                         our project will be advertised on our promoted section : live on the website and the mobile application (iOS & Android) among thousands users per day. If your project is not validated yet the promotion will automatically activate it.
@@ -582,7 +582,7 @@ const Advertise = () => {
                                     <div className='w-full mb-[5px] text-center flex flex-col items-center justify-center'>
                                         <label className='pt-[10px] font-bold mb-[5px]'>Select your coin</label>
                                         <select
-                                            className='cursor-default focus-visible:outline-none w-[60%] rounded-[40px] bg-[#262626] border border-gray-400 py-[5p]'
+                                            className='cursor-default focus-visible:outline-none w-[60%] rounded-[40px] bg-white text-black border border-gray-400 py-[5p]'
                                             placeholder='Contract or Name'
                                             value={coin}
                                             onChange={(e) => setCoin(e.target.value)}>
@@ -596,7 +596,7 @@ const Advertise = () => {
                                     <div className='w-full flex flex-col justify-center items-center mt-[12px]'>
                                         <label
                                             htmlFor="image-input2"
-                                            className=' hover:bg-primary bg-transparent text-white border-[2px] border-primary px-[16px] py-[8px] cursor-pointer rounded-[4px]'
+                                            className='hover:bg-white hover:text-primary bg-transparent text-white border-[2px] border-white px-[16px] py-[8px] cursor-pointer rounded-[4px]'
                                         >
                                             {voteImage ? 'Change Banner' : 'Upload banner'}
                                         </label>
@@ -619,15 +619,15 @@ const Advertise = () => {
                                         )}
                                     </div>
                                     <div className='w-full mx-auto inline-flex flex-row px-[8px] justify-center items-center mt-[12px]'>
-                                        <span className='w-[30%] bg-[#262626] border border-[#808080] text-white py-[6px] px-[15px] rounded-l-[4px] text-center justify-center items-center'>URL Redirection</span>
-                                        <input value={link2} placeholder="ad-url.com" onChange={(e) => setLink2(e.target.value)} type="text" className='w-[50%] bg-[#262626] border border-[#808080] py-[5px] px-[15px] focus-visible:outline-none h-[34px] overflow-hidden text-ellipsis' />
+                                        <span className='w-[30%] bg-white border border-primary text-primary py-[6px] px-[15px] rounded-l-[4px] text-center justify-center items-center border-r-0'>URL Redirection</span>
+                                        <input value={link2} placeholder="add-url.com" onChange={(e) => setLink2(e.target.value)} type="text" className='w-[50%] bg-white text-black border-l-0 border border-primary py-[16.5px] px-[15px] focus-visible:outline-none h-[34px] overflow-hidden text-ellipsis' />
                                     </div>
                                     <div className='flex w-full justify-center items-center mt-[30px]'>
                                         <Calendar
                                             multiple
                                             value={date3}
                                             onChange={setDate3}
-                                            className={"rmdp-prime bg-dark yellow"}
+                                            className={"rmdp-prime blue"}
                                             minDate={new DateObject()}
                                             mapDays={({ date }) => voteDisable({ date })}
                                         />
@@ -639,14 +639,14 @@ const Advertise = () => {
                         <div className='w-full md:w-[70%] mt-[14px]  text-center flex flex-col justify-center items-center'>
                             <h3 className='text-[20px] mt-[20px] mb-[10px] font-medium'>Bulk Discounts</h3>
                             <p>These discounts are applied directly to your cart and work even if you have selected different kinds of services.</p>
-                            <div className='w-full border-[2px] gap-y-3 my-[20px] py-[20px] bg-[#262626] text-[20px] border-gray-300 rounded-[20px] overflow-hidden flex items-center flex-col'>
+                            <div className='w-full border-[2px] text-black gap-y-3 my-[20px] py-[20px] bg-white text-[20px] border-secondary rounded-[20px] overflow-hidden flex items-center flex-col'>
                                 <div className='flex flex-row w-full items-center justify-evenly'>
                                     <p>3+ Days</p>
-                                    <p className='text-[#f4a460]'>20% off</p>
+                                    <p className='text-primary'>20% off</p>
                                 </div>
                                 <div className='flex flex-row w-full items-center justify-evenly'>
                                     <p>7+ Days</p>
-                                    <p>30% off</p>
+                                    <p className='text-primary'>30% off</p>
                                 </div>
                                 <div className='flex flex-row w-full items-center justify-evenly'>
                                     <p>14+ Days</p>
@@ -656,21 +656,21 @@ const Advertise = () => {
                         </div>
                     </div>
 
-                    <div className='w-full lg:w-[30%] flex flex-col justify-center items-center bg-[#303030] rounded-[20px] py-[40px] px-[20px] m-[20px]'>
+                    <div className='w-full lg:w-[30%] flex flex-col justify-center items-center bg-secondary rounded-[20px] py-[40px] px-[20px] m-[20px]'>
                         <h1 className='font-bold text-[1.5rem] mt-[20px] mb-[10px]'>Your Order</h1>
-                        <table className='text-center w-full rounded-t-[10px] overflow-hidden bg-[#262626] text-white border-[#373b3e] border'>
-                            <thead className='bg-[#1d1d1d] border-[#373b3e] border'>
+                        <table className='text-center w-full rounded-t-[10px] overflow-hidden bg-primary text-white border-white border'>
+                            <thead className='bg-primary border-white border'>
                                 <tr>
                                     <th>Item</th>
                                     <th>Date</th>
                                     <th>Price</th>
                                 </tr>
                             </thead>
-                            <tbody className='bg-[#262626] border border-[#373b3e] text-white'>
+                            <tbody className='bg-white border border-black text-white'>
                                 {
                                     date1.length > 0 ?
                                         date1.map((date, index) => (
-                                            <tr key={index} className='hover:bg-[#505050] border-t- border-t-[#ddd]'>
+                                            <tr key={index} className='hover:bg-primary border-t text-black hover:text-white border-t-black select-none'>
                                                 <td className='py-[8px] align-middle'>Promoted Slot</td>
                                                 <td className='py-[8px] align-middle'>{`${date.month.shortName}, ${date.day}, ${date.year}`}</td>
                                                 <td className='py-[8px] align-middle'>0.11 BNB</td>
@@ -681,7 +681,7 @@ const Advertise = () => {
                                 {
                                     date2.length > 0 ?
                                         date2.map((date, index) => (
-                                            <tr key={index} className='hover:bg-[#505050] border-t border-t-[#ddd]'>
+                                            <tr key={index} className='hover:bg-primary border-t text-black hover:text-white border-t-black select-none'>
                                                 <td className='py-[8px] align-middle'>Banner Slot</td>
                                                 <td className='py-[8px] align-middle'>{`${date.month.shortName}, ${date.day}, ${date.year}`}</td>
                                                 <td className='py-[8px] align-middle'>0.11 BNB</td>
@@ -692,7 +692,7 @@ const Advertise = () => {
                                 {
                                     date3.length > 0 ?
                                         date3.map((date, index) => (
-                                            <tr key={index} className='hover:bg-[#505050] border-t border-t-[#ddd]'>
+                                            <tr key={index} className='hover:bg-primary border-t text-black hover:text-white border-t-black select-none'>
                                                 <td className='py-[8px] align-middle'>Vote Ad</td>
                                                 <td className='py-[8px] align-middle'>{`${date.month.shortName}, ${date.day}, ${date.year}`}</td>
                                                 <td className='py-[8px] align-middle'>0.08 BNB</td>
@@ -702,17 +702,17 @@ const Advertise = () => {
                                 }
                             </tbody>
                         </table>
-                        <div className='w-full rounded-b-[10px] border-t-[2px] border-[#ffffff4d]'>
-                            <div className='w-full flex flex-row justify-between bg-[#302e2a] py-[5px] px-[10px] '>
-                                <p className='#302e2a'>Subtotal</p>
+                        <div className='text-white w-full rounded-b-[10px] border-t-[2px] border-white'>
+                            <div className='w-full flex flex-row justify-between bg-primary py-[5px] px-[10px] '>
+                                <p>Subtotal</p>
                                 <p>{subtotal} {currency === 'BNB' ? "BNB" : "BTC"}</p>
                             </div>
-                            <div className='w-full flex flex-row justify-between bg-[#302e2a] py-[5px] px-[10px] '>
-                                <p className='#302e2a'>Reduction</p>
+                            <div className='w-full flex flex-row justify-between bg-primary py-[5px] px-[10px] '>
+                                <p>Reduction</p>
                                 <p>{reduction} {currency === 'BNB' ? "BNB" : "BTC"}</p>
                             </div>
-                            <div className='w-full flex flex-row justify-between bg-[#4f4f4f] py-[5px] px-[10px] '>
-                                <p className='#302e2a'>Total</p>
+                            <div className='w-full flex flex-row justify-between bg-primary py-[5px] px-[10px] '>
+                                <p>Total</p>
                                 <p>{total} {currency === 'BNB' ? "BNB" : "BTC"}</p>
                             </div>
                         </div>
@@ -720,7 +720,7 @@ const Advertise = () => {
                         <div className='inline-flex items-center text-center justify-center mt-[20px]'>
                             <p><input className='mt-[5px] m-0 p-0' type="checkbox" checked={terms} onChange={() => setTerms(!terms)} /> By checking this box, you acknowledge that you have read and accepted our Terms of Sale.</p>
                         </div>
-                        <button onClick={handleSubmit} className='mt-[15px] border border-primary py-[6px] px-[50px] bg-[#262626] text-[15px] h-[35px] whitespace-nowrap align-middle rounded-[4px] hover:text-background hover:bg-primary'>
+                        <button onClick={handleSubmit} className='mt-[15px] border border-white py-[6px] px-[50px] bg-primary text-[15px] h-[35px] whitespace-nowrap align-middle rounded-[4px] hover:text-primary hover:bg-white'>
                             Reserve and Pay
                         </button>
 
@@ -736,7 +736,7 @@ const Advertise = () => {
                     <div
                         className="z-[30000000] justify-center items-center flex overflow-x-hidden overflow-y-auto fixed inset-0 outline-none focus:outline-none"
                     >
-                        <div className="bg-[#262626] text-white relative my-6 mx-auto w-[50%]">
+                        <div className="bg-primary text-white relative my-6 mx-auto w-[50%]">
                             {/*content*/}
                             <div className={` border-0 rounded-lg shadow-lg relative flex flex-col w-full outline-none focus:outline-none`}>
                                 {/*header*/}
@@ -748,7 +748,7 @@ const Advertise = () => {
                                         className="text-primary p-1 ml-auto bg-transparent border-0 text-3xl leading-none font-semibold outline-none focus:outline-none"
                                         onClick={() => setShowModal(false)}
                                     >
-                                        <span className="bg-transparent text-primary h-6 w-6 text-2xl block outline-none focus:outline-none">
+                                        <span className="bg-transparent text-white h-6 w-6 text-2xl block outline-none focus:outline-none">
                                             X
                                         </span>
                                     </button>
@@ -791,12 +791,12 @@ const Advertise = () => {
                                             <label className='text-[#e2e2e2]'>Postal Code</label>
                                             <input value={postal} onChange={(e) => setPostal(e.target.value)} type="text" className='w-[90%] text-[#272727] pl-[10px] mb-[19px] h-[34px] py-[6px] px-[12px] border border-[#ced4da]' />
                                         </div>
-                                        <p className='mx-auto text-red-500 mt-[12px] text-[12px] text-center'>{error}</p>
+                                        <p className='mx-auto text-red-500 font-bold mt-[12px] text-[12px] text-center'>{error}</p>
                                     </div>
                                 </div>
                                 {/*footer*/}
                                 <div className="flex items-center justify-center p-6 border-t border-solid border-slate-200 rounded-b">
-                                    <button onClick={handleBilling} className='border border-primary py-[6px] px-[50px] bg-[#262626] text-[15px] h-[35px] whitespace-nowrap align-middle rounded-[4px] hover:text-background hover:bg-primary'>
+                                    <button onClick={handleBilling} className='border border-white py-[6px] px-[50px] bg-primary text-[15px] h-[35px] whitespace-nowrap align-middle rounded-[4px] hover:text-primary hover:bg-white'>
                                         Next
                                     </button>
                                 </div>
@@ -811,7 +811,7 @@ const Advertise = () => {
                     <div
                         className="z-[30000000] justify-center items-center flex overflow-x-hidden overflow-y-auto fixed inset-0 outline-none focus:outline-none"
                     >
-                        <div className="bg-[#262626] text-white relative my-6 mx-auto w-[50%]">
+                        <div className="bg-primary text-white relative my-6 mx-auto w-[50%]">
                             {/*content*/}
                             <div className={` border-0 rounded-lg shadow-lg relative flex flex-col w-full outline-none focus:outline-none`}>
                                 {/*header*/}
@@ -823,7 +823,7 @@ const Advertise = () => {
                                         className="text-primary p-1 ml-auto bg-transparent border-0 text-3xl leading-none font-semibold outline-none focus:outline-none"
                                         onClick={() => setPaymentModal(false)}
                                     >
-                                        <span className="bg-transparent text-primary h-6 w-6 text-2xl block outline-none focus:outline-none">
+                                        <span className="bg-transparent text-white h-6 w-6 text-2xl block outline-none focus:outline-none">
                                             X
                                         </span>
                                     </button>
@@ -842,7 +842,7 @@ const Advertise = () => {
                                 </div>
                                 {/*footer*/}
                                 <div className="flex items-center justify-center p-6 border-t border-solid border-slate-200 rounded-b">
-                                    <button onClick={handlePay} className='border border-primary py-[6px] px-[50px] bg-[#262626] text-[15px] h-[35px] whitespace-nowrap align-middle rounded-[4px] hover:text-background hover:bg-primary'>
+                                    <button onClick={handlePay} className='border border-white py-[6px] px-[50px] bg-primary text-[15px] h-[35px] whitespace-nowrap align-middle rounded-[4px] hover:text-primary hover:bg-white'>
                                         Pay
                                     </button>
                                 </div>
