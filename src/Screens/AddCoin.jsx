@@ -173,8 +173,6 @@ const AddCoin = () => {
           addedDate: JSON.stringify(coinDate),
           owner: currentUser.displayName,
           ownerId: currentUser.uid,
-          voteBy: [currentUser.uid],
-
         });
         navigate('/');
       });

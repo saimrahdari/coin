@@ -159,7 +159,6 @@ const AddAirdrop = () => {
                     ownerId: currentUser.uid,
                     rank: 0,
                     votes: 0,
-                    voteBy: [currentUser.uid],
                 });
                 navigate('/');
             });
