@@ -1,5 +1,7 @@
-import { onValue, ref } from 'firebase/database'
-import React, { useContext, useEffect, useState } from 'react'
+import axios from 'axios'
+import { onValue, ref, update } from 'firebase/database'
+import React, { useContext, useEffect, useRef, useState } from 'react'
+import ReCAPTCHA from 'react-google-recaptcha'
 import { Link, useNavigate } from 'react-router-dom'
 import { db } from '../../Firebase'
 import { GlobalContext } from './GlobalContext'
@@ -11,6 +13,11 @@ const Airdrops = () => {
   const [banner, setBanner] = useState([])
   const [dbUser, setDbUser] = useState([])
   const [airdropData, setAirdropData] = useState([])
+  const [showModal, setShowModal] = useState(false);
+  const [clickedAirdrop, setClickedAirdrop] = useState({});
+  const [recaptchaToken, setRecaptchaToken] = useState(null);
+  const [recaptchaKey, setRecaptchaKey] = useState(Date.now());
+  const captchaRef = useRef(null)
 
 
   useEffect(() => {
@@ -41,22 +48,52 @@ const Airdrops = () => {
     }, (error) => console.log(error))
   }, [currentUser]);
 
-  const upVote = (e, airdrop) => {
+  const upVote = (e, coin) => {
     e.stopPropagation();
-    if (currentUser.length <= 0) {
-      alert("please login to vote");
+    setRecaptchaKey(Date.now());
+    setShowModal(true)
+  }
+
+  const handleModalClose = () => {
+    setShowModal(false);
+    setRecaptchaToken(null);
+    // Reset the reCAPTCHA widget
+    setRecaptchaKey(Date.now());
+  }
+
+  const handleVote = async () => {
+    const token = captchaRef.current.getValue();
+
+    if (token) {
+      let valid_token = await verifyToken(token);
+      if (valid_token.success) {
+        update(ref(db, `/airdrops/${clickedAirdrop.key}`), {
+          votes: clickedAirdrop.airdrop.votes + 1,
+        })
+        setShowModal(false)
+      }
     }
-    else if (!airdrop.airdrop.voteBy.includes(currentUser.uid)) {
-      let airdropvote = airdrop.airdrop.voteBy
-      airdropvote.push(currentUser.uid)
-      update(ref(db, `/coins/${airdrop.key}`), {
-        votes: airdrop.airdrop.votes + 1,
-        voteBy: airdropvote
-      })
+  }
+
+  useEffect(() => {
+    // Reset the reCAPTCHA widget when the component first loads
+    if (captchaRef.current) {
+      setRecaptchaKey(Date.now());
     }
-    else {
-      alert("Cannot vote");
+  }, [showModal]);
+
+  const verifyToken = async (token) => {
+    try {
+      let response = await axios.post(`https://coinvote-api.herokuapp.com/verify-token`, {
+
+        secret: import.meta.env.VITE_REACT_APP_SECRET_KEY,
+        token
+      });
+      return response.data;
+    } catch (error) {
+      console.log("error ", error);
     }
+    setRecaptchaKey(Date.now());
   }
 
   return (
@@ -110,7 +147,7 @@ const Airdrops = () => {
                   <td className='hidden md:table-cell align-middle text-[16px] text-white'>{airdrop.airdrop.startDate}</td>
                   <td className='hidden md:table-cell align-middle text-[16px] text-white'>{airdrop.airdrop.endDate}</td>
                   <td className='hidden md:table-cell align-middle text-[16px] text-white'>{airdrop.airdrop.rewards}</td>
-                  <td onClick={(e) => upVote(e, airdrop)} className='align-middle text-[16px] text-white'>
+                  <td onClick={(e) => { upVote(e, airdrop); setClickedAirdrop(airdrop) }} className='align-middle text-[16px] text-white'>
                     <button className='hover:bg-redPrimary font-extrabold min-w-[80px] text-center border-[2px] border-redPrimary bg-primary rounded-[7px] p-[10px] text-white' style={{ lineHeight: 1.5 }}>
                       <div className='flex flex-row justify-evenly items-start align-middle'>
                         <svg className='mt-[3px]' width="15" height="16" viewBox="0 0 18 34" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M9 0L0.339747 15L17.6603 15L9 0ZM10.5 34L10.5 13.5L7.5 13.5L7.5 34L10.5 34Z" fill="currentColor" /></svg>
@@ -125,6 +162,47 @@ const Airdrops = () => {
           </tbody>
         </table>
       </div>
+
+      {showModal ? (
+        <>
+          <div
+            className="z-[30000000] justify-center items-center flex overflow-x-hidden overflow-y-auto fixed inset-0 outline-none focus:outline-none"
+          >
+            <div className="bg-primary text-white relative my-6 mx-auto w-[50%]">
+              {/*content*/}
+              <div className={` border-0 rounded-lg shadow-lg relative flex flex-col w-full outline-none focus:outline-none`}>
+                {/*header*/}
+                <div className="flex  items-start justify-between p-5 border-b border-solid border-slate-200 rounded-t">
+                  <h3 className=" text-2xl font-semibold text-center">
+                    {clickedAirdrop.airdrop.name}
+                  </h3>
+                  <button
+                    className="text-primary p-1 ml-auto bg-transparent border-0 text-3xl leading-none font-semibold outline-none focus:outline-none"
+                    onClick={handleModalClose}
+                  >
+                    <span className="bg-transparent text-white h-6 w-6 text-2xl block outline-none focus:outline-none">
+                      X
+                    </span>
+                  </button>
+                </div>
+                {/*body*/}
+                <div className="relative p-6 flex w-full flex-col">
+                  <p className='mb-[40px]'>Total Votes: {clickedAirdrop.airdrop.votes}</p>
+
+                  <ReCAPTCHA className='self-center' sitekey={import.meta.env.VITE_REACT_APP_SITE_KEY} ref={captchaRef} key={recaptchaKey} onChange={setRecaptchaToken} />
+                </div>
+                {/*footer*/}
+                <div className="flex items-center justify-center p-6 border-t border-solid border-slate-200 rounded-b">
+                  <button onClick={handleVote} className='border border-white py-[6px] px-[50px] bg-primary text-[15px] h-[35px] whitespace-nowrap align-middle rounded-[4px] hover:text-primary hover:bg-white'>
+                    Vote
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div className="opacity-25 fixed inset-0 z-40 bg-black"></div>
+        </>
+      ) : null}
     </div>
   )
 }

@@ -214,12 +214,10 @@ const Dashboad = () => {
         set(ref(db, `users/${currentUser.uid}/fav`), favs)
     }
 
-
     const upVote = (e, coin) => {
         e.stopPropagation();
         setRecaptchaKey(Date.now());
         setShowModal(true)
-        console.log(Date.now());
     }
 
     const handleModalClose = () => {
@@ -234,13 +232,9 @@ const Dashboad = () => {
 
         if (token) {
             let valid_token = await verifyToken(token);
-            console.log(token);
             if (valid_token.success) {
-                let coinvote = clickedCoin.coin.voteBy
-                coinvote.push(currentUser.uid)
                 update(ref(db, `/coins/${clickedCoin.key}`), {
                     votes: clickedCoin.coin.votes + 1,
-                    voteBy: coinvote
                 })
                 setShowModal(false)
             }
@@ -250,7 +244,6 @@ const Dashboad = () => {
     useEffect(() => {
         // Reset the reCAPTCHA widget when the component first loads
         if (captchaRef.current) {
-            console.log("here");
             setRecaptchaKey(Date.now());
         }
     }, [showModal]);
@@ -261,7 +254,7 @@ const Dashboad = () => {
 
                 secret: import.meta.env.VITE_REACT_APP_SECRET_KEY,
                 token
-            }, console.log(token));
+            });
             return response.data;
         } catch (error) {
             console.log("error ", error);
