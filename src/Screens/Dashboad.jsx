@@ -257,7 +257,7 @@ const Dashboad = () => {
 
     const verifyToken = async (token) => {
         try {
-            let response = await axios.post(`http://localhost:5000/verify-token`, {
+            let response = await axios.post(`https://coinvote-api.herokuapp.com/verify-token`, {
 
                 secret: import.meta.env.VITE_REACT_APP_SECRET_KEY,
                 token
