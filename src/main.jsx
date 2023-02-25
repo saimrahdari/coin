@@ -105,9 +105,7 @@ const router = createBrowserRouter([
 
 
 ReactDOM.createRoot(document.getElementById('root')).render(
-  <React.StrictMode>
   <GlobalProvider>
     <RouterProvider router={router} />
   </GlobalProvider>
-  </React.StrictMode>,
 )

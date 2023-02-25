@@ -1,9 +1,11 @@
 import { onValue, push, ref, set, update } from 'firebase/database'
-import React, { useContext, useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState, useRef } from 'react'
 import { DateObject } from 'react-multi-date-picker'
 import { Link, useNavigate } from 'react-router-dom'
 import { db } from '../../Firebase'
 import { GlobalContext } from './GlobalContext'
+import ReCAPTCHA from "react-google-recaptcha"
+import axios from 'axios'
 
 const coinType = [
     {
@@ -70,6 +72,11 @@ const Dashboad = () => {
     const [price, setPrice] = useState([])
     const { currentUser } = useContext(GlobalContext)
     const todayDate = new DateObject()
+    const [showModal, setShowModal] = useState(false);
+    const [clickedCoin, setClickedCoin] = useState({});
+    const [recaptchaToken, setRecaptchaToken] = useState(null);
+    const [recaptchaKey, setRecaptchaKey] = useState(Date.now());
+    const captchaRef = useRef(null)
 
     const dateDifference = (endDate) => {
         const currentDate = new Date();
@@ -210,20 +217,56 @@ const Dashboad = () => {
 
     const upVote = (e, coin) => {
         e.stopPropagation();
-        if (currentUser.length <= 0) {
-            alert("please login to vote");
+        setRecaptchaKey(Date.now());
+        setShowModal(true)
+        console.log(Date.now());
+    }
+
+    const handleModalClose = () => {
+        setShowModal(false);
+        setRecaptchaToken(null);
+        // Reset the reCAPTCHA widget
+        setRecaptchaKey(Date.now());
+    }
+
+    const handleVote = async () => {
+        const token = captchaRef.current.getValue();
+
+        if (token) {
+            let valid_token = await verifyToken(token);
+            console.log(token);
+            if (valid_token.success) {
+                let coinvote = clickedCoin.coin.voteBy
+                coinvote.push(currentUser.uid)
+                update(ref(db, `/coins/${clickedCoin.key}`), {
+                    votes: clickedCoin.coin.votes + 1,
+                    voteBy: coinvote
+                })
+                setShowModal(false)
+            }
         }
-        else if (!coin.coin.voteBy.includes(currentUser.uid)) {
-            let coinvote = coin.coin.voteBy
-            coinvote.push(currentUser.uid)
-            update(ref(db, `/coins/${coin.key}`), {
-                votes: coin.coin.votes + 1,
-                voteBy: coinvote
-            })
+    }
+
+    useEffect(() => {
+        // Reset the reCAPTCHA widget when the component first loads
+        if (captchaRef.current) {
+            console.log("here");
+            setRecaptchaKey(Date.now());
         }
-        else {
-            alert("Cannot vote");
+    }, [showModal]);
+
+    const verifyToken = async (token) => {
+        try {
+            let response = await axios.post(`http://localhost:5000/verify-token`, {
+
+                secret: import.meta.env.VITE_REACT_APP_SECRET_KEY,
+                token
+            }, console.log(token));
+            return response.data;
+        } catch (error) {
+            console.log("error ", error);
         }
+        setRecaptchaKey(Date.now());
     }
 
     const filterCoins = (type1) => {
@@ -339,6 +382,7 @@ const Dashboad = () => {
                         }
                     </tbody>
                 </table>
+
                 <div className='w-full justify-center items-center flex my-[12px]'>
                     <Link to={"/advertise"} className="uppercase font-bold rounded-[50px] border-none align-middle text-center text-[15px] bg-[#fff] hover:bg-primary text-primary hover:text-white  py-[6px] px-[12px] block">Advertise With Us</Link>
                 </div>
@@ -432,9 +476,6 @@ const Dashboad = () => {
                 ))}
             </div>
 
-
-
-
             <div className='w-full flex mt-[20px] px-[8px] md:w-[80%] flex-col'>
                 <ul className=' overflow-x-auto overflow-y-hidden whitespace-nowrap flex gap-x-2 flex-wrap'>
                     <li onClick={() => { setAllCoins("alltime"); filterCoins("all") }} className='mt-[5px] border-[5px]  inline-block mr-[2px] border-primary'>
@@ -505,7 +546,7 @@ const Dashboad = () => {
                                     <td className='hidden md:table-cell align-middle text-[16px] text-white'>{ }</td>
                                     <td className='hidden md:table-cell align-middle text-[16px] text-white'>$ {coin.coin.cap.toString().slice(0, 6)}</td>
                                     <td className='hidden md:table-cell align-middle text-[16px] text-white'>{`${dateDifference(coin.coin.launchDate)} Months`}</td>
-                                    <td onClick={(e) => upVote(e, coin)} className='align-middle text-[16px] text-white'>
+                                    <td onClick={(e) => { upVote(e, coin); setClickedCoin(coin) }} className='align-middle text-[16px] text-white'>
                                         <button className='hover:bg-redPrimary font-extrabold min-w-[80px] text-center border-[2px] border-redPrimary bg-primary rounded-[7px] p-[10px] text-white' style={{ lineHeight: 1.5 }}>
                                             <div className='flex flex-row justify-evenly items-start align-middle'>
                                                 <svg className='mt-[3px]' width="15" height="16" viewBox="0 0 18 34" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M9 0L0.339747 15L17.6603 15L9 0ZM10.5 34L10.5 13.5L7.5 13.5L7.5 34L10.5 34Z" fill="currentColor" /></svg>
@@ -559,6 +600,47 @@ const Dashboad = () => {
                     <p><b>Note on voting:</b> You can vote up to two times per hour, the votes are added to those of the Today and the All Time section.</p>
                 </div>
             </div>
+
+            {showModal ? (
+                <>
+                    <div
+                        className="z-[30000000] justify-center items-center flex overflow-x-hidden overflow-y-auto fixed inset-0 outline-none focus:outline-none"
+                    >
+                        <div className="bg-primary text-white relative my-6 mx-auto w-[50%]">
+                            {/*content*/}
+                            <div className={` border-0 rounded-lg shadow-lg relative flex flex-col w-full outline-none focus:outline-none`}>
+                                {/*header*/}
+                                <div className="flex  items-start justify-between p-5 border-b border-solid border-slate-200 rounded-t">
+                                    <h3 className=" text-2xl font-semibold text-center">
+                                        {clickedCoin.coin.name}
+                                    </h3>
+                                    <button
+                                        className="text-primary p-1 ml-auto bg-transparent border-0 text-3xl leading-none font-semibold outline-none focus:outline-none"
+                                        onClick={handleModalClose}
+                                    >
+                                        <span className="bg-transparent text-white h-6 w-6 text-2xl block outline-none focus:outline-none">
+                                            X
+                                        </span>
+                                    </button>
+                                </div>
+                                {/*body*/}
+                                <div className="relative p-6 flex w-full flex-col">
+                                    <p className='mb-[40px]'>Total Votes: {clickedCoin.coin.votes}</p>
+
+                                    <ReCAPTCHA className='self-center' sitekey={import.meta.env.VITE_REACT_APP_SITE_KEY} ref={captchaRef} key={recaptchaKey} onChange={setRecaptchaToken} />
+                                </div>
+                                {/*footer*/}
+                                <div className="flex items-center justify-center p-6 border-t border-solid border-slate-200 rounded-b">
+                                    <button onClick={handleVote} className='border border-white py-[6px] px-[50px] bg-primary text-[15px] h-[35px] whitespace-nowrap align-middle rounded-[4px] hover:text-primary hover:bg-white'>
+                                        Vote
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div className="opacity-25 fixed inset-0 z-40 bg-black"></div>
+                </>
+            ) : null}
         </div>
     )
 }
