@@ -462,7 +462,7 @@ const Dashboad = () => {
 
             <div className='flex flex-row gap-x-[18px] justify-start px-[8px] mt-[20px] md:w-[80%] w-full flex-wrap'>
                 {coinType.map((coin, index) => (
-                    <div key={coin.key} onClick={() => filterSymbol(index, coin)} className={`flex flex-row gap-x-3 cursor-pointer mb-[3px] text-primary p-[10px] border-[2px] border-primary w-auto   ${type === index ? "bg-primary text-white" : "bg-white"} `}>
+                    <div key={coin.key} onClick={() => filterSymbol(index, coin)} className={`flex flex-row gap-x-3 cursor-pointer mb-[3px] p-[10px] border-[2px] border-primary w-auto   ${type === index ? "bg-primary text-white" : "bg-white text-primary"} `}>
                         <img src={coin.image} alt="" />
                         <p>{coin.name}</p>
                     </div>

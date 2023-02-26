@@ -32,7 +32,6 @@ const Register = () => {
             snapshot.forEach(childSnapshot => {
                 const childData = childSnapshot.val();
                 usernames.push(childData.username);
-                console.log(childData.username);
             })
             setDbName(usernames);
         });

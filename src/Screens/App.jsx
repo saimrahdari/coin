@@ -18,11 +18,12 @@ const App = () => {
 
     useEffect(() => {
         setUserDropdown(false)
+        console.log(currentUser.photoURL);
+        setImage(currentUser.photoURL)
         if (Object.keys(currentUser).length !== 0) {
             setDisplayName(currentUser.displayName)
-            setImage(currentUser.photoURL)
         }
-    }, [currentUser])
+    }, [currentUser, currentUser.photoURL])
 
 
     const handleLogout = async () => {
@@ -330,27 +331,34 @@ const App = () => {
                     </div>
                     <ul className='px-[5px] flex flex-wrap flex-row justify-center items-center text-[1.1rem] text-center gap-x-[18px] mt-[8px]'>
                         <li className='text-[#dcdcdc] hover:text-white'>
-                            <Link to={"/"} className=''>Disclaimer</Link>
+                            <Link to={"/disclaimer"} className=''>Disclaimer</Link>
                         </li>
                         <li className='text-[#dcdcdc] hover:text-white'>
-                            <Link to={"/"} className=''>Terms of Use</Link>
+                            <Link to={"/terms"} className=''>Terms of Use</Link>
                         </li>
                         <li className='text-[#dcdcdc] hover:text-white'>
-                            <Link to={"/"} className=''>Privacy Policy</Link>
+                            <Link to={"/privacy"} className=''>Privacy Policy</Link>
                         </li>
                         <li className='text-[#dcdcdc] hover:text-white'>
-                            <Link to={"/"} className=''>Terms & Conditions</Link>
+                            <Link to={"/cgv"} className=''>Terms & Conditions</Link>
                         </li>
                         <li className='text-[#dcdcdc] hover:text-white'>
-                            <Link to={"/"} className=''>Contact</Link>
+                            <Link to={"/contact"} className=''>Contact</Link>
                         </li>
                         <li className='text-[#dcdcdc] hover:text-white'>
-                            <Link to={"/"} className=''>Mobile App</Link>
+                            <Link to={"/mobile"} className=''>Mobile App</Link>
                         </li>
                     </ul>
                     <div className='flex justify-center items-center px-[5px] mt-[5px]'>
                         © 2023 Coinvote. All rights reserved.
                     </div>
+                    <div className='flex justify-center items-center px-[5px] mt-[5px]'>
+                        <img className='lg:w-[13%] md:w-[21%] w-[35%]' src="https://images.dmca.com/Badges/dmca-badge-w250-5x1-09.png?ID=42663165-1ec2-4a03-be8a-5ded6dd2930c" alt="" />
+                    </div>
+                    <div className='flex justify-center items-center px-[5px] mt-[5px]'>
+                        <img className='lg:w-[4%] md:w-[6%] w-[15%]' src="https://b.sf-syn.com/badge_img/3457098/light-default?&variant_id=sf&r=https://coinvote.cc/" alt="" />
+                    </div>
+
                 </div>
             </footer>
         </>

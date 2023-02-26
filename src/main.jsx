@@ -24,6 +24,12 @@ import AddAirdrop from './Screens/AddAirdrop';
 import Partners from './Screens/Partners';
 import AirdropDetails from './Screens/AirdropDetails';
 import AddPartner from './Screens/AddPartner';
+import Disclaimer from './Screens/Disclaimer';
+import TermsOfUse from './Screens/TermsOfUse';
+import PrivacyPolicy from './Screens/PrivacyPolicy';
+import TermsConditions from './Screens/TermsConditions';
+import Mobile from './Screens/Mobile';
+import Contact from './Screens/Contact';
 
 
 const router = createBrowserRouter([
@@ -98,6 +104,30 @@ const router = createBrowserRouter([
       {
         path: "partner",
         element : <Partners />
+      },
+      {
+        path: "disclaimer",
+        element : <Disclaimer />
+      },
+      {
+        path: "terms",
+        element : <TermsOfUse />
+      },
+      {
+        path: "privacy",
+        element : <PrivacyPolicy />
+      },
+      {
+        path: "cgv",
+        element : <TermsConditions />
+      },
+      {
+        path: "mobile",
+        element : <Mobile />
+      },
+      {
+        path: "contact",
+        element : <Contact />
       },
     ]
   },
