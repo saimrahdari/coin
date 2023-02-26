@@ -42,7 +42,7 @@ const Airdrops = () => {
         AirdropList.push({ key: childKey, airdrop: childData });
       });
 
-      AirdropList.sort((a, b) => b.coin.vote - a.coin.vote);
+      AirdropList.sort((a, b) => b.airdrop.votes - a.airdrop.votes);
 
       setAirdropData(AirdropList);
     }, (error) => console.log(error))

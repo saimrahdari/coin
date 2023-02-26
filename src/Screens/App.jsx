@@ -298,7 +298,7 @@ const App = () => {
             <footer className='text-[#e8f5f6] text-[12px] bg-secondary w-full mt-[80px] '>
                 <div className='w-full bg-secondary text-white items-center py-[10px] px-auto '>
                     <span className='block mx-auto text-center '>
-                        <Link to={'/'} className="p-[5px] inline-block ml-[12px] mt-0">
+                        {/* <Link to={'/'} className="p-[5px] inline-block ml-[12px] mt-0">
                             <img className='w-[130px] align-middle' src={'https://coinvote.cc/template/images/en_badge_web_generic.png'} alt="" />
                         </Link>
                         <Link to={'/'} className="p-[5px] inline-block ml-[12px] mt-0">
@@ -348,7 +348,8 @@ const App = () => {
                                     </g>
                                 </g>
                             </svg>
-                        </Link>
+                        </Link> */}
+                        <p className='my-[8px] text-[1.2rem] font-semibold'>Coming Soon on APP Store and Google Pay.</p>
                     </span>
                     <div className='flex flex-row gap-x-[20px] w-[50%] justify-center items-center mx-auto'>
                         <Link to='/'>
