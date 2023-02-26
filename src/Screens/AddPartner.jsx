@@ -293,7 +293,7 @@ const AddPartner = () => {
                             className='text-ellipsis focus-visible:outline-none w-full h-[34px] py-[6px] px-[12px] text-[#495057] bg-white border border-[#ced4da] rounded-[0.25rem]'
                             style={{ boxShadow: 'inset 0 1px 1px rgb(0 0 0 / 8%)', transition: "border-color ease-in-out .15s, box-shadow ease-in-out .15s" }}
                             type="text"
-                            placeholder='ex: 48 Hours'
+                            placeholder='ex: 48'
                             value={deliveryDuration}
                             onChange={(e) => setDeliveryDuration(e.target.value)}
                         />
