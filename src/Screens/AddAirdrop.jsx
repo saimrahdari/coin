@@ -176,7 +176,7 @@ const AddAirdrop = () => {
 
                 <div className='flex justify-center items-center flex-col md:w-[80%] w-full text-center mx-auto px-[5px]'>
                     <h1 className='font-bold text-[2.5rem] mt-[20px] mb-[10px]'>Add an airdrop</h1>
-                    <p className='font-medium text-[1.5rem] '> Add your airdrop to coinvote ! You will be able to vote for it and see it on Airdrops.</p>
+                    <p className='font-medium text-[1.5rem] '> Add your airdrop to votenow-crypto ! You will be able to vote for it and see it on Airdrops.</p>
                 </div>
 
                 <div className='w-full flex flex-col px-[18px]'>

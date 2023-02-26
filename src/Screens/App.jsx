@@ -1,8 +1,11 @@
 import React, { useContext, useEffect, useState } from 'react'
 import { Link, Outlet, useNavigate } from 'react-router-dom'
 import { GlobalContext } from './GlobalContext'
-import { auth } from '../../Firebase'
+import { auth, db } from '../../Firebase'
 import Logo from '../assets/logo.png'
+import { onValue, ref } from 'firebase/database'
+import { DateObject } from 'react-multi-date-picker'
+
 
 
 const App = () => {
@@ -14,17 +17,46 @@ const App = () => {
     const { currentUser, setCurrentUser } = useContext(GlobalContext)
     const [displayName, setDisplayName] = useState('')
     const [image, setImage] = useState("https://firebasestorage.googleapis.com/v0/b/coin-ab637.appspot.com/o/Profiles%2Fprofile.jpg?alt=media&token=19d30fce-c1a6-4057-a9e0-e3a5c66caf38")
+    const [trending, setTrending] = useState([])
+
 
 
     useEffect(() => {
         setUserDropdown(false)
-        console.log(currentUser.photoURL);
         setImage(currentUser.photoURL)
         if (Object.keys(currentUser).length !== 0) {
             setDisplayName(currentUser.displayName)
         }
     }, [currentUser, currentUser.photoURL])
 
+    useEffect(() => {
+        const CoinsRef = ref(db, '/coins');
+        onValue(CoinsRef, (snapshot) => {
+            let coinList = [];
+            snapshot.forEach(childSnapshot => {
+                const childKey = childSnapshot.key;
+                const childData = childSnapshot.val();
+                childData.addedDate = JSON.parse(childData.addedDate)
+                childData.addedDate = new DateObject(childData.addedDate)
+                coinList.push({ key: childKey, coin: childData });
+            });
+            if (search.length === 0) {
+                console.log("here");
+                console.log(search);
+                const trendingList = coinList.slice().sort(function (a, b) {
+                    return b.coin.votes - a.coin.votes;
+                }).slice(0, 5);
+                setTrending(trendingList);
+            }
+            else {
+                const filteredList = coinList.filter((coin) =>
+                    coin.coin.name.toLowerCase().includes(search)
+                );
+                setTrending(filteredList)
+            }
+
+        }, (error) => console.log(error))
+    }, [currentUser, search]);
 
     const handleLogout = async () => {
         await auth.signOut()
@@ -71,7 +103,7 @@ const App = () => {
                                     Advertise
                                 </Link>
                             </li>
-                            
+
                             <li className='relative block'>
                                 <div className='text-[#ffffff] flex flex-row justify-center items-center cursor-pointer max-w-[170px]  text-[14.5px] leading-5 py-[10px] px-[15px] hover:text-gray'>
                                     <Link to={'/add-coin'} className='mr-[5px]'>Add Coin</Link>
@@ -92,15 +124,31 @@ const App = () => {
                                     Partners & Tools
                                 </Link>
                             </li>
-                            <div className='ml-[1rem] flex justify-center items-center border-[#e2c5741a] border-[2px] h-[40px] rounded-[10px] bg-[#e2c5740d] max-w-[200px]'>
+                            <div className='group/view relative ml-[1rem] flex justify-center items-center border-[#e2c5741a] border-[2px] h-[40px] rounded-[10px] bg-[#e2c5740d] max-w-[200px]'>
                                 <form className='w-full flex relative' autoComplete="off">
                                     <input
-                                        className='focus-visible:outline-none text-ellipsis text-white pl-[40px] bg-inherit'
-                                        type="text" value={search} onChange={(e) => setSearch(e.target.value)} placeholder={"Search coins..."} name={"search"} autoComplete="on"/>
+                                        className=' focus-visible:outline-none text-ellipsis text-white pl-[40px] bg-inherit'
+                                        type="text" value={search} onChange={(e) => setSearch(e.target.value)} placeholder={"Search coins..."} name={"search"} autoComplete="on" />
                                     <span className='inline-flex items-center justify-center text-[#dbdbdb8c] absolute w-[2.5rem] cursor-pointer text-[15px] left-0 mt-[2px] '>
                                         <svg width="15" height="15" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M18.4746 19.7175L11.6667 12.9096C11.1017 13.3992 10.4426 13.7806 9.68927 14.0537C8.93597 14.3267 8.13559 14.4633 7.28814 14.4633C5.25424 14.4633 3.53107 13.7571 2.11864 12.3446C0.706215 10.9322 0 9.22787 0 7.23164C0 5.2354 0.706215 3.53107 2.11864 2.11864C3.53107 0.706215 5.24482 0 7.25989 0C9.25612 0 10.9557 0.706215 12.3588 2.11864C13.7618 3.53107 14.4633 5.2354 14.4633 7.23164C14.4633 8.04143 14.3314 8.82298 14.0678 9.57627C13.8041 10.3296 13.4087 11.0358 12.8814 11.6949L19.7458 18.5028C19.9153 18.6535 20 18.8465 20 19.0819C20 19.3173 19.9058 19.5292 19.7175 19.7175C19.548 19.887 19.3409 19.9718 19.096 19.9718C18.8512 19.9718 18.6441 19.887 18.4746 19.7175ZM7.25989 12.7684C8.78531 12.7684 10.0847 12.2269 11.1582 11.1441C12.2316 10.0612 12.7684 8.75706 12.7684 7.23164C12.7684 5.70621 12.2316 4.40207 11.1582 3.31921C10.0847 2.23635 8.78531 1.69492 7.25989 1.69492C5.71563 1.69492 4.40207 2.23635 3.31921 3.31921C2.23635 4.40207 1.69492 5.70621 1.69492 7.23164C1.69492 8.75706 2.23635 10.0612 3.31921 11.1441C4.40207 12.2269 5.71563 12.7684 7.25989 12.7684Z" fill="currentColor" /></svg>
                                     </span>
                                 </form>
+                                <div className={`group-focus-within/view:flex hover:flex hidden absolute w-[380px] bg-[#4f83a7] pb-[10px] top-[30px] pt-[28px] ml-[-2px] left-0 z-[1000] border-[2px] border-[#e2c5741a]`}>
+                                    <div className='flex flex-col px-[18px] gap-y-2'>
+                                        <h1 className='font-semibold text-[1rem] mb-[8px]'>Trending 🔥</h1>
+                                        {
+                                            trending.map(coin => (
+                                                <div onClick={() => navigate(`/coin/${coin.coin.name}`, { state: coin })} className='group flex flex-row gap-2 cursor-pointer items-center'>
+                                                    <div className='group w-[30px] h-[30px] overflow-hidden rounded-[50%]'>
+                                                        <img src={coin.coin.coinLogo} alt="" />
+                                                    </div>
+                                                    <p className='group-hover:text-hover'>{coin.coin.name}</p>
+                                                    <p className='text-center bg-white text-primary rounded-[12px] text-[0.7rem] px-[7px] py-[7px]'>{coin.coin.symbol}</p>
+                                                </div>
+                                            ))
+                                        }
+                                    </div>
+                                </div>
                             </div>
                             {displayName != "" ?
 
@@ -179,12 +227,12 @@ const App = () => {
                             </li>
                             <li className={`${currentUser.displayName === "admin" ? "block" : "hidden"}`}>
                                 <Link onClick={() => setsidebar(false)} to={'/add-partner'} className='relative flex items-center py-[10px] px-[20px] font-normal rounded-[10px] my-[2px] border-b border-b-[#e2c57412] text-white text-[16px] leading-[1.5] hover:text-white hover:bg-[#e2c5740d] hover:cursor-pointer' style={{ transition: 'border-left-color 0.3s, background-color 0.3s' }}>
-                                Add Partners & Tools
+                                    Add Partners & Tools
                                 </Link>
                             </li>
                             <li>
                                 <Link onClick={() => setsidebar(false)} to={'/partner'} className='relative flex items-center py-[10px] px-[20px] font-normal rounded-[10px] my-[2px] border-b border-b-[#e2c57412] text-white text-[16px] leading-[1.5] hover:text-white hover:bg-[#e2c5740d] hover:cursor-pointer' style={{ transition: 'border-left-color 0.3s, background-color 0.3s' }}>
-                                Partners & Tools
+                                    Partners & Tools
                                 </Link>
                             </li>
                             <li>
@@ -226,12 +274,12 @@ const App = () => {
                                     (
                                         <ul className={`relative min-w-[160px] py-[5px] ml-[26px] ${isAccountActive ? "block" : "hidden"}`}>
                                             <li>
-                                                <p onClick={() => { navigate("/login") ; setIsAccountActive(false); setsidebar(false);}} className='cursor-pointer flex items-center p-[8px] text-[13px] text-white hover:text-gray'>
+                                                <p onClick={() => { navigate("/login"); setIsAccountActive(false); setsidebar(false); }} className='cursor-pointer flex items-center p-[8px] text-[13px] text-white hover:text-gray'>
                                                     Login
                                                 </p>
                                             </li>
                                             <li>
-                                                <p onClick={() => {navigate("/register") ; setIsAccountActive(false);setsidebar(false)}} className='cursor-pointer flex items-center p-[8px] text-[13px] text-white hover:text-gray'>
+                                                <p onClick={() => { navigate("/register"); setIsAccountActive(false); setsidebar(false) }} className='cursor-pointer flex items-center p-[8px] text-[13px] text-white hover:text-gray'>
                                                     Register
                                                 </p>
                                             </li>
@@ -350,7 +398,7 @@ const App = () => {
                         </li>
                     </ul>
                     <div className='flex justify-center items-center px-[5px] mt-[5px]'>
-                        © 2023 Coinvote. All rights reserved.
+                        © 2023 votenow-crypto. All rights reserved.
                     </div>
                     <div className='flex justify-center items-center px-[5px] mt-[5px]'>
                         <img className='lg:w-[13%] md:w-[21%] w-[35%]' src="https://images.dmca.com/Badges/dmca-badge-w250-5x1-09.png?ID=42663165-1ec2-4a03-be8a-5ded6dd2930c" alt="" />

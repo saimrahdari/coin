@@ -302,7 +302,7 @@ const AddCoin = () => {
 
         <div className='flex justify-center items-center flex-col md:w-[80%] w-full text-center mx-auto px-[5px]'>
           <h1 className='font-bold text-[2.5rem] mt-[20px] mb-[10px]'>Add a coin</h1>
-          <p className='font-medium text-[1.5rem] '> List your project on Coinvote. You will be able to update your token page whenever you want even if its listing is live. We fairly recommend you to upvote to get trending on Soon Launch section.</p>
+          <p className='font-medium text-[1.5rem] '> List your project on votenow-crypto. You will be able to update your token page whenever you want even if its listing is live. We fairly recommend you to upvote to get trending on Soon Launch section.</p>
         </div>
 
         <div className='w-full px-[30px] flex flex-row flex-wrap gap-x-6'>

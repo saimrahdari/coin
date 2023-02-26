@@ -104,7 +104,7 @@ const Register = () => {
                 </div>
                 <h1 className='font-bold text-[2.5rem] text-center'>Register</h1>
                 <p className='text-center font-medium text-[1.5rem] break-words text-[#D2D2D2] mb-[5px]'>
-                    Register an account on coinvote to unlock all features!
+                    Register an account on votenow-crypto to unlock all features!
                 </p>
                 <hr />
                 <div className='mt-[20px] flex flex-col gap-y-[18px] items-center'>

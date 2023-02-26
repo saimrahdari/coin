@@ -15,10 +15,10 @@ const Contact = () => {
             <h1 className='font-bold text-[2.5rem] mt-[20px] mb-[10px]'>Contact</h1>
             <p className='break-words text-[1.5rem] font-semibold]'>Advertising/Support</p>
             <p className='text-[1rem] break-words'>Want to promote your project? We offer Promoted coin slots & banner ads. Prices and <span className='text-hover font-medium cursor-pointer' onClick={()=> navigate('/advertise')}>here</span>, any questions :</p>
-            <p className='text-[1rem] break-words text-hover font-medium cursor-pointer'>support@coinvote.cc</p>
+            <p className='text-[1rem] break-words text-hover font-medium cursor-pointer'>support@votenow-crypto.com</p>
             <p className='break-words text-[1.5rem] font-semibold] my-[10px]'>Questions/Suggestions</p>
             <p className='text-[1rem] break-words'>For technical/important questions or suggestions, feel free to contact us there:</p>
-            <p className='text-[1rem] break-words text-hover font-medium cursor-pointer'>support@coinvote.cc</p>
+            <p className='text-[1rem] break-words text-hover font-medium cursor-pointer'>contact@votenow-crypto.com</p>
         </div>
     </div>
 </div>

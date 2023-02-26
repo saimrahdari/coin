@@ -111,7 +111,7 @@ const Airdrops = () => {
             <h1 className=''>Logo</h1>
             <div className=' py-[8px]  flex flex-col justify-center items-center'>
               <h2 className='text-[1.5rem] font-medium'>YOUR BANNER HERE</h2>
-              <h2 className='text-white text-[1rem] font-medium'>www.coinvote.cc</h2>
+              <h2 className='text-white text-[1rem] font-medium'>votenow-crypto.com</h2>
             </div>
           </div>
       }

@@ -1,4 +1,4 @@
-import { onValue, push, ref, set, update } from 'firebase/database'
+import { onValue, ref, set, update } from 'firebase/database'
 import React, { useContext, useEffect, useState, useRef } from 'react'
 import { DateObject } from 'react-multi-date-picker'
 import { Link, useNavigate } from 'react-router-dom'
@@ -309,7 +309,7 @@ const Dashboad = () => {
                             <h1 className=''>Logo</h1>
                             <div className=' py-[8px]  flex flex-col justify-center items-center'>
                                 <h2 className='text-[1.5rem] font-medium'>YOUR BANNER HERE</h2>
-                                <h2 className='text-white text-[1rem] font-medium'>www.coinvote.cc</h2>
+                                <h2 className='text-white text-[1rem] font-medium'>votenow-crypto.com</h2>
                             </div>
                         </div>
                 }
@@ -437,7 +437,7 @@ const Dashboad = () => {
                     <div className='w-full flex justify-between items-center flex-row'>
                         <h4 className='text-[18px] my-[10px] font-semibold'>✨ Recently added</h4>
                         <div className="group relative flex justify-center">
-                            <span className="absolute top-10 scale-0 rounded bg-black p-2 text-xs w-[250px] text-white group-hover:scale-100">recently added highlights recently listed projects on Coinvote to give everyone a chance to be seen</span>
+                            <span className="absolute top-10 scale-0 rounded bg-black p-2 text-xs w-[250px] text-white group-hover:scale-100">recently added highlights recently listed projects on votenow-crypto to give everyone a chance to be seen</span>
                             <button className="min-w-[20px] h-[20px] text-black rounded-[50%] bg-white">i</button>
                         </div>
                     </div>
@@ -578,9 +578,9 @@ const Dashboad = () => {
             <div className='flex flex-row justify-center items-center gap-[10px] px-[8px] mt-[20px] md:w-[80%] w-full flex-wrap text-black'>
                 <div className='w-full md:w-[45%] justify-center flex flex-col'>
                     <h1 className='mt-[20px] mb-[10px] text-[30px] font-medium'>Find the next moon shot first</h1>
-                    <p>You've probably already asked yourself how to be ahead of the others and bet on the winning token. Thanks to coinvote.cc and our daily listing of new tokens, be early and join a project that hasn't been listed on major exchanges like CoinMarketCap, CoinGecko and others!</p>
+                    <p>You've probably already asked yourself how to be ahead of the others and bet on the winning token. Thanks to votenow-crypto.com and our daily listing of new tokens, be early and join a project that hasn't been listed on major exchanges like CoinMarketCap, CoinGecko and others!</p>
                     <br />
-                    <p>Disclaimer: before investing always do your own research (DYOR)! A token listed on coinvote.cc does NOT mean we guarantee the project reliability, they could be scams. Be careful with your investments.</p>
+                    <p>Disclaimer: before investing always do your own research (DYOR)! A token listed on votenow-crypto.com does NOT mean we guarantee the project reliability, they could be scams. Be careful with your investments.</p>
                 </div>
                 <div className='w-full md:w-[45%] justify-center text-right items-end flex flex-col'>
                     <h1 className='mt-[20px] mb-[10px] text-[30px] font-medium'>How it works?</h1>

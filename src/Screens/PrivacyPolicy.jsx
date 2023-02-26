@@ -16,7 +16,7 @@ const PrivacyPolicy = () => {
                     <h1 className='font-bold text-[2.5rem] mt-[20px] mb-[10px]'>Privacy Policy (RGPD standard)</h1>
                     <p className='text-[1rem] break-words'>Vote Now Crypto</p>
                     <p className='text-[1rem] break-words'>Société à Responsabilité Limitée au capital de 1000 Euros</p>
-                    <p className='text-[1rem] break-words'>Siège social : 6, rue des acacias – 17120 Semussac</p>
+                    <p className='text-[1rem] break-words'>Siège social : 1250 Cnty Rd #D Elkhart, Kansas(KS), 67950</p>
                     <p className='text-[1rem] break-words'>RCS Saintes : B 903 091 023</p>
                     <p className='text-[1rem] break-words'>Tél : +33601719350</p><br />
                     <p className='text-[1rem] break-words'>Numéro TVA Intracommunautaire: FR31903091023</p><br />

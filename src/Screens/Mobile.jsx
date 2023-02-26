@@ -13,7 +13,7 @@ const Mobile = () => {
 
                 <div className='flex justify-center items-center flex-row flex-wrap w-full text-center mx-auto px-[5px]'>
                     <div className='md:w-[50%] w-full flex flex-col'>
-                        <h1 className='font-bold text-[2.5rem] mt-[20px] mb-[10px]'>Track & Vote.Meet Coinvote's Crypto App</h1>
+                        <h1 className='font-bold text-[2.5rem] mt-[20px] mb-[10px]'>Track & Vote.Meet votenow-crypto's Crypto App</h1>
                         <p className='text-[1.3rem] break-words'>Use our app to track the latest listed token or vote for your favorite one. Get notified once the ranking shifted</p>
                         <br /><p className='text-[1.3rem] break-words'>You will definitely find the next x10 token first.</p>
                         <span className='block mx-auto text-center mt-[12px]'>
