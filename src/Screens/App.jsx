@@ -351,7 +351,7 @@ const App = () => {
                         </Link> */}
                         <p className='my-[8px] text-[1.2rem] font-semibold'>Coming Soon on APP Store and Google Pay.</p>
                     </span>
-                    <div className='flex flex-row gap-x-[20px] w-[50%] justify-center items-center mx-auto'>
+                    {/* <div className='flex flex-row gap-x-[20px] w-[50%] justify-center items-center mx-auto'>
                         <Link to='/'>
                             <span className=' flex justify-center items-center rounded-[50%] h-[3em] text-primary bg-white align-middle w-[3em] hover:bg-gray' style={{ lineHeight: "2em" }}>
                                 <svg width="20" height="15" viewBox="0 0 15 13" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M14.9573 1.14521L12.6937 11.8203C12.5229 12.5737 12.0775 12.7612 11.4447 12.4063L7.9957 9.86474L6.33149 11.4653C6.14732 11.6495 5.99329 11.8035 5.63835 11.8035L5.88614 8.29094L12.2784 2.51475C12.5564 2.26696 12.2182 2.12967 11.8465 2.37746L3.944 7.35335L0.541912 6.28853C-0.198109 6.05748 -0.211503 5.54851 0.695944 5.19356L14.0029 0.0669903C14.6191 -0.164057 15.1582 0.204279 14.9573 1.14521Z" fill="currentColor" /></svg>
@@ -372,7 +372,7 @@ const App = () => {
                                 <svg width="20" height="18" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3.35759 14.9997H0.247768V4.98516H3.35759V14.9997ZM1.801 3.61908C0.806585 3.61908 0 2.79542 0 1.801C7.11763e-09 1.32335 0.189748 0.865256 0.527502 0.527502C0.865256 0.189748 1.32335 0 1.801 0C2.27866 0 2.73675 0.189748 3.07451 0.527502C3.41226 0.865256 3.60201 1.32335 3.60201 1.801C3.60201 2.79542 2.79509 3.61908 1.801 3.61908ZM14.9967 14.9997H11.8935V10.1247C11.8935 8.96283 11.8701 7.47288 10.2767 7.47288C8.65982 7.47288 8.41205 8.73516 8.41205 10.041V14.9997H5.30558V4.98516H8.28817V6.35123H8.3317C8.74687 5.5644 9.76105 4.73404 11.2741 4.73404C14.4214 4.73404 15 6.80659 15 9.49855V14.9997H14.9967Z" fill="currentColor" /></svg>
                             </span>
                         </Link>
-                    </div>
+                    </div> */}
                     <div className='flex justify-center items-center mt-[8px]'>
                         <Link to={"/"} className="text-[20px] text-white font-medium">
                             🚀 Need to boost your marketing?
