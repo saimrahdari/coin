@@ -109,6 +109,8 @@ const Dashboad = () => {
                 childData.addedDate = new DateObject(childData.addedDate)
                 coinList.push({ key: childKey, coin: childData });
             });
+
+            coinList.sort((a, b) => b.coin.votes - a.coin.votes);
             setCoinsData(coinList);
             setFilteredCoins(coinList)
             setTypeFiltered(coinList)

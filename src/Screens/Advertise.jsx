@@ -789,7 +789,7 @@ const Advertise = () => {
                     </div>
                 </div>
 
-                <div className='w-full flex flex-col justify-center items-center flex-wrap'>
+                {/* <div className='w-full flex flex-col justify-center items-center flex-wrap'>
                     <h1 className='font-bold text-[2.5rem] mt-[20px] mb-[10px]'>Why Advertise With Us</h1>
                     <div className='border-[5px] border-white rounded-[18px] w-[90%] md:w-[70%]'>
                         <Slider {...settings}>
@@ -826,7 +826,7 @@ const Advertise = () => {
                                 Also Read our Media Kit
                             </button>
                         </div>
-                    </div>
+                    </div> */}
                 </div>
 
                 {/* MODAL  */}
