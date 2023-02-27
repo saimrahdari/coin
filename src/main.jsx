@@ -30,6 +30,7 @@ import PrivacyPolicy from './Screens/PrivacyPolicy';
 import TermsConditions from './Screens/TermsConditions';
 import Mobile from './Screens/Mobile';
 import Contact from './Screens/Contact';
+import ForgetPassword from './Screens/ForgetPassword';
 
 
 const router = createBrowserRouter([
@@ -128,6 +129,10 @@ const router = createBrowserRouter([
       {
         path: "contact",
         element : <Contact />
+      },
+      {
+        path: "forget-password",
+        element : <ForgetPassword />
       },
     ]
   },

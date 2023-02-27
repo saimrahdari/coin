@@ -28,7 +28,6 @@ const Login = () => {
             setError("Please Enter Password")
         }
         else{
-
             signInWithEmailAndPassword(auth, email, password)
             .then((userCredential) => {
                 const data = userCredential.user;
@@ -78,7 +77,7 @@ const Login = () => {
                           onChange={(e) => setPassword(e.target.value)}
                       />
                   </div>
-                  <p className='text-white hover:text-hover cursor-pointer'>Forgot Password?</p>
+                  <p onClick={() => navigate('/forget-password')} className='text-white hover:text-hover cursor-pointer'>Forgot Password?</p>
                   <p className='text-red-500 mt-[8px]'>{error}</p>
                   
                   <button onClick={loginHandle} className='border border-white py-[6px] px-[50px] bg-primary text-[15px] h-[35px] whitespace-nowrap align-middle rounded-[4px] hover:text-primary hover:bg-white'>
