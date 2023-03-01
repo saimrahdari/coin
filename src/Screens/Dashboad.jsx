@@ -238,7 +238,7 @@ const Dashboad = () => {
             const res = await axios.get('https://geolocation-db.com/json/')
             console.log(res.data.IPv4);
             try {
-                const response = await axios.get(`http://localhost:5000/verifyIp/${res.data.IPv4}`);
+                const response = await axios.get(`https://coinvote-api.herokuapp.com/verifyIp/${res.data.IPv4}`);
                 console.log(response.data.success);
                 if (valid_token.success && response.data.success) {
                     update(ref(db, `/coins/${clickedCoin.key}`), {
