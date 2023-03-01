@@ -16,6 +16,7 @@ const MyCoins = () => {
     const [recaptchaToken, setRecaptchaToken] = useState(null);
     const [recaptchaKey, setRecaptchaKey] = useState(Date.now());
     const captchaRef = useRef(null)
+    const [hourError, setHourError] = useState(false);
 
     const loggedIn = localStorage.getItem('currentUser');
 
@@ -98,12 +99,23 @@ const MyCoins = () => {
 
         if (token) {
             let valid_token = await verifyToken(token);
-            if (valid_token.success) {
-                update(ref(db, `/coins/${clickedCoin.key}`), {
-                    votes: clickedCoin.coin.votes + 1,
-                })
-                setShowModal(false)
-            }
+            const res = await axios.get('https://geolocation-db.com/json/')
+            console.log(res.data.IPv4);
+            try {
+                const response = await axios.get(`http://localhost:5000/verifyIp/${res.data.IPv4}`);
+                console.log(response.data.success);
+                if (valid_token.success && response.data.success) {
+                    update(ref(db, `/coins/${clickedCoin.key}`), {
+                        votes: clickedCoin.coin.votes + 1,
+                    })
+                    setShowModal(false)
+                }else{
+                    setHourError(true)
+                }
+              } catch (error) {
+                console.log(error);
+              }
+          
         }
     }
 
@@ -201,6 +213,9 @@ const MyCoins = () => {
                             {/*content*/}
                             <div className={` border-0 rounded-lg shadow-lg relative flex flex-col w-full outline-none focus:outline-none`}>
                                 {/*header*/}
+                                <div className={`${hourError ? "block" : "hidden"} w-full bg-green-300 my-[8px] py-[20px] px-[8px]`}>
+                                    <p>Thank you for voting! +2 votes :) come back in an hour</p>
+                                </div> 
                                 <div className="flex  items-start justify-between p-5 border-b border-solid border-slate-200 rounded-t">
                                     <h3 className=" text-2xl font-semibold text-center">
                                         {clickedCoin.coin.name}

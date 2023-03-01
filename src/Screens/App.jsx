@@ -5,6 +5,7 @@ import { auth, db } from '../../Firebase'
 import Logo from '../assets/logo.png'
 import { onValue, ref } from 'firebase/database'
 import { DateObject } from 'react-multi-date-picker'
+import axios from 'axios'
 
 
 
@@ -18,7 +19,6 @@ const App = () => {
     const [displayName, setDisplayName] = useState('')
     const [image, setImage] = useState("https://firebasestorage.googleapis.com/v0/b/coin-ab637.appspot.com/o/Profiles%2Fprofile.jpg?alt=media&token=19d30fce-c1a6-4057-a9e0-e3a5c66caf38")
     const [trending, setTrending] = useState([])
-
 
 
     useEffect(() => {
@@ -41,8 +41,6 @@ const App = () => {
                 coinList.push({ key: childKey, coin: childData });
             });
             if (search.length === 0) {
-                console.log("here");
-                console.log(search);
                 const trendingList = coinList.slice().sort(function (a, b) {
                     return b.coin.votes - a.coin.votes;
                 }).slice(0, 5);
