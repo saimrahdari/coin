@@ -18,6 +18,8 @@ const CoinDetails = () => {
     const [recaptchaKey, setRecaptchaKey] = useState(Date.now());
     const captchaRef = useRef(null)
     const [hourError, setHourError] = useState(false);
+    const [collapse1, setcollapse1] = useState(true);
+    const [collapse2, setcollapse2] = useState(true);
 
 
 
@@ -30,6 +32,7 @@ const CoinDetails = () => {
                 }
             });
         });
+
     }, []);
 
 
@@ -74,13 +77,13 @@ const CoinDetails = () => {
                         votes: clickedCoin.coin.votes + 1,
                     })
                     setShowModal(false)
-                }else{
+                } else {
                     setHourError(true)
                 }
-              } catch (error) {
+            } catch (error) {
                 console.log(error);
-              }
-          
+            }
+
         }
     }
 
@@ -177,6 +180,26 @@ const CoinDetails = () => {
                         </div>
 
                         <hr className='border-[2px] border-primatext-primary my-[20px]' />
+                        <div className={` ${!collapse1 || !collapse2 ? "flex-col" : "flex-row"} flex  justify-start w-full mb-[40px] gap-2`}>
+                            <div onClick={() => setcollapse1(!collapse1)} className={`${!collapse1 ? "w-full" : "md:w-[45%]"} pl-[1rem] cursor-pointer w-full bg-primary border border-white rounded-[20px] flex flex-col pr-[10px]`}>
+                                <div className='flex flex-row w-full justify-between items-center'>
+                                    <h1 className='font-bold text-[1.5rem] my-[15px]'>Token Chart</h1>
+                                    <svg className={!collapse1 ? "rotate-180" : ""} width="20" height="17" viewBox="0 0 28 17" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M0.728676 1.45065C1.12112 1.08129 1.58283 0.890834 2.11379 0.879291C2.64475 0.867749 3.10646 1.0582 3.49891 1.45065L13.9912 11.9429L24.4834 1.45065C24.8528 1.08129 25.3087 0.885063 25.8512 0.861977C26.3937 0.838892 26.8612 1.02357 27.2536 1.41602C27.6461 1.78539 27.8481 2.24709 27.8596 2.80114C27.8712 3.35518 27.6807 3.81689 27.2883 4.18625L15.1339 16.3753C14.9723 16.5369 14.7934 16.6581 14.5971 16.7389C14.4009 16.8197 14.1989 16.8601 13.9912 16.8601C13.7834 16.8601 13.5814 16.8197 13.3852 16.7389C13.1889 16.6581 13.01 16.5369 12.8484 16.3753L0.694048 4.22088C0.324684 3.85152 0.14 3.39558 0.14 2.85308C0.14 2.31058 0.336226 1.8431 0.728676 1.45065Z" fill="currentColor" /></svg>
+                                </div>
+                                <div className={!collapse1 ? "block" : "hidden"}>
+                                    <iframe width="100%" height="500" src={`https://coinbrain.com/embed/${state.coin.symbol.toLowerCase()}-${state.coin?.address}?theme=dark&padding=16&chart=1&trades=0`}></iframe>
+                                </div>
+                            </div>
+                            <div onClick={() => setcollapse2(!collapse2)} className={`${!collapse2 ? "w-full" : "md:w-[45%]"} pl-[1rem] cursor-pointer w-full bg-primary border border-white rounded-[20px] flex flex-col pr-[10px]`}>
+                                <div className='flex flex-row w-full justify-between items-center'>
+                                    <h1 className='font-bold text-[1.5rem] my-[15px]'>BubbleMaps</h1>
+                                    <svg className={!collapse2 ? "rotate-180" : ""} width="20" height="17" viewBox="0 0 28 17" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M0.728676 1.45065C1.12112 1.08129 1.58283 0.890834 2.11379 0.879291C2.64475 0.867749 3.10646 1.0582 3.49891 1.45065L13.9912 11.9429L24.4834 1.45065C24.8528 1.08129 25.3087 0.885063 25.8512 0.861977C26.3937 0.838892 26.8612 1.02357 27.2536 1.41602C27.6461 1.78539 27.8481 2.24709 27.8596 2.80114C27.8712 3.35518 27.6807 3.81689 27.2883 4.18625L15.1339 16.3753C14.9723 16.5369 14.7934 16.6581 14.5971 16.7389C14.4009 16.8197 14.1989 16.8601 13.9912 16.8601C13.7834 16.8601 13.5814 16.8197 13.3852 16.7389C13.1889 16.6581 13.01 16.5369 12.8484 16.3753L0.694048 4.22088C0.324684 3.85152 0.14 3.39558 0.14 2.85308C0.14 2.31058 0.336226 1.8431 0.728676 1.45065Z" fill="currentColor" /></svg>
+                                </div>
+                                <div className={!collapse2 ? "block" : "hidden"}>
+                                    <iframe width="100%" height="500" src={`https://app.bubblemaps.io/${state.coin.chain.toLowerCase()}/token/${state.coin.address}`}/>
+                                </div>
+                            </div>
+                        </div>
                         <p className=''>{state.coin.description}</p>
                     </div>
 
@@ -241,7 +264,7 @@ const CoinDetails = () => {
                                 {/*header*/}
                                 <div className={`${hourError ? "block" : "hidden"} w-full bg-green-300 my-[8px] py-[20px] px-[8px]`}>
                                     <p>Thank you for voting! +2 votes :) come back in an hour</p>
-                                </div> 
+                                </div>
                                 <div className="flex  items-start justify-between p-5 border-b border-solid border-slate-200 rounded-t">
                                     <h3 className=" text-2xl font-semibold text-center">
                                         {state.coin.name}
