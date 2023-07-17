@@ -1,302 +1,713 @@
-import React, { useContext, useEffect, useState } from 'react'
-import { Link, Outlet, useNavigate } from 'react-router-dom'
-import { GlobalContext } from './GlobalContext'
-import { auth, db } from '../../Firebase'
-import Logo from '../assets/logo.png'
-import { onValue, ref } from 'firebase/database'
-import { DateObject } from 'react-multi-date-picker'
-import axios from 'axios'
-
-
+import React, { useContext, useEffect, useState } from "react";
+import { Link, Outlet, useNavigate } from "react-router-dom";
+import { GlobalContext } from "./GlobalContext";
+import { auth, db } from "../../Firebase";
+import Logo from "../assets/logo.png";
+import { onValue, ref } from "firebase/database";
+import { DateObject } from "react-multi-date-picker";
+import axios from "axios";
 
 const App = () => {
-    const navigate = useNavigate()
-    const [userDropdown, setUserDropdown] = useState(false)
-    const [sidebar, setsidebar] = useState(false)
-    const [isAccountActive, setIsAccountActive] = useState(false)
-    const [search, setSearch] = useState('')
-    const { currentUser, setCurrentUser } = useContext(GlobalContext)
-    const [displayName, setDisplayName] = useState('')
-    const [image, setImage] = useState("https://firebasestorage.googleapis.com/v0/b/coin-ab637.appspot.com/o/Profiles%2Fprofile.jpg?alt=media&token=19d30fce-c1a6-4057-a9e0-e3a5c66caf38")
-    const [trending, setTrending] = useState([])
+  const navigate = useNavigate();
+  const [userDropdown, setUserDropdown] = useState(false);
+  const [sidebar, setsidebar] = useState(false);
+  const [isAccountActive, setIsAccountActive] = useState(false);
+  const [search, setSearch] = useState("");
+  const { currentUser, setCurrentUser } = useContext(GlobalContext);
+  const [displayName, setDisplayName] = useState("");
+  const [image, setImage] = useState(
+    "https://firebasestorage.googleapis.com/v0/b/coin-ab637.appspot.com/o/Profiles%2Fprofile.jpg?alt=media&token=19d30fce-c1a6-4057-a9e0-e3a5c66caf38"
+  );
+  const [trending, setTrending] = useState([]);
+  const [showSearch, setShowSearch] = useState(false);
+  const [coins, setCoins] = useState(0);
+  const [votes, setVotes] = useState(0);
+  const [cap, setCap] = useState(0);
+  const [oneTrending, setOneTrending] = useState([]);
+  const [recently, setRecently] = useState([]);
+  const [header, setHeader] = useState({});
 
-
-    useEffect(() => {
-        setUserDropdown(false)
-        setImage(currentUser.photoURL)
-        if (Object.keys(currentUser).length !== 0) {
-            setDisplayName(currentUser.displayName)
-        }
-    }, [currentUser, currentUser.photoURL])
-
-    useEffect(() => {
-        const CoinsRef = ref(db, '/coins');
-        onValue(CoinsRef, (snapshot) => {
-            let coinList = [];
-            snapshot.forEach(childSnapshot => {
-                const childKey = childSnapshot.key;
-                const childData = childSnapshot.val();
-                childData.addedDate = JSON.parse(childData.addedDate)
-                childData.addedDate = new DateObject(childData.addedDate)
-                coinList.push({ key: childKey, coin: childData });
-            });
-            if (search.length === 0) {
-                const trendingList = coinList.slice().sort(function (a, b) {
-                    return b.coin.votes - a.coin.votes;
-                }).slice(0, 5);
-                setTrending(trendingList);
-            }
-            else {
-                const filteredList = coinList.filter((coin) =>
-                    coin.coin.name.toLowerCase().includes(search)
-                );
-                setTrending(filteredList)
-            }
-
-        }, (error) => console.log(error))
-    }, [currentUser, search]);
-
-    const handleLogout = async () => {
-        await auth.signOut()
-        setCurrentUser({})
-        setDisplayName("")
-        localStorage.removeItem("currentUser")
-        setsidebar(false)
+  useEffect(() => {
+    setUserDropdown(false);
+    setImage(currentUser.photoURL);
+    if (Object.keys(currentUser).length !== 0) {
+      setDisplayName(currentUser.displayName);
     }
+  }, [currentUser, currentUser.photoURL]);
 
-    return (
-        <>
-            <div className='z-[10000000] fixed w-full h-[72px] p-0 border-b-primary border-b-[5px] m-0 mb-[5px] bg-secondary top-0' style={{ boxShadow: '0px 1px 20px 0px rgb(73 73 73 / 50%)' }}>
-                <div className='h-[72px] m-0 flex w-full justify-around items-center'>
+  useEffect(() => {
+    const DataRef = ref(db, "/dataHeader");
+    onValue(DataRef, (snapshot) => {
+      snapshot.forEach((childSnapshot) => {
+        const childKey = childSnapshot.key;
+        const childData = childSnapshot.val();
+        setHeader(childData);
+      });
+    });
 
-                    <div className="z-20 lg:hidden w-full flex flex-row justify-between items-center px-[8px] bg-secondary ">
-                        <Link to={'/'} className='inline-block relative max-w-[170px]  text-[#ffffff] text-[14.5px] leading-5'>
-                            <img className="align-middle max-h-[72px] my-0 mx-auto w-full max-w-[80%] relative h-auto hover:scale-110" src={Logo} style={{ transition: "transform 0.3s" }} alt="" />
-                        </Link>
+    const CoinsRef = ref(db, "/coins");
+    onValue(
+      CoinsRef,
+      (snapshot) => {
+        let coinList = [];
+        let voteCount = 0;
+        let coinCount = 0;
+        let capCount = 0;
+        snapshot.forEach((childSnapshot) => {
+          const childKey = childSnapshot.key;
+          const childData = childSnapshot.val();
+          coinCount += 1;
+          voteCount += childData.votes;
+          capCount += parseInt(childData.cap);
+          childData.addedDate = JSON.parse(childData.addedDate);
+          childData.addedDate = new DateObject(childData.addedDate);
+          coinList.push({ key: childKey, coin: childData });
+        });
 
-                        <div className='flex flex-row '>
-                            <button className='hover:bg-white hover:text-gray text-white py-[9px] px-[10px] mr-[15px] border border-transparent rounded-[4px]'>
-                                <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M18.4746 19.7175L11.6667 12.9096C11.1017 13.3992 10.4426 13.7806 9.68927 14.0537C8.93597 14.3267 8.13559 14.4633 7.28814 14.4633C5.25424 14.4633 3.53107 13.7571 2.11864 12.3446C0.706215 10.9322 0 9.22787 0 7.23164C0 5.2354 0.706215 3.53107 2.11864 2.11864C3.53107 0.706215 5.24482 0 7.25989 0C9.25612 0 10.9557 0.706215 12.3588 2.11864C13.7618 3.53107 14.4633 5.2354 14.4633 7.23164C14.4633 8.04143 14.3314 8.82298 14.0678 9.57627C13.8041 10.3296 13.4087 11.0358 12.8814 11.6949L19.7458 18.5028C19.9153 18.6535 20 18.8465 20 19.0819C20 19.3173 19.9058 19.5292 19.7175 19.7175C19.548 19.887 19.3409 19.9718 19.096 19.9718C18.8512 19.9718 18.6441 19.887 18.4746 19.7175ZM7.25989 12.7684C8.78531 12.7684 10.0847 12.2269 11.1582 11.1441C12.2316 10.0612 12.7684 8.75706 12.7684 7.23164C12.7684 5.70621 12.2316 4.40207 11.1582 3.31921C10.0847 2.23635 8.78531 1.69492 7.25989 1.69492C5.71563 1.69492 4.40207 2.23635 3.31921 3.31921C2.23635 4.40207 1.69492 5.70621 1.69492 7.23164C1.69492 8.75706 2.23635 10.0612 3.31921 11.1441C4.40207 12.2269 5.71563 12.7684 7.25989 12.7684Z" fill="currentColor" /></svg>
-                            </button>
-                            <button onClick={() => setsidebar(!sidebar)} className='hover:bg-white hover:text-gray text-white py-[9px] px-[10px] mr-[15px] border border-transparent rounded-[4px]'>
-                                <svg width="20" height="15" viewBox="0 0 20 15" fill="none" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" clip-rule="evenodd" d="M1.25015 0H18.7499C19.4402 0 20 0.559556 20 1.24993C20 1.94031 19.4402 2.50008 18.7499 2.50008H1.25015C0.55977 2.50008 0 1.94031 0 1.24993C0 0.559556 0.55977 0 1.25015 0ZM1.25015 6.2502H18.7499C19.4402 6.2502 20 6.80976 20 7.50013C20 8.19051 19.4402 8.75007 18.7499 8.75007H1.25015C0.55977 8.75007 0 8.19051 0 7.50013C0 6.80976 0.55977 6.2502 1.25015 6.2502ZM1.25015 12.4999H18.7499C19.4402 12.4999 20 13.0596 20 13.75C20 14.4404 19.4402 14.9999 18.7499 14.9999H1.25015C0.55977 14.9999 0 14.4404 0 13.75C0 13.0596 0.55977 12.4999 1.25015 12.4999Z" fill="currentColor" /></svg>
-                            </button>
-                        </div>
-                    </div>
+        setCoins(coinCount);
+        let dollarUSLocale = Intl.NumberFormat("en-US");
+        setVotes(dollarUSLocale.format(voteCount));
+        setCap(dollarUSLocale.format(capCount));
+        if (search.length === 0) {
+          const trendingList = coinList
+            .slice()
+            .sort(function (a, b) {
+              return b.coin.votes - a.coin.votes;
+            })
+            .slice(0, 5);
+          setTrending(trendingList);
+        } else {
+          const filteredList = coinList.filter((coin) =>
+            coin.coin.name.toLowerCase().includes(search)
+          );
+          setTrending(filteredList);
+        }
 
-                    <div className='z-20 lg:block hidden p-0 m-0 h-[55px] overflow-visible w-auto max-h-[340px]'>
-                        <ul className='h-[72px] flex flex-row justify-center items-center mt-[-5px] float-left m-0 list-none'>
-                            <li className=''>
-                                <Link to={'/'} className='inline-block relative max-w-[170px] text-[#ffffff] text-[14.5px] leading-5'>
-                                    <img className="align-middle max-h-[72px] my-0 mx-auto w-full max-w-[75%] relative h-auto hover:scale-110" src={Logo} style={{ transition: "transform 0.3s" }} alt="" />
-                                </Link>
-                            </li>
-                            <li>
-                                <Link to={'/airdrops'} className='max-w-[170px] text-[#ffffff] text-[14.5px] leading-5 py-[10px] px-[15px] hover:text-gray'>
-                                    Airdops
-                                </Link>
-                            </li>
-                            <li>
-                                <Link to={'/advertise'} className='max-w-[170px] text-[#ffffff] text-[14.5px] leading-5 py-[10px] px-[15px] hover:text-gray'>
-                                    Advertise
-                                </Link>
-                            </li>
+        const trendingCoin = coinList
+          .slice()
+          .sort(function (a, b) {
+            return b.coin.votes - a.coin.votes;
+          })
+          .slice(0, 5);
+        setOneTrending(trendingCoin);
 
-                            <li className='relative block'>
-                                <div className='text-[#ffffff] flex flex-row justify-center items-center cursor-pointer max-w-[170px]  text-[14.5px] leading-5 py-[10px] px-[15px] hover:text-gray'>
-                                    <Link to={'/add-coin'} className='mr-[5px]'>Add Coin</Link>
-                                </div>
-                            </li>
-                            <li className='relative block'>
-                                <div className='text-[#ffffff] flex flex-row justify-center items-center cursor-pointer max-w-[170px]  text-[14.5px] leading-5 py-[10px] px-[15px] hover:text-gray'>
-                                    <Link to={'/add-airdrop'} className='mr-[5px]'>Add airdrop</Link>
-                                </div>
-                            </li>
-                            <li className={`${currentUser.displayName === "admin" ? "block" : "hidden"}`}>
-                                <Link to={'/add-partner'} className='max-w-[170px] text-[#ffffff] text-[14.5px] leading-5 py-[10px] px-[15px] hover:text-gray'>
-                                    Add Partners & Tools
-                                </Link>
-                            </li>
-                            <li>
-                                <Link to={'/partner'} className='max-w-[170px] text-[#ffffff] text-[14.5px] leading-5 py-[10px] px-[15px] hover:text-gray'>
-                                    Partners & Tools
-                                </Link>
-                            </li>
-                            <div className='group/view relative ml-[1rem] flex justify-center items-center border-[#e2c5741a] border-[2px] h-[40px] rounded-[10px] bg-[#e2c5740d] max-w-[200px]'>
-                                <form className='w-full flex relative' autoComplete="off">
-                                    <input
-                                        className=' focus-visible:outline-none text-ellipsis text-white pl-[40px] bg-inherit'
-                                        type="text" value={search} onChange={(e) => setSearch(e.target.value)} placeholder={"Search coins..."} name={"search"} autoComplete="on" />
-                                    <span className='inline-flex items-center justify-center text-[#dbdbdb8c] absolute w-[2.5rem] cursor-pointer text-[15px] left-0 mt-[2px] '>
-                                        <svg width="15" height="15" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M18.4746 19.7175L11.6667 12.9096C11.1017 13.3992 10.4426 13.7806 9.68927 14.0537C8.93597 14.3267 8.13559 14.4633 7.28814 14.4633C5.25424 14.4633 3.53107 13.7571 2.11864 12.3446C0.706215 10.9322 0 9.22787 0 7.23164C0 5.2354 0.706215 3.53107 2.11864 2.11864C3.53107 0.706215 5.24482 0 7.25989 0C9.25612 0 10.9557 0.706215 12.3588 2.11864C13.7618 3.53107 14.4633 5.2354 14.4633 7.23164C14.4633 8.04143 14.3314 8.82298 14.0678 9.57627C13.8041 10.3296 13.4087 11.0358 12.8814 11.6949L19.7458 18.5028C19.9153 18.6535 20 18.8465 20 19.0819C20 19.3173 19.9058 19.5292 19.7175 19.7175C19.548 19.887 19.3409 19.9718 19.096 19.9718C18.8512 19.9718 18.6441 19.887 18.4746 19.7175ZM7.25989 12.7684C8.78531 12.7684 10.0847 12.2269 11.1582 11.1441C12.2316 10.0612 12.7684 8.75706 12.7684 7.23164C12.7684 5.70621 12.2316 4.40207 11.1582 3.31921C10.0847 2.23635 8.78531 1.69492 7.25989 1.69492C5.71563 1.69492 4.40207 2.23635 3.31921 3.31921C2.23635 4.40207 1.69492 5.70621 1.69492 7.23164C1.69492 8.75706 2.23635 10.0612 3.31921 11.1441C4.40207 12.2269 5.71563 12.7684 7.25989 12.7684Z" fill="currentColor" /></svg>
-                                    </span>
-                                </form>
-                                <div className={`group-focus-within/view:flex hover:flex hidden absolute w-[380px] bg-[#4f83a7] pb-[10px] top-[30px] pt-[28px] ml-[-2px] left-0 z-[1000] border-[2px] border-[#e2c5741a]`}>
-                                    <div className='flex flex-col px-[18px] gap-y-2'>
-                                        <h1 className='font-semibold text-[1rem] mb-[8px]'>Trending 🔥</h1>
-                                        {
-                                            trending.map(coin => (
-                                                <div onClick={() => navigate(`/coin/${coin.coin.name}`, { state: coin })} className='group flex flex-row gap-2 cursor-pointer items-center'>
-                                                    <div className='group w-[30px] h-[30px] overflow-hidden rounded-[50%]'>
-                                                        <img src={coin.coin.coinLogo} alt="" />
-                                                    </div>
-                                                    <p className='group-hover:text-hover'>{coin.coin.name}</p>
-                                                    <p className='text-center bg-white text-primary rounded-[12px] text-[0.7rem] px-[7px] py-[7px]'>{coin.coin.symbol}</p>
-                                                </div>
-                                            ))
-                                        }
-                                    </div>
-                                </div>
-                            </div>
-                            {displayName != "" ?
+        const recentlyList = coinList
+          .slice()
+          .sort(function (a, b) {
+            return b.coin.addedDate - a.coin.addedDate;
+          })
+          .slice(0, 3);
+        setRecently(recentlyList);
+      },
+      (error) => console.log(error)
+    );
+  }, [currentUser, search]);
 
-                                (
-                                    <li onMouseEnter={() => setUserDropdown(true)} onMouseLeave={() => setUserDropdown(false)} className='ml-[15px] inline-flex relative'>
-                                        <div className='w-[45px] h-[45px] rounded-[50%] overflow-hidden '>
-                                            <img src={image} className="overflow-hidden" alt="" />
-                                        </div>
-                                        <div className={` ${userDropdown ? "block" : "hidden"} absolute right-[-20px] top-[40px] `}>
-                                            <div className='bg-secondary border-[2px] border-primary rounded-[10px] mt-[8px]' style={{ boxShadow: 'rgb(81 89 105 / 12%) 0px 2px 10px, rgb(81 89 105 / 8%) 0px 1px 2px' }}>
-                                                <Link to={`/profile/${displayName}`} className='flex p-[15px] flex-row w-[248px] gap-x-[20px] mb-[8px] items-center'>
-                                                    <div className='w-[75px] h-[75px] rounded-[50%] overflow-hidden '>
-                                                        <img src={image} className="overflow-hidden" alt="" />
-                                                    </div>
-                                                    <div className='flex flex-col gap-y-[4px]'>
-                                                        <p>{displayName}</p>
-                                                        <p>View my Profile</p>
-                                                    </div>
-                                                </Link>
-                                                <hr className='border-[2px] border-primary w-full my-0 ' />
-                                                <div className='rounded-[8px] p-[8px] cursor-pointer text-[12px] text-white hover:text-secondary hover:bg-white'>
-                                                    <Link to={'/my-fav'} className=''>My Favourite</Link>
-                                                </div>
-                                                <div className='rounded-[8px] p-[8px] cursor-pointer text-[12px] text-white hover:text-secondary hover:bg-white'>
-                                                    <Link to={'/my-orders'} className=''>My Orders</Link>
-                                                </div>
-                                                <div className='rounded-[8px] p-[8px] cursor-pointer text-[12px] text-white hover:text-secondary hover:bg-white'>
-                                                    <Link to={'/my-coins'} className=''>My Coins</Link>
-                                                </div>
-                                                <div className='rounded-[8px] p-[8px] cursor-pointer text-[12px] text-white hover:text-secondary hover:bg-white'>
-                                                    <Link to={'/account-settings'} className=''>Account Settings</Link>
-                                                </div>
-                                                <div onClick={handleLogout} className='rounded-[8px] p-[8px] cursor-pointer text-[12px]text-primary hover:text-secondary hover:bg-white'>
-                                                    <p className=''>Logout</p>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </li>
-                                ) :
-                                (
-                                    <li className='inline-flex relative'>
-                                        <Link to={"/login"} className='ml-[5px] text-white text-[14.5px] py-[10px] px-[15px] rounded-[8px] hover:bg-white hover:text-primary' style={{ lineHeight: '20px' }}>
-                                            Login
-                                        </Link>
-                                        <Link to={"/register"} className='font-medium ml-[5px] text-secondary text-[14.5px] py-[10px] px-[15px] rounded-[8px]' style={{ lineHeight: '20px', animation: 'shadow-pulse 3s infinite', background: "linear-gradient(180deg,white 0, white" }}>
-                                            Register
-                                        </Link>
-                                    </li>
-                                )
-                            }
+  const handleLogout = async () => {
+    await auth.signOut();
+    setCurrentUser({});
+    setDisplayName("");
+    localStorage.removeItem("currentUser");
+    setsidebar(false);
+  };
 
-                        </ul>
-                    </div>
+  const handleKeyDown = (e) => {
+    if (e.key === "Enter") {
+      e.preventDefault();
+      // Handle your custom logic here
+    }
+  };
 
-                    <aside className={`${sidebar ? "block lg:hidden left-0 " : "left-full"} h-screen bg-secondary -z-0 w-full right-0  overflow-auto fixed top-0 bottom-0 `} style={{ transition: 'left 0.2s, width 0.2s' }}>
-                        <ul className='w-full pt-[80px] px-[15px] pb-0 list-none mb-[10px]'>
-                            <li>
-                                <Link onClick={() => setsidebar(false)} to={'/airdrops'} className='relative flex items-center py-[10px] px-[20px] font-normal rounded-[10px] my-[2px] border-b border-b-[#e2c57412] text-white text-[16px] leading-[1.5] hover:text-white hover:bg-[#e2c5740d] hover:cursor-pointer' style={{ transition: 'border-left-color 0.3s, background-color 0.3s' }}>
-                                    Airdrops
-                                </Link>
-                            </li>
-                            <li>
-                                <Link onClick={() => setsidebar(false)} to={'/advertise'} className='relative flex items-center py-[10px] px-[20px] font-normal rounded-[10px] my-[2px] border-b border-b-[#e2c57412] text-white text-[16px] leading-[1.5] hover:text-white hover:bg-[#e2c5740d] hover:cursor-pointer' style={{ transition: 'border-left-color 0.3s, background-color 0.3s' }}>
-                                    Advertise
-                                </Link>
-                            </li>
-                            <li>
-                                <Link onClick={() => setsidebar(false)} to={'/add-coin'} className='relative flex items-center py-[10px] px-[20px] font-normal rounded-[10px] my-[2px] border-b border-b-[#e2c57412] text-white text-[16px] leading-[1.5] hover:text-white hover:bg-[#e2c5740d] hover:cursor-pointer' style={{ transition: 'border-left-color 0.3s, background-color 0.3s' }}>
-                                    Add Coin
-                                </Link>
-                            </li>
-                            <li>
-                                <Link onClick={() => setsidebar(false)} to={'/add-airdrop'} className='relative flex items-center py-[10px] px-[20px] font-normal rounded-[10px] my-[2px] border-b border-b-[#e2c57412] text-white text-[16px] leading-[1.5] hover:text-white hover:bg-[#e2c5740d] hover:cursor-pointer' style={{ transition: 'border-left-color 0.3s, background-color 0.3s' }}>
-                                    Add Airdrop
-                                </Link>
-                            </li>
-                            <li className={`${currentUser.displayName === "admin" ? "block" : "hidden"}`}>
-                                <Link onClick={() => setsidebar(false)} to={'/add-partner'} className='relative flex items-center py-[10px] px-[20px] font-normal rounded-[10px] my-[2px] border-b border-b-[#e2c57412] text-white text-[16px] leading-[1.5] hover:text-white hover:bg-[#e2c5740d] hover:cursor-pointer' style={{ transition: 'border-left-color 0.3s, background-color 0.3s' }}>
-                                    Add Partners & Tools
-                                </Link>
-                            </li>
-                            <li>
-                                <Link onClick={() => setsidebar(false)} to={'/partner'} className='relative flex items-center py-[10px] px-[20px] font-normal rounded-[10px] my-[2px] border-b border-b-[#e2c57412] text-white text-[16px] leading-[1.5] hover:text-white hover:bg-[#e2c5740d] hover:cursor-pointer' style={{ transition: 'border-left-color 0.3s, background-color 0.3s' }}>
-                                    Partners & Tools
-                                </Link>
-                            </li>
-                            <li>
-                                <div onClick={() => setIsAccountActive(!isAccountActive)} className={`${isAccountActive ? "text-white bg-[#e2c5740d] cursor-pointer" : "text-white"}  flex items-center flex-row  hover:text-white hover:bg-[#e2c5740d] hover:cursor-pointer justify-between rounded-[10px] py-[10px] px-[20px] text-[16px] leading-[1.5] my-[2px] border-b border-b-[#e2c57412]`} style={{ transition: 'border-left-color 0.3s, background-color 0.3s' }}>
-                                    <Link to={'/'} className={`relative flex items-center font-normal`} >
-                                        Account
-                                    </Link>
-                                    <svg className={`${isAccountActive ? "" : "-rotate-90"}`} style={{ transition: 'all 0.3s' }} width="14" height="8.5" viewBox="0 0 28 17" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M0.728676 1.45065C1.12112 1.08129 1.58283 0.890834 2.11379 0.879291C2.64475 0.867749 3.10646 1.0582 3.49891 1.45065L13.9912 11.9429L24.4834 1.45065C24.8528 1.08129 25.3087 0.885063 25.8512 0.861977C26.3937 0.838892 26.8612 1.02357 27.2536 1.41602C27.6461 1.78539 27.8481 2.24709 27.8596 2.80114C27.8712 3.35518 27.6807 3.81689 27.2883 4.18625L15.1339 16.3753C14.9723 16.5369 14.7934 16.6581 14.5971 16.7389C14.4009 16.8197 14.1989 16.8601 13.9912 16.8601C13.7834 16.8601 13.5814 16.8197 13.3852 16.7389C13.1889 16.6581 13.01 16.5369 12.8484 16.3753L0.694048 4.22088C0.324684 3.85152 0.14 3.39558 0.14 2.85308C0.14 2.31058 0.336226 1.8431 0.728676 1.45065Z" fill="currentColor" /></svg>
-                                </div>
-                                {displayName != "" ?
-                                    (
-                                        <ul className={`relative min-w-[160px] py-[5px] ml-[26px] ${isAccountActive ? "block" : "hidden"}`}>
-                                            <li>
-                                                <Link to={'/my-fav'} onClick={() => setsidebar(false)} className='flex items-center p-[8px] text-[13px] text-white hover:text-gray'>
-                                                    My Favourite
-                                                </Link>
-                                            </li>
-                                            <li>
-                                                <Link to={'/my-orders'} onClick={() => setsidebar(false)} className='flex items-center p-[8px] text-[13px] text-white hover:text-gray'>
-                                                    My Orders
-                                                </Link>
-                                            </li>   <li>
-                                                <Link to={'/my-coins'} onClick={() => setsidebar(false)} className='flex items-center p-[8px] text-[13px] text-white hover:text-gray'>
-                                                    My Coins
-                                                </Link>
-                                            </li>
-                                            <li>
-                                                <Link to={'/account-settings'} onClick={() => setsidebar(false)} className='flex items-center p-[8px] text-[13px] text-white hover:text-gray'>
-                                                    Account Settings
-                                                </Link>
-                                            </li>
-                                            <li>
-                                                <Link to={''} onClick={handleLogout} className='flex items-center p-[8px] text-[13px] text-white hover:text-gray'>
-                                                    Logout
-                                                </Link>
-                                            </li>
-                                        </ul>
-                                    ) :
-                                    (
-                                        <ul className={`relative min-w-[160px] py-[5px] ml-[26px] ${isAccountActive ? "block" : "hidden"}`}>
-                                            <li>
-                                                <p onClick={() => { navigate("/login"); setIsAccountActive(false); setsidebar(false); }} className='cursor-pointer flex items-center p-[8px] text-[13px] text-white hover:text-gray'>
-                                                    Login
-                                                </p>
-                                            </li>
-                                            <li>
-                                                <p onClick={() => { navigate("/register"); setIsAccountActive(false); setsidebar(false) }} className='cursor-pointer flex items-center p-[8px] text-[13px] text-white hover:text-gray'>
-                                                    Register
-                                                </p>
-                                            </li>
-                                        </ul>
-                                    )
-                                }
-                            </li>
-                        </ul>
-                    </aside>
+  return (
+    <>
+      <div
+        className="z-[10000000] fixed w-full h-[72px] p-0 border-b-primary border-b-[5px] m-0 mb-[5px] bg-secondary top-0"
+        style={{ boxShadow: "0px 1px 20px 0px rgb(73 73 73 / 50%)" }}
+      >
+        <div className="h-[72px] m-0 flex w-full justify-around items-center">
+          <div className="z-20 lg:hidden w-full flex flex-row justify-between items-center px-[8px] bg-secondary ">
+            <Link
+              to={"/"}
+              className="inline-block relative max-w-[170px]  text-[#ffffff] text-[14.5px] leading-5"
+            >
+              <img
+                className="align-middle max-h-[72px] my-0 mx-auto w-full max-w-[80%] relative h-auto hover:scale-110"
+                src={Logo}
+                style={{ transition: "transform 0.3s" }}
+                alt=""
+              />
+            </Link>
+
+            <div className="flex flex-row ">
+              <button className="hover:bg-white hover:text-gray text-white py-[9px] px-[10px] mr-[15px] border border-transparent rounded-[4px]">
+                <svg
+                  width="20"
+                  height="20"
+                  viewBox="0 0 20 20"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M18.4746 19.7175L11.6667 12.9096C11.1017 13.3992 10.4426 13.7806 9.68927 14.0537C8.93597 14.3267 8.13559 14.4633 7.28814 14.4633C5.25424 14.4633 3.53107 13.7571 2.11864 12.3446C0.706215 10.9322 0 9.22787 0 7.23164C0 5.2354 0.706215 3.53107 2.11864 2.11864C3.53107 0.706215 5.24482 0 7.25989 0C9.25612 0 10.9557 0.706215 12.3588 2.11864C13.7618 3.53107 14.4633 5.2354 14.4633 7.23164C14.4633 8.04143 14.3314 8.82298 14.0678 9.57627C13.8041 10.3296 13.4087 11.0358 12.8814 11.6949L19.7458 18.5028C19.9153 18.6535 20 18.8465 20 19.0819C20 19.3173 19.9058 19.5292 19.7175 19.7175C19.548 19.887 19.3409 19.9718 19.096 19.9718C18.8512 19.9718 18.6441 19.887 18.4746 19.7175ZM7.25989 12.7684C8.78531 12.7684 10.0847 12.2269 11.1582 11.1441C12.2316 10.0612 12.7684 8.75706 12.7684 7.23164C12.7684 5.70621 12.2316 4.40207 11.1582 3.31921C10.0847 2.23635 8.78531 1.69492 7.25989 1.69492C5.71563 1.69492 4.40207 2.23635 3.31921 3.31921C2.23635 4.40207 1.69492 5.70621 1.69492 7.23164C1.69492 8.75706 2.23635 10.0612 3.31921 11.1441C4.40207 12.2269 5.71563 12.7684 7.25989 12.7684Z"
+                    fill="currentColor"
+                  />
+                </svg>
+              </button>
+              <button
+                onClick={() => setsidebar(!sidebar)}
+                className="hover:bg-white hover:text-gray text-white py-[9px] px-[10px] mr-[15px] border border-transparent rounded-[4px]"
+              >
+                <svg
+                  width="20"
+                  height="15"
+                  viewBox="0 0 20 15"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    fill-rule="evenodd"
+                    clip-rule="evenodd"
+                    d="M1.25015 0H18.7499C19.4402 0 20 0.559556 20 1.24993C20 1.94031 19.4402 2.50008 18.7499 2.50008H1.25015C0.55977 2.50008 0 1.94031 0 1.24993C0 0.559556 0.55977 0 1.25015 0ZM1.25015 6.2502H18.7499C19.4402 6.2502 20 6.80976 20 7.50013C20 8.19051 19.4402 8.75007 18.7499 8.75007H1.25015C0.55977 8.75007 0 8.19051 0 7.50013C0 6.80976 0.55977 6.2502 1.25015 6.2502ZM1.25015 12.4999H18.7499C19.4402 12.4999 20 13.0596 20 13.75C20 14.4404 19.4402 14.9999 18.7499 14.9999H1.25015C0.55977 14.9999 0 14.4404 0 13.75C0 13.0596 0.55977 12.4999 1.25015 12.4999Z"
+                    fill="currentColor"
+                  />
+                </svg>
+              </button>
+            </div>
+          </div>
+
+          <div className="z-20 lg:block hidden p-0 m-0 h-[55px] overflow-visible w-auto max-h-[340px]">
+            <ul className="h-[72px] flex flex-row justify-center items-center mt-[-5px] float-left m-0 list-none">
+              <li className="">
+                <Link
+                  to={"/"}
+                  className="inline-block relative max-w-[170px] text-[#ffffff] text-[14.5px] leading-5"
+                >
+                  <img
+                    className="align-middle max-h-[72px] my-0 mx-auto w-full max-w-[75%] relative h-auto hover:scale-110"
+                    src={Logo}
+                    style={{ transition: "transform 0.3s" }}
+                    alt=""
+                  />
+                </Link>
+              </li>
+              <li>
+                <Link
+                  to={"/airdrops"}
+                  className="max-w-[170px] text-[#ffffff] text-[14.5px] leading-5 py-[10px] px-[15px] hover:text-gray"
+                >
+                  Airdops
+                </Link>
+              </li>
+              <li>
+                <Link
+                  to={"/advertise"}
+                  className="max-w-[170px] text-[#ffffff] text-[14.5px] leading-5 py-[10px] px-[15px] hover:text-gray"
+                >
+                  Advertise
+                </Link>
+              </li>
+
+              <li className="relative block">
+                <div className="text-[#ffffff] flex flex-row justify-center items-center cursor-pointer max-w-[170px]  text-[14.5px] leading-5 py-[10px] px-[15px] hover:text-gray">
+                  <Link to={"/add-coin"} className="mr-[5px]">
+                    Add Coin
+                  </Link>
                 </div>
-            </div>
+              </li>
+              <li className="relative block">
+                <div className="text-[#ffffff] flex flex-row justify-center items-center cursor-pointer max-w-[170px]  text-[14.5px] leading-5 py-[10px] px-[15px] hover:text-gray">
+                  <Link to={"/add-airdrop"} className="mr-[5px]">
+                    Add airdrop
+                  </Link>
+                </div>
+              </li>
+              <li
+                className={`${
+                  currentUser.displayName === "admin" ? "block" : "hidden"
+                }`}
+              >
+                <Link
+                  to={"/add-partner"}
+                  className="max-w-[170px] text-[#ffffff] text-[14.5px] leading-5 py-[10px] px-[15px] hover:text-gray"
+                >
+                  Add Partners & Tools
+                </Link>
+              </li>
+              <li>
+                <Link
+                  to={"/partner"}
+                  className="max-w-[170px] text-[#ffffff] text-[14.5px] leading-5 py-[10px] px-[15px] hover:text-gray"
+                >
+                  Partners & Tools
+                </Link>
+              </li>
+              <div className="group/view relative ml-[1rem] flex justify-center items-center border-[#e2c5741a] border-[2px] h-[40px] rounded-[10px] bg-[#e2c5740d] max-w-[200px]">
+                <form className="w-full flex relative" autoComplete="off">
+                  <input
+                    className=" focus-visible:outline-none text-ellipsis text-white pl-[40px] bg-inherit"
+                    type="text"
+                    value={search}
+                    onChange={(e) => setSearch(e.target.value)}
+                    placeholder={"Search coins..."}
+                    name={"search"}
+                    autoComplete="on"
+                  />
+                  <span className="inline-flex items-center justify-center text-[#dbdbdb8c] absolute w-[2.5rem] cursor-pointer text-[15px] left-0 mt-[2px] ">
+                    <svg
+                      width="15"
+                      height="15"
+                      viewBox="0 0 20 20"
+                      fill="none"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        d="M18.4746 19.7175L11.6667 12.9096C11.1017 13.3992 10.4426 13.7806 9.68927 14.0537C8.93597 14.3267 8.13559 14.4633 7.28814 14.4633C5.25424 14.4633 3.53107 13.7571 2.11864 12.3446C0.706215 10.9322 0 9.22787 0 7.23164C0 5.2354 0.706215 3.53107 2.11864 2.11864C3.53107 0.706215 5.24482 0 7.25989 0C9.25612 0 10.9557 0.706215 12.3588 2.11864C13.7618 3.53107 14.4633 5.2354 14.4633 7.23164C14.4633 8.04143 14.3314 8.82298 14.0678 9.57627C13.8041 10.3296 13.4087 11.0358 12.8814 11.6949L19.7458 18.5028C19.9153 18.6535 20 18.8465 20 19.0819C20 19.3173 19.9058 19.5292 19.7175 19.7175C19.548 19.887 19.3409 19.9718 19.096 19.9718C18.8512 19.9718 18.6441 19.887 18.4746 19.7175ZM7.25989 12.7684C8.78531 12.7684 10.0847 12.2269 11.1582 11.1441C12.2316 10.0612 12.7684 8.75706 12.7684 7.23164C12.7684 5.70621 12.2316 4.40207 11.1582 3.31921C10.0847 2.23635 8.78531 1.69492 7.25989 1.69492C5.71563 1.69492 4.40207 2.23635 3.31921 3.31921C2.23635 4.40207 1.69492 5.70621 1.69492 7.23164C1.69492 8.75706 2.23635 10.0612 3.31921 11.1441C4.40207 12.2269 5.71563 12.7684 7.25989 12.7684Z"
+                        fill="currentColor"
+                      />
+                    </svg>
+                  </span>
+                </form>
+                <div
+                  className={`group-focus-within/view:flex hover:flex hidden absolute w-[380px] bg-[#4f83a7] pb-[10px] top-[30px] pt-[28px] ml-[-2px] left-0 z-[1000] border-[2px] border-[#e2c5741a]`}
+                >
+                  <div className="flex flex-col px-[18px] gap-y-2">
+                    <h1 className="font-semibold text-[1rem] mb-[8px]">
+                      {search !== "" ? "Search Result" : "Trending 🔥"}
+                    </h1>
+                    {trending.map((coin) => (
+                      <div
+                        onClick={() =>
+                          navigate(`/coin/${coin.coin.name}`, { state: coin })
+                        }
+                        className="group flex flex-row gap-2 cursor-pointer items-center"
+                      >
+                        <div className="group w-[30px] h-[30px] overflow-hidden rounded-[50%]">
+                          <img src={coin.coin.coinLogo} alt="" />
+                        </div>
+                        <p className="group-hover:text-hover">
+                          {coin.coin.name}
+                        </p>
+                        <p className="text-center bg-white text-primary rounded-[12px] text-[0.7rem] px-[7px] py-[7px]">
+                          {coin.coin.symbol}
+                        </p>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+              {displayName != "" ? (
+                <li
+                  onMouseEnter={() => setUserDropdown(true)}
+                  onMouseLeave={() => setUserDropdown(false)}
+                  className="ml-[15px] inline-flex relative"
+                >
+                  <div className="w-[45px] h-[45px] rounded-[50%] overflow-hidden ">
+                    <img src={image} className="overflow-hidden" alt="" />
+                  </div>
+                  <div
+                    className={` ${
+                      userDropdown ? "block" : "hidden"
+                    } absolute right-[-20px] top-[40px] `}
+                  >
+                    <div
+                      className="bg-secondary border-[2px] border-primary rounded-[10px] mt-[8px]"
+                      style={{
+                        boxShadow:
+                          "rgb(81 89 105 / 12%) 0px 2px 10px, rgb(81 89 105 / 8%) 0px 1px 2px",
+                      }}
+                    >
+                      <Link
+                        to={`/profile/${displayName}`}
+                        className="flex p-[15px] flex-row w-[248px] gap-x-[20px] mb-[8px] items-center"
+                      >
+                        <div className="w-[75px] h-[75px] rounded-[50%] overflow-hidden ">
+                          <img src={image} className="overflow-hidden" alt="" />
+                        </div>
+                        <div className="flex flex-col gap-y-[4px]">
+                          <p>{displayName}</p>
+                          <p>View my Profile</p>
+                        </div>
+                      </Link>
+                      <hr className="border-[2px] border-primary w-full my-0 " />
+                      <div className="rounded-[8px] p-[8px] cursor-pointer text-[12px] text-white hover:text-secondary hover:bg-white">
+                        <Link to={"/my-fav"} className="">
+                          My Favourite
+                        </Link>
+                      </div>
+                      <div className="rounded-[8px] p-[8px] cursor-pointer text-[12px] text-white hover:text-secondary hover:bg-white">
+                        <Link to={"/my-orders"} className="">
+                          My Orders
+                        </Link>
+                      </div>
+                      <div className="rounded-[8px] p-[8px] cursor-pointer text-[12px] text-white hover:text-secondary hover:bg-white">
+                        <Link to={"/my-coins"} className="">
+                          My Coins
+                        </Link>
+                      </div>
+                      <div className="rounded-[8px] p-[8px] cursor-pointer text-[12px] text-white hover:text-secondary hover:bg-white">
+                        <Link to={"/account-settings"} className="">
+                          Account Settings
+                        </Link>
+                      </div>
+                      <div
+                        onClick={handleLogout}
+                        className="rounded-[8px] p-[8px] cursor-pointer text-[12px]text-primary hover:text-secondary hover:bg-white"
+                      >
+                        <p className="">Logout</p>
+                      </div>
+                    </div>
+                  </div>
+                </li>
+              ) : (
+                <li className="inline-flex relative">
+                  <Link
+                    to={"/login"}
+                    className="ml-[5px] text-white text-[14.5px] py-[10px] px-[15px] rounded-[8px] hover:bg-white hover:text-primary"
+                    style={{ lineHeight: "20px" }}
+                  >
+                    Login
+                  </Link>
+                  <Link
+                    to={"/register"}
+                    className="font-medium ml-[5px] text-secondary text-[14.5px] py-[10px] px-[15px] rounded-[8px]"
+                    style={{
+                      lineHeight: "20px",
+                      animation: "shadow-pulse 3s infinite",
+                      background: "linear-gradient(180deg,white 0, white",
+                    }}
+                  >
+                    Register
+                  </Link>
+                </li>
+              )}
+            </ul>
+          </div>
 
-            <Outlet />
-            <div className='mt-[100px]'>
+          <aside
+            className={`${
+              sidebar ? "block lg:hidden left-0 " : "left-full"
+            } h-screen bg-secondary -z-0 w-full right-0  overflow-auto fixed top-0 bottom-0 `}
+            style={{ transition: "left 0.2s, width 0.2s" }}
+          >
+            <ul className="w-full pt-[80px] px-[15px] pb-0 list-none mb-[10px]">
+              <li>
+                <Link
+                  onClick={() => setsidebar(false)}
+                  to={"/airdrops"}
+                  className="relative flex items-center py-[10px] px-[20px] font-normal rounded-[10px] my-[2px] border-b border-b-[#e2c57412] text-white text-[16px] leading-[1.5] hover:text-white hover:bg-[#e2c5740d] hover:cursor-pointer"
+                  style={{
+                    transition: "border-left-color 0.3s, background-color 0.3s",
+                  }}
+                >
+                  Airdrops
+                </Link>
+              </li>
+              <li>
+                <Link
+                  onClick={() => setsidebar(false)}
+                  to={"/advertise"}
+                  className="relative flex items-center py-[10px] px-[20px] font-normal rounded-[10px] my-[2px] border-b border-b-[#e2c57412] text-white text-[16px] leading-[1.5] hover:text-white hover:bg-[#e2c5740d] hover:cursor-pointer"
+                  style={{
+                    transition: "border-left-color 0.3s, background-color 0.3s",
+                  }}
+                >
+                  Advertise
+                </Link>
+              </li>
+              <li>
+                <Link
+                  onClick={() => setsidebar(false)}
+                  to={"/add-coin"}
+                  className="relative flex items-center py-[10px] px-[20px] font-normal rounded-[10px] my-[2px] border-b border-b-[#e2c57412] text-white text-[16px] leading-[1.5] hover:text-white hover:bg-[#e2c5740d] hover:cursor-pointer"
+                  style={{
+                    transition: "border-left-color 0.3s, background-color 0.3s",
+                  }}
+                >
+                  Add Coin
+                </Link>
+              </li>
+              <li>
+                <Link
+                  onClick={() => setsidebar(false)}
+                  to={"/add-airdrop"}
+                  className="relative flex items-center py-[10px] px-[20px] font-normal rounded-[10px] my-[2px] border-b border-b-[#e2c57412] text-white text-[16px] leading-[1.5] hover:text-white hover:bg-[#e2c5740d] hover:cursor-pointer"
+                  style={{
+                    transition: "border-left-color 0.3s, background-color 0.3s",
+                  }}
+                >
+                  Add Airdrop
+                </Link>
+              </li>
+              <li
+                className={`${
+                  currentUser.displayName === "admin" ? "block" : "hidden"
+                }`}
+              >
+                <Link
+                  onClick={() => setsidebar(false)}
+                  to={"/add-partner"}
+                  className="relative flex items-center py-[10px] px-[20px] font-normal rounded-[10px] my-[2px] border-b border-b-[#e2c57412] text-white text-[16px] leading-[1.5] hover:text-white hover:bg-[#e2c5740d] hover:cursor-pointer"
+                  style={{
+                    transition: "border-left-color 0.3s, background-color 0.3s",
+                  }}
+                >
+                  Add Partners & Tools
+                </Link>
+              </li>
+              <li>
+                <Link
+                  onClick={() => setsidebar(false)}
+                  to={"/partner"}
+                  className="relative flex items-center py-[10px] px-[20px] font-normal rounded-[10px] my-[2px] border-b border-b-[#e2c57412] text-white text-[16px] leading-[1.5] hover:text-white hover:bg-[#e2c5740d] hover:cursor-pointer"
+                  style={{
+                    transition: "border-left-color 0.3s, background-color 0.3s",
+                  }}
+                >
+                  Partners & Tools
+                </Link>
+              </li>
+              <li>
+                <div
+                  onClick={() => setIsAccountActive(!isAccountActive)}
+                  className={`${
+                    isAccountActive
+                      ? "text-white bg-[#e2c5740d] cursor-pointer"
+                      : "text-white"
+                  }  flex items-center flex-row  hover:text-white hover:bg-[#e2c5740d] hover:cursor-pointer justify-between rounded-[10px] py-[10px] px-[20px] text-[16px] leading-[1.5] my-[2px] border-b border-b-[#e2c57412]`}
+                  style={{
+                    transition: "border-left-color 0.3s, background-color 0.3s",
+                  }}
+                >
+                  <Link
+                    to={"/"}
+                    className={`relative flex items-center font-normal`}
+                  >
+                    Account
+                  </Link>
+                  <svg
+                    className={`${isAccountActive ? "" : "-rotate-90"}`}
+                    style={{ transition: "all 0.3s" }}
+                    width="14"
+                    height="8.5"
+                    viewBox="0 0 28 17"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      d="M0.728676 1.45065C1.12112 1.08129 1.58283 0.890834 2.11379 0.879291C2.64475 0.867749 3.10646 1.0582 3.49891 1.45065L13.9912 11.9429L24.4834 1.45065C24.8528 1.08129 25.3087 0.885063 25.8512 0.861977C26.3937 0.838892 26.8612 1.02357 27.2536 1.41602C27.6461 1.78539 27.8481 2.24709 27.8596 2.80114C27.8712 3.35518 27.6807 3.81689 27.2883 4.18625L15.1339 16.3753C14.9723 16.5369 14.7934 16.6581 14.5971 16.7389C14.4009 16.8197 14.1989 16.8601 13.9912 16.8601C13.7834 16.8601 13.5814 16.8197 13.3852 16.7389C13.1889 16.6581 13.01 16.5369 12.8484 16.3753L0.694048 4.22088C0.324684 3.85152 0.14 3.39558 0.14 2.85308C0.14 2.31058 0.336226 1.8431 0.728676 1.45065Z"
+                      fill="currentColor"
+                    />
+                  </svg>
+                </div>
+                {displayName != "" ? (
+                  <ul
+                    className={`relative min-w-[160px] py-[5px] ml-[26px] ${
+                      isAccountActive ? "block" : "hidden"
+                    }`}
+                  >
+                    <li>
+                      <Link
+                        to={"/my-fav"}
+                        onClick={() => setsidebar(false)}
+                        className="flex items-center p-[8px] text-[13px] text-white hover:text-gray"
+                      >
+                        My Favourite
+                      </Link>
+                    </li>
+                    <li>
+                      <Link
+                        to={"/my-orders"}
+                        onClick={() => setsidebar(false)}
+                        className="flex items-center p-[8px] text-[13px] text-white hover:text-gray"
+                      >
+                        My Orders
+                      </Link>
+                    </li>{" "}
+                    <li>
+                      <Link
+                        to={"/my-coins"}
+                        onClick={() => setsidebar(false)}
+                        className="flex items-center p-[8px] text-[13px] text-white hover:text-gray"
+                      >
+                        My Coins
+                      </Link>
+                    </li>
+                    <li>
+                      <Link
+                        to={"/account-settings"}
+                        onClick={() => setsidebar(false)}
+                        className="flex items-center p-[8px] text-[13px] text-white hover:text-gray"
+                      >
+                        Account Settings
+                      </Link>
+                    </li>
+                    <li>
+                      <Link
+                        to={""}
+                        onClick={handleLogout}
+                        className="flex items-center p-[8px] text-[13px] text-white hover:text-gray"
+                      >
+                        Logout
+                      </Link>
+                    </li>
+                  </ul>
+                ) : (
+                  <ul
+                    className={`relative min-w-[160px] py-[5px] ml-[26px] ${
+                      isAccountActive ? "block" : "hidden"
+                    }`}
+                  >
+                    <li>
+                      <p
+                        onClick={() => {
+                          navigate("/login");
+                          setIsAccountActive(false);
+                          setsidebar(false);
+                        }}
+                        className="cursor-pointer flex items-center p-[8px] text-[13px] text-white hover:text-gray"
+                      >
+                        Login
+                      </p>
+                    </li>
+                    <li>
+                      <p
+                        onClick={() => {
+                          navigate("/register");
+                          setIsAccountActive(false);
+                          setsidebar(false);
+                        }}
+                        className="cursor-pointer flex items-center p-[8px] text-[13px] text-white hover:text-gray"
+                      >
+                        Register
+                      </p>
+                    </li>
+                  </ul>
+                )}
+              </li>
+            </ul>
+          </aside>
+        </div>
+        <div
+          className={` ${
+            showSearch ? "flex" : "hidden"
+          } md:hidden flex bg-secondary py-3 border-b-4 border-b-primary`}
+        >
+          <div className="group/view px-[18px] flex flex-col w-full justify-center items-center bg-[#e2c5740d]">
+            <form
+              className="w-full flex h-[40px] relative bg-primary border-[#e2e2e2] border-[2px] rounded-t-[10px]"
+              autoComplete="off"
+            >
+              <input
+                className="w-full relative focus-visible:outline-none text-ellipsis text-white pl-[40px] bg-inherit placeholder-secondary rounded-t-[10px]"
+                type="text"
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
+                onKeyDown={handleKeyDown}
+                placeholder={"Search coins..."}
+                name={"search"}
+                autoComplete="on"
+              />
+              <span className="inline-flex items-center justify-center text-[#1a1a1a] absolute w-[2.5rem] cursor-pointer text-[15px] left-0 mt-[2px] top-[8px] ">
+                <svg
+                  width="20"
+                  height="20"
+                  viewBox="0 0 20 20"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M18.4746 19.7175L11.6667 12.9096C11.1017 13.3992 10.4426 13.7806 9.68927 14.0537C8.93597 14.3267 8.13559 14.4633 7.28814 14.4633C5.25424 14.4633 3.53107 13.7571 2.11864 12.3446C0.706215 10.9322 0 9.22787 0 7.23164C0 5.2354 0.706215 3.53107 2.11864 2.11864C3.53107 0.706215 5.24482 0 7.25989 0C9.25612 0 10.9557 0.706215 12.3588 2.11864C13.7618 3.53107 14.4633 5.2354 14.4633 7.23164C14.4633 8.04143 14.3314 8.82298 14.0678 9.57627C13.8041 10.3296 13.4087 11.0358 12.8814 11.6949L19.7458 18.5028C19.9153 18.6535 20 18.8465 20 19.0819C20 19.3173 19.9058 19.5292 19.7175 19.7175C19.548 19.887 19.3409 19.9718 19.096 19.9718C18.8512 19.9718 18.6441 19.887 18.4746 19.7175ZM7.25989 12.7684C8.78531 12.7684 10.0847 12.2269 11.1582 11.1441C12.2316 10.0612 12.7684 8.75706 12.7684 7.23164C12.7684 5.70621 12.2316 4.40207 11.1582 3.31921C10.0847 2.23635 8.78531 1.69492 7.25989 1.69492C5.71563 1.69492 4.40207 2.23635 3.31921 3.31921C2.23635 4.40207 1.69492 5.70621 1.69492 7.23164C1.69492 8.75706 2.23635 10.0612 3.31921 11.1441C4.40207 12.2269 5.71563 12.7684 7.25989 12.7684Z"
+                    fill="currentColor"
+                  />
+                </svg>
+              </span>
+            </form>
+            <div
+              className={` bg-[#F864D8] pb-[10px] pt-[28px] border-[2px] border-[#e2c5741a] w-full rounded-b-[10px]`}
+            >
+              <h1 className="font-semibold text-[1rem] mb-[8px]">
+                {search !== "" ? "Search Result" : "Trending 🔥"}
+              </h1>
+              <div className="content flex flex-col overflow-y-scroll gap-y-2 w-full h-[200px]">
+                {trending.map((coin) => (
+                  <div
+                    onClick={() =>
+                      navigate(`/coin/${coin.coin.name}`, { state: coin })
+                    }
+                    className="group flex flex-row gap-2 cursor-pointer items-center"
+                  >
+                    <div className="group w-[30px] h-[30px] overflow-hidden rounded-[50%]">
+                      <img src={coin.coin.coinLogo} alt="" />
+                    </div>
+                    <p className="group-hover:text-hover">{coin.coin.name}</p>
+                    <p className="text-center bg-white text-primary rounded-[12px] text-[0.7rem] px-[7px] py-[7px]">
+                      {coin.coin.symbol}
+                    </p>
+                  </div>
+                ))}
+              </div>
             </div>
-            <footer className='text-[#e8f5f6] text-[12px] bg-secondary w-full mt-[80px] '>
-                <div className='w-full bg-secondary text-white items-center py-[10px] px-auto '>
-                    <span className='block mx-auto text-center '>
-                        {/* <Link to={'/'} className="p-[5px] inline-block ml-[12px] mt-0">
+          </div>
+        </div>
+      </div>
+      <div className="w-full hidden bg-secondary md:flex flex-row justify-center">
+        <div
+          className="flex flex-row items-center text-center text-[11px] mt-[72px] py-[12px] gap-x-4 opacity-80 hover:opacity-100"
+          style={{ transition: "all .2s ease" }}
+        >
+          <p>
+            Coins: <span className="text-primary">{coins}</span>
+          </p>
+          <p>
+            Votes: <span className="text-primary">{votes}</span>
+          </p>
+          <p>
+            Market Cap: <span className="text-primary">{cap}</span>
+          </p>
+          <p>
+            BTC: <span className="text-primary">${header.btc}</span>
+          </p>
+          <p>
+            ETH: <span className="text-primary">${header.eth}</span>
+          </p>
+          <p>
+            BNB: <span className="text-primary">${header.bnb}</span>
+          </p>
+          <div
+            className="flex flex-row gap-x-2 items-center text-center cursor-pointer"
+            onClick={() =>
+              navigate(`/coin/${oneTrending[0]?.coin.name}`, {
+                state: oneTrending[0],
+              })
+            }
+          >
+            <img
+              className="w-[20px]"
+              src={oneTrending[0]?.coin.coinLogo}
+              alt=""
+            />
+            <p>{oneTrending[0]?.coin.name}</p>
+          </div>
+          <div
+            className="flex flex-row gap-x-2 items-center text-center cursor-pointer"
+            onClick={() =>
+              navigate(`/coin/${recently[0]?.coin.name}`, {
+                state: recently[0],
+              })
+            }
+          >
+            <img className="w-[20px]" src={recently[0]?.coin.coinLogo} alt="" />
+            <p>{recently[0]?.coin.name}</p>
+          </div>
+        </div>
+      </div>
+
+      <Outlet />
+      <div className="mt-[100px]"></div>
+      <footer className="text-[#e8f5f6] text-[12px] bg-secondary w-full mt-[80px] ">
+        <div className="w-full bg-secondary text-white items-center py-[10px] px-auto ">
+          <span className="block mx-auto text-center ">
+            {/* <Link to={'/'} className="p-[5px] inline-block ml-[12px] mt-0">
                             <img className='w-[130px] align-middle' src={'https://coinvote.cc/template/images/en_badge_web_generic.png'} alt="" />
                         </Link>
                         <Link to={'/'} className="p-[5px] inline-block ml-[12px] mt-0">
@@ -347,9 +758,11 @@ const App = () => {
                                 </g>
                             </svg>
                         </Link> */}
-                        <p className='my-[8px] text-[1.2rem] font-semibold'>Coming Soon on APP Store and Google Pay.</p>
-                    </span>
-                    {/* <div className='flex flex-row gap-x-[20px] w-[50%] justify-center items-center mx-auto'>
+            <p className="my-[8px] text-[1.2rem] font-semibold">
+              Coming Soon on APP Store and Google Pay.
+            </p>
+          </span>
+          {/* <div className='flex flex-row gap-x-[20px] w-[50%] justify-center items-center mx-auto'>
                         <Link to='/'>
                             <span className=' flex justify-center items-center rounded-[50%] h-[3em] text-primary bg-white align-middle w-[3em] hover:bg-gray' style={{ lineHeight: "2em" }}>
                                 <svg width="20" height="15" viewBox="0 0 15 13" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M14.9573 1.14521L12.6937 11.8203C12.5229 12.5737 12.0775 12.7612 11.4447 12.4063L7.9957 9.86474L6.33149 11.4653C6.14732 11.6495 5.99329 11.8035 5.63835 11.8035L5.88614 8.29094L12.2784 2.51475C12.5564 2.26696 12.2182 2.12967 11.8465 2.37746L3.944 7.35335L0.541912 6.28853C-0.198109 6.05748 -0.211503 5.54851 0.695944 5.19356L14.0029 0.0669903C14.6191 -0.164057 15.1582 0.204279 14.9573 1.14521Z" fill="currentColor" /></svg>
@@ -371,45 +784,64 @@ const App = () => {
                             </span>
                         </Link>
                     </div> */}
-                    <div className='flex justify-center items-center mt-[8px]'>
-                        <Link to={"/"} className="text-[20px] text-white font-medium">
-                            🚀 Need to boost your marketing?
-                        </Link>
-                    </div>
-                    <ul className='px-[5px] flex flex-wrap flex-row justify-center items-center text-[1.1rem] text-center gap-x-[18px] mt-[8px]'>
-                        <li className='text-[#dcdcdc] hover:text-white'>
-                            <Link to={"/disclaimer"} className=''>Disclaimer</Link>
-                        </li>
-                        <li className='text-[#dcdcdc] hover:text-white'>
-                            <Link to={"/terms"} className=''>Terms of Use</Link>
-                        </li>
-                        <li className='text-[#dcdcdc] hover:text-white'>
-                            <Link to={"/privacy"} className=''>Privacy Policy</Link>
-                        </li>
-                        <li className='text-[#dcdcdc] hover:text-white'>
-                            <Link to={"/cgv"} className=''>Terms & Conditions</Link>
-                        </li>
-                        <li className='text-[#dcdcdc] hover:text-white'>
-                            <Link to={"/contact"} className=''>Contact</Link>
-                        </li>
-                        <li className='text-[#dcdcdc] hover:text-white'>
-                            <Link to={"/mobile"} className=''>Mobile App</Link>
-                        </li>
-                    </ul>
-                    <div className='flex justify-center items-center px-[5px] mt-[5px]'>
-                        © 2023 votenow-crypto. All rights reserved.
-                    </div>
-                    <div className='flex justify-center items-center px-[5px] mt-[5px]'>
-                        <img className='lg:w-[13%] md:w-[21%] w-[35%]' src="https://images.dmca.com/Badges/dmca-badge-w250-5x1-09.png?ID=42663165-1ec2-4a03-be8a-5ded6dd2930c" alt="" />
-                    </div>
-                    <div className='flex justify-center items-center px-[5px] mt-[5px]'>
-                        <img className='lg:w-[4%] md:w-[6%] w-[15%]' src="https://b.sf-syn.com/badge_img/3457098/light-default?&variant_id=sf&r=https://coinvote.cc/" alt="" />
-                    </div>
+          <div className="flex justify-center items-center mt-[8px]">
+            <Link to={"/"} className="text-[20px] text-white font-medium">
+              🚀 Need to boost your marketing?
+            </Link>
+          </div>
+          <ul className="px-[5px] flex flex-wrap flex-row justify-center items-center text-[1.1rem] text-center gap-x-[18px] mt-[8px]">
+            <li className="text-[#dcdcdc] hover:text-white">
+              <Link to={"/disclaimer"} className="">
+                Disclaimer
+              </Link>
+            </li>
+            <li className="text-[#dcdcdc] hover:text-white">
+              <Link to={"/terms"} className="">
+                Terms of Use
+              </Link>
+            </li>
+            <li className="text-[#dcdcdc] hover:text-white">
+              <Link to={"/privacy"} className="">
+                Privacy Policy
+              </Link>
+            </li>
+            <li className="text-[#dcdcdc] hover:text-white">
+              <Link to={"/cgv"} className="">
+                Terms & Conditions
+              </Link>
+            </li>
+            <li className="text-[#dcdcdc] hover:text-white">
+              <Link to={"/contact"} className="">
+                Contact
+              </Link>
+            </li>
+            <li className="text-[#dcdcdc] hover:text-white">
+              <Link to={"/mobile"} className="">
+                Mobile App
+              </Link>
+            </li>
+          </ul>
+          <div className="flex justify-center items-center px-[5px] mt-[5px]">
+            © 2023 votenow-crypto. All rights reserved.
+          </div>
+          <div className="flex justify-center items-center px-[5px] mt-[5px]">
+            <img
+              className="lg:w-[13%] md:w-[21%] w-[35%]"
+              src="https://images.dmca.com/Badges/dmca-badge-w250-5x1-09.png?ID=42663165-1ec2-4a03-be8a-5ded6dd2930c"
+              alt=""
+            />
+          </div>
+          <div className="flex justify-center items-center px-[5px] mt-[5px]">
+            <img
+              className="lg:w-[4%] md:w-[6%] w-[15%]"
+              src="https://b.sf-syn.com/badge_img/3457098/light-default?&variant_id=sf&r=https://coinvote.cc/"
+              alt=""
+            />
+          </div>
+        </div>
+      </footer>
+    </>
+  );
+};
 
-                </div>
-            </footer>
-        </>
-    )
-}
-
-export default App
+export default App;
