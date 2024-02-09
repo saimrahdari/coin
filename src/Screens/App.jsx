@@ -241,6 +241,15 @@ const App = () => {
                   Partners & Tools
                 </Link>
               </li>
+
+              <li>
+                <Link
+                  to={"https://token.votenow-crypto.com/"}
+                  className="max-w-[170px] text-[#ffffff] text-[14.5px] leading-5 py-[10px] px-[15px] hover:text-gray"
+                >
+                  Vote Now Token
+                </Link>
+              </li>
               <div className="group/view relative ml-[1rem] flex justify-center items-center border-[#e2c5741a] border-[2px] h-[40px] rounded-[10px] bg-[#e2c5740d] max-w-[200px]">
                 <form className="w-full flex relative" autoComplete="off">
                   <input
