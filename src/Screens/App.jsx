@@ -593,6 +593,17 @@ const App = () => {
                   </ul>
                 )}
               </li>
+              <li>
+                <Link
+                  to={"https://token.votenow-crypto.com/"}
+                  className="relative flex items-center py-[10px] px-[20px] font-normal rounded-[10px] my-[2px] border-b border-b-[#e2c57412] text-white text-[16px] leading-[1.5] hover:text-white hover:bg-[#e2c5740d] hover:cursor-pointer"
+                  style={{
+                    transition: "border-left-color 0.3s, background-color 0.3s",
+                  }}
+                >
+                  Vote Now Token
+                </Link>
+              </li>
             </ul>
           </aside>
         </div>

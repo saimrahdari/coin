@@ -231,7 +231,7 @@ const Advertise = () => {
 
     useEffect(() => {
         if (bannerLink || voteLink || forPay !== "") {
-            axios.post('https://coinvote-api.herokuapp.com/createTransaction', {
+            axios.post('http://ec2-13-233-4-250.ap-south-1.compute.amazonaws.com:4000/createTransaction', {
                 amount: total,
                 currency1: currency,
                 currency2: "BTC",
@@ -239,7 +239,7 @@ const Advertise = () => {
             })
                 .then(function (res) {
                     axios
-                        .post('https://coinvote-api.herokuapp.com/getPaymentStatus', {
+                        .post('http://ec2-13-233-4-250.ap-south-1.compute.amazonaws.com:4000/getPaymentStatus', {
                             transactionId: res.data.result.txn_id
                         })
                         .then(res2 => {
