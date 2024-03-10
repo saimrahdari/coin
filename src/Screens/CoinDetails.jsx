@@ -38,6 +38,8 @@ const CoinDetails = () => {
     const [collapse2, setcollapse2] = useState(true);
     const paragraphRef = useRef(null);
 
+    console.log("coins");
+    console.log(state);
     function copyToClipboard() {
         const textToCopy = paragraphRef.current.textContent;
         navigator.clipboard.writeText(textToCopy)
@@ -95,8 +97,8 @@ const CoinDetails = () => {
                 const response = await axios.get(`http://ec2-3-110-217-31.ap-south-1.compute.amazonaws.com:4000/verifyIp/${res.data.IPv4}`);
                 console.log(response.data.success);
                 if (valid_token.success && response.data.success) {
-                    update(ref(db, `/coins/${clickedCoin.key}`), {
-                        votes: clickedCoin.coin.votes + 1,
+                    update(ref(db, `/coins/${state.key}`), {
+                        votes: state.coin.votes + 1,
                     })
                     setShowModal(false)
                 } else {
@@ -106,6 +108,8 @@ const CoinDetails = () => {
                 console.log(error);
             }
 
+        } else{
+            console.log("I am getting no token...")
         }
     }
 
