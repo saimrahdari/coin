@@ -84,7 +84,7 @@ const Airdrops = () => {
 
   const verifyToken = async (token) => {
     try {
-      let response = await axios.post(`http://ec2-3-110-217-31.ap-south-1.compute.amazonaws.com:4000/verify-token`, {
+      let response = await axios.post(`https://coinvote-backend.com/verify-token`, {
 
         secret: import.meta.env.VITE_REACT_APP_SECRET_KEY,
         token

@@ -102,7 +102,7 @@ const MyCoins = () => {
             const res = await axios.get('https://geolocation-db.com/json/')
             console.log(res.data.IPv4);
             try {
-                const response = await axios.get(`http://ec2-3-110-217-31.ap-south-1.compute.amazonaws.com:4000/${res.data.IPv4}`);
+                const response = await axios.get(`https://coinvote-backend.com/${res.data.IPv4}`);
                 console.log(response.data.success);
                 if (valid_token.success && response.data.success) {
                     update(ref(db, `/coins/${clickedCoin.key}`), {
@@ -128,7 +128,7 @@ const MyCoins = () => {
 
     const verifyToken = async (token) => {
         try {
-            let response = await axios.post(`http://ec2-3-110-217-31.ap-south-1.compute.amazonaws.com:4000/verify-token`, {
+            let response = await axios.post(`https://coinvote-backend.com/verify-token`, {
 
                 secret: import.meta.env.VITE_REACT_APP_SECRET_KEY,
                 token

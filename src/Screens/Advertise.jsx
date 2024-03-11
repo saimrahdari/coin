@@ -231,7 +231,7 @@ const Advertise = () => {
 
     useEffect(() => {
         if (bannerLink || voteLink || forPay !== "") {
-            axios.post('http://ec2-3-110-217-31.ap-south-1.compute.amazonaws.com:4000/createTransaction', {
+            axios.post('https://coinvote-backend.com/createTransaction', {
                 amount: total,
                 currency1: currency,
                 currency2: "BTC",
@@ -239,7 +239,7 @@ const Advertise = () => {
             })
                 .then(function (res) {
                     axios
-                        .post('http://ec2-3-110-217-31.ap-south-1.compute.amazonaws.com:4000/getPaymentStatus', {
+                        .post('https://coinvote-backend.com/getPaymentStatus', {
                             transactionId: res.data.result.txn_id
                         })
                         .then(res2 => {
